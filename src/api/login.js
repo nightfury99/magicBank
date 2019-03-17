@@ -1,27 +1,26 @@
-import request from '@/utils/request'
+import request from '@/utils/authrequest'
 
 export function login(username, password) {
   return request({
-    url: '/user/login',
+    url: '/auth/local',
     method: 'post',
     data: {
-      username,
-      password
+      'identifier': username,
+      'password': password
     }
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/user/me',
+    method: 'get'
   })
 }
 
 export function logout() {
-  return request({
-    url: '/user/logout',
-    method: 'post'
-  })
+  // return request({
+  //   url: '/user/logout',
+  //   method: 'post'
+  // })
 }
