@@ -49,27 +49,33 @@ export default new Router({
 export const asyncRoutes = [
 
   {
-    path: '/example',
+    path: '/revenue',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
+    redirect: '/revenue/outlet',
+    name: 'Revenue',
     meta: { 
-      title: 'Example', 
-      icon: 'example',
-      roles: ['admin']
+      title: 'Revenue', 
+      icon: 'example'
     },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'outlet',
+        name: 'OutletRevenue',
+        component: () => import('@/views/revenue/outlet'),
+        meta: { title: 'Outlet', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'branches/:id',
+        name: 'BranchesRevenue',
+        hidden: true,
+        component: () => import('@/views/revenue/branch'),
+        meta: { title: 'Branches', icon: 'table' }
+      },
+      {
+        path: '/commission',
+        name: 'CommissionRevenue',
+        component: () => import('@/views/revenue/agent'),
+        meta: { title: 'Commission', icon: 'table' }
       }
     ]
   },

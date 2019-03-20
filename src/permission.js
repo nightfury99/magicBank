@@ -25,8 +25,10 @@ router.beforeEach((to, from, next) => {
         store.dispatch('GetInfo').then(res => {
           const roles = res.data.groups // note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
           store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
+           
             router.addRoutes(accessRoutes)
             router.options.routes = router.options.routes.concat(accessRoutes)
+
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           })
         }).catch((err) => {
