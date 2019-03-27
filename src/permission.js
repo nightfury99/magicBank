@@ -23,7 +23,11 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => {
-          const roles = res.data.groups // note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
+          const roles = []  // note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
+          
+          // roles.push(res.data.groups)
+          
+          roles.push(res.data.groups.name)
           store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
            
             router.addRoutes(accessRoutes)

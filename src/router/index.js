@@ -49,13 +49,46 @@ export default new Router({
 export const asyncRoutes = [
 
   {
+    path: '/customer',
+    component: Layout,
+    redirect: '/customer/all',
+    name: 'Customer',
+    meta: { 
+      title: 'User', 
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'all',
+        name: 'CustomerAll',
+        component: () => import('@/views/customer/all'),
+        meta: { title: 'All User', icon: 'table' }
+      },
+      {
+        path: 'outlet',
+        name: 'CustomerOutlet',
+        component: () => import('@/views/customer/outlet'),
+        meta: { title: 'User Outlet', icon: 'table' }
+      },
+      {
+        path: 'agent',
+        name: 'CustomerAgent',
+        component: () => import('@/views/customer/agent'),
+        meta: { title: 'User Agent', icon: 'table' }
+      }
+    ]
+  },
+
+  {
     path: '/revenue',
     component: Layout,
     redirect: '/revenue/outlet',
     name: 'Revenue',
     meta: { 
       title: 'Revenue', 
-      icon: 'example'
+      icon: 'example',
+      roles: ['outlet']
     },
     children: [
       {
@@ -70,14 +103,27 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/revenue/branch'),
         meta: { title: 'Branches', icon: 'table' }
-      },
-      {
-        path: '/commission',
-        name: 'CommissionRevenue',
-        component: () => import('@/views/revenue/agent'),
-        meta: { title: 'Commission', icon: 'table' }
       }
     ]
+  },
+
+  {
+    path: '/commission',
+    component: Layout,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/agent/index'),
+        name: 'CommissionReport',
+        meta: { 
+          title: 'Comm. Report', 
+          icon: 'example',
+          roles: ['agent']
+        }
+      }
+    ]
+    
   },
 
   { path: '*', redirect: '/404', hidden: true }

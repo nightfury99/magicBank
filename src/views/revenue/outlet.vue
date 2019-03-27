@@ -143,16 +143,16 @@ export default {
 
         } else if(this.roles.includes('outlet')) {
             
-            var data
+            var data = []
             var x
-            for (x = 0; x < useroutlets.length; x++) {
-
-                await getOutlet(useroutlets[x])
+            for (x = 0; x < this.useroutlets.length; x++) {
+                
+                await getOutlet(this.useroutlets[x])
                     .then(res => {
                         data.push(res.data.data)
                     })
                     .catch(error => {
-                        console.log(error.response)
+                        console.log(error)
                     })
             }
 
@@ -194,8 +194,8 @@ export default {
 <style>
     .el-row {
         margin-bottom: 20px;
-        &:last-child {
-        margin-bottom: 0;
+            &:last-child {
+            margin-bottom: 0;
         }
     }
 </style>

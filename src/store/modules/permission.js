@@ -23,6 +23,7 @@ export function filterAsyncRoutes(routes, roles) {
 
   routes.forEach(route => {
     const tmp = { ...route }
+
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
@@ -51,6 +52,7 @@ const permission = {
         const { roles } = data
         
         let accessedRoutes
+
         if (roles.includes('admin')) {
           accessedRoutes = asyncRoutes
         } else {

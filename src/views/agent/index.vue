@@ -32,9 +32,7 @@
         highlight-current-row>
         <el-table-column label="Outlet Name">
             <template slot-scope="scope">
-            <router-link :to="{ name: 'BranchesRevenue', params: { id: scope.row.outlet_id }, query: { from: from, to: to }}">
                 {{ scope.row.name }}
-            </router-link>
             </template>
         </el-table-column>
         <el-table-column property="total" label="Applied Charges (RM)" align="center" width="180">
@@ -60,7 +58,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getBranchAgent } from '@/api/outlet'
-import { getRevenueOutlet } from '@/api/revenue'
+import { getRevenueBranch } from '@/api/revenue'
 import moment from 'moment'
 
 export default {
@@ -134,7 +132,8 @@ export default {
     processData: async function(data) {
 
         for (var i=0;i < data.length; i++) {
-            var outlet = data[i]
+            
+            var branch = data[i]
             var d = {};
             d.name = branch.name;
           

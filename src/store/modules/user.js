@@ -58,12 +58,9 @@ const user = {
           
           let roles = []
           let uoutlets = []
-          
-          var i
-          for (i = 0; i < data.groups.length; i++) {
-            roles.push(data.groups[i].name)
-          }
 
+          roles.push(data.groups.name)
+          
           if (roles.length) {
             commit('SET_ROLES', roles)
           } else {
@@ -77,8 +74,8 @@ const user = {
           for (x = 0; x < data.useroutlets.length; x++) {
             uoutlets.push(data.useroutlets[x].outlet_id)
           }
-
-          commit('SET_USER_OUTLETS', data.uoutlets)
+          
+          commit('SET_USER_OUTLETS', uoutlets)
           resolve(response)
         }).catch(error => {
           reject(error)
