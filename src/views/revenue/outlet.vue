@@ -52,7 +52,7 @@
             {{ scope.row.company_revenue }}
             </template>
         </el-table-column>
-        <el-table-column property="agent" class-name="status-col" label="Agent (RM)" width="140" align="center">
+        <el-table-column v-if="roles.includes('admin')" property="agent" class-name="status-col" label="Agent (RM)" width="140" align="center">
             <template align="center" slot-scope="scope">
             {{ scope.row.agent }}
             </template>

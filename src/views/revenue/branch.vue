@@ -36,12 +36,12 @@
             <span>{{ scope.row.branch }}</span>
             </template>
         </el-table-column>
-        <el-table-column property="promo_total" label="Promo (RM)" width="140" align="center">
+        <el-table-column v-if="roles.includes('admin')" property="promo_total" label="Promo (RM)" width="140" align="center">
             <template align="center" slot-scope="scope">
             {{ scope.row.promo_total }}
             </template>
         </el-table-column>
-        <el-table-column property="agent" class-name="status-col" label="Agent (RM)" width="140" align="center">
+        <el-table-column v-if="roles.includes('admin')" property="agent" class-name="status-col" label="Agent (RM)" width="140" align="center">
             <template align="center" slot-scope="scope">
             {{ scope.row.agent }}
             </template>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getOutletBranches } from '@/api/outlet'
 import { getRevenueBranch } from '@/api/revenue'
 import moment from 'moment'
@@ -63,6 +64,11 @@ export default {
       range: [],
       listLoading: false
     }
+  },
+  computed: {
+    ...mapGetters([
+      'roles'
+    ])
   },
   created() {
     this.range.push(this.$route.query.from)
