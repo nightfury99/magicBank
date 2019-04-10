@@ -136,7 +136,7 @@ export default {
             var branch = data[i]
             var d = {};
             d.name = branch.name;
-          
+            
           await getRevenueBranch(branch.branch_id, moment(this.range[0]).format('YYYY-MM-DD'), moment(this.range[1]).format('YYYY-MM-DD'))
               .then((r) => {
                   

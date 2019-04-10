@@ -42,7 +42,7 @@
             {{ scope.row.total }}
             </template>
         </el-table-column>
-        <el-table-column property="promo_total" label="Promo (RM)" width="140" align="center">
+        <el-table-column v-if="roles.includes('admin')" property="promo_total" label="Promo (RM)" width="140" align="center">
             <template align="center" slot-scope="scope">
             {{ scope.row.promo_total }}
             </template>

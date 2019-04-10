@@ -35,6 +35,11 @@
               <el-button
                 size="mini"
                 @click="handleGroup(scope.row)" type="info">Groups</el-button>
+                <el-button
+                size="mini"
+                type="success"
+                plain
+                @click="getUserWallet(scope.row)">Wallet</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -62,12 +67,41 @@
         <el-button type="success" @click="changeGroup">Confirm</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog
+      :title="dialog.title"
+      :visible.sync="walletDialogVisible"
+      width="40%">
+      <el-row>
+        <el-form :model="selectWallet">
+          <el-form-item label="Balance Amount">
+            <el-input v-model="selectWallet.balance" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="Deposit Amount">
+            <el-input v-model="selectWallet.deposit" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="Is this a VIRTUAL account?">
+            <el-switch
+            v-model="selectWallet.virtual" 
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="Yes"
+            inactive-text="No"
+            @change="changeVirtual"></el-switch>
+
+          </el-form-item>
+        </el-form>
+      </el-row>
+
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getUsers, getUser, updateUser } from '@/api/user'
 import { getGroups, getUserGroups } from '@/api/group'
+import { getWallet, updateWallet } from '@/api/wallet'
 import axios from 'axios'
 
 export default {
@@ -78,11 +112,17 @@ export default {
       search: '',
       groups: [],
       selectedGroup: [],
+      selectWallet: {
+        balance: 0,
+        deposit: 0,
+        virtual: false,
+      },
       dialog: {
         userId: '',
         title: '',
       },
       dialogVisible: false,
+      walletDialogVisible: false,
     }
   },
   created() {
@@ -95,21 +135,21 @@ export default {
 
         getUsers()
            .then(res => {
-
-                var data = res.data
+              
+              var data = res.data
                 
-                if(data.length > 0) {
-                    
-                    var i
-                    for (i = 0; i < data.length; i++) {
-                        
-                        let r = data[i]
-                        r.username = data[i].username
-                        r.id = data[i]._id
+              if(data.length > 0) {
+                  
+                  var i
+                  for (i = 0; i < data.length; i++) {
 
-                        this.list.push(r)
-                    }
-                }
+                      let r = data[i]
+                      r.username = data[i].username
+                      r.id = data[i]._id
+
+                      this.list.push(r)
+                  }
+              }
 
                 this.listLoading = false
             })
@@ -117,6 +157,25 @@ export default {
                 this.listLoading = false
                 console.log(error.response)
             }) 
+    },
+
+    getUserWallet: async function(row) {
+      
+      getWallet(row.id)
+        .then(res => {
+
+          this.walletDialogVisible = true
+
+          this.selectWallet.virtual = res.data.data.is_virtual
+          this.selectWallet.balance = res.data.data.account_balance_display
+          this.selectWallet.deposit = res.data.data.deposit_amount_display
+
+          this.dialog = {
+            userId: row.id,
+            title: row.username
+          }
+
+        });
     },
 
     handleGroup: async function(row) {
@@ -138,7 +197,7 @@ export default {
 
         this.dialog = {
           userId: row.id,
-          title: `Assign group to ${row.username}`
+          title: `Assign GROUP to ${row.username}`
         }
 
       }));
@@ -151,10 +210,28 @@ export default {
           groups: this.selectedGroup
         })
         .then(res => {
-          console.log(res)
+          this.$notify({
+            title: 'Success',
+            message: 'GROUP updated',
+            type: 'success'
+          });
         })
 
       this.dialogVisible = false
+    },
+
+    changeVirtual: function() {
+
+      updateWallet(this.dialog.userId, {
+        is_virtual: this.selectWallet.virtual
+      })
+      .then(res => {
+        this.$notify({
+          title: 'Success',
+          message: 'Type VIRTUAL updated',
+          type: 'success'
+        });
+      })
     }
   }
 }

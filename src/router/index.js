@@ -69,13 +69,13 @@ export const asyncRoutes = [
         path: 'outlet',
         name: 'CustomerOutlet',
         component: () => import('@/views/customer/outlet'),
-        meta: { title: 'User Outlet', icon: 'table' }
+        meta: { title: 'Outlets', icon: 'table' }
       },
       {
         path: 'agent',
         name: 'CustomerAgent',
         component: () => import('@/views/customer/agent'),
-        meta: { title: 'User Agent', icon: 'table' }
+        meta: { title: 'Agents', icon: 'table' }
       }
     ]
   },
