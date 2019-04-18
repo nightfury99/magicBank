@@ -126,5 +126,69 @@ export const asyncRoutes = [
     
   },
 
+  {
+    path: '/payment',
+    component: Layout,
+    redirect: '/payment/overall',
+    name: 'Customer',
+    meta: { 
+      title: 'Payment', 
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'deposit',
+        name: 'PaymentDeposit',
+        component: () => import('@/views/payments/deposit'),
+        meta: { title: 'Deposit', icon: 'table' }
+      },
+      {
+        path: 'reload',
+        name: 'PaymentReload',
+        component: () => import('@/views/payments/reload'),
+        meta: { title: 'Reload', icon: 'table' }
+      },
+      {
+        path: 'promo',
+        name: 'PaymentPromo',
+        component: () => import('@/views/payments/promo'),
+        meta: { title: 'Promo Used', icon: 'table' }
+      },
+      {
+        path: 'charges',
+        name: 'PaymentCharges',
+        component: () => import('@/views/payments/order'),
+        meta: { title: 'Charges', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/analytics',
+    component: Layout,
+    redirect: '/analytics/account',
+    name: 'Analytic',
+    meta: { 
+      title: 'Analytics', 
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'Account',
+        name: 'AnalyticAccount',
+        component: () => import('@/views/analytics/account'),
+        meta: { title: 'Account', icon: 'example' }
+      },
+      {
+        path: 'Payment',
+        name: 'AnalyticPayment',
+        component: () => import('@/views/analytics/payment'),
+        meta: { title: 'Payment', icon: 'example' }
+      }
+    ]
+  },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
