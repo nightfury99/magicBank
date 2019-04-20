@@ -42,6 +42,18 @@
             </el-table-column>
         </el-table>
     </el-row>
+
+    <el-row>
+        <el-col :span="24" align="center">
+            <pagination
+                background
+                layout="prev, pager, next"
+                :total="total" 
+                :current-page.sync="listQuery.page"
+                @pagination="searchRecord" />
+        </el-col>
+    </el-row>
+    
   </div>
 </template>
 
@@ -49,6 +61,7 @@
 import { mapGetters } from 'vuex'
 import { getPromoList } from '@/api/payment'
 import moment from 'moment'
+import Pagination from '@/components/Pagination'
 
 export default {
   data() {
@@ -57,9 +70,15 @@ export default {
       list: null,
       range: [],
       listLoading: false,
-      status: 1
+      status: 1,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 50
+      },
     }
   },
+  components: { Pagination },
   computed: {
     ...mapGetters([
       'roles'
@@ -67,13 +86,13 @@ export default {
   },
   created() {
     
-    var start = new Date()
-    start.setDate(1)
+    if(this.$route.query.from) {
+      this.range.push(this.$route.query.from)
+      this.range.push(this.$route.query.to)
+    } else {
+      this.defaultRange()
+    }
 
-    var end = new Date()
-
-    this.range.push(start)
-    this.range.push(end)
     this.searchRecord()
   },
   methods: {
@@ -84,11 +103,14 @@ export default {
 
       this.list = []
 
-      getPromoList(moment(this.range[0]).format('YYYY-MM-DD'), moment(this.range[1]).format('YYYY-MM-DD'))
+      getPromoList(moment(this.range[0]).format('YYYY-MM-DD'), moment(this.range[1]).format('YYYY-MM-DD'), this.listQuery)
         .then(res => {
             var data = res.data.data
+            var meta = res.data.meta
+
             if (data.length > 0) {
                 this.list = data
+                this.total = meta.total_records
             } else {
                 this.list = []
             }
@@ -98,6 +120,16 @@ export default {
         .catch(error => {
             console.log(error.response)
         })
+    },
+
+    defaultRange: function() {
+      var start = new Date()
+      start.setDate(1)
+
+      var end = new Date()
+
+      this.range.push(start)
+      this.range.push(end)
     },
 
   }
