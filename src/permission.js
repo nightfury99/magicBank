@@ -7,7 +7,13 @@ import { getToken } from '@/utils/auth' // getToken from cookie
 
 NProgress.configure({ showSpinner: false })// NProgress configuration
 
-const whiteList = ['/login'] // 不重定向白名单
+function hasPermission(roles, permissionRoles) {
+  if (roles.includes('admin')) return true // admin permission passed directly
+  if (!permissionRoles) return true
+  return roles.some(role => permissionRoles.indexOf(role) >= 0)
+}
+
+const whiteList = ['/login', '/auth-redirect'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
@@ -17,7 +23,18 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => {
-          next()
+          const roles = []  // note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
+          
+          // roles.push(res.data.groups)
+          
+          roles.push(res.data.groups.name)
+          store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
+           
+            router.addRoutes(accessRoutes)
+            router.options.routes = router.options.routes.concat(accessRoutes)
+
+            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+          })
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message.error(err || 'Verification failed, please login again')
@@ -25,7 +42,11 @@ router.beforeEach((to, from, next) => {
           })
         })
       } else {
-        next()
+        if (hasPermission(store.getters.roles, to.meta.roles)) {
+          next()
+        } else {
+          next({ path: '/401', replace: true, query: { noGoBack: true }})
+        }
       }
     }
   } else {

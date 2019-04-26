@@ -37,112 +37,7 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
-  { path: '*', redirect: '/404', hidden: true }
+  
 ]
 
 export default new Router({
@@ -150,3 +45,150 @@ export default new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
+
+export const asyncRoutes = [
+
+  {
+    path: '/customer',
+    component: Layout,
+    redirect: '/customer/all',
+    name: 'Customer',
+    meta: { 
+      title: 'User', 
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'all',
+        name: 'CustomerAll',
+        component: () => import('@/views/customer/all'),
+        meta: { title: 'All User', icon: 'table' }
+      },
+      {
+        path: 'outlet',
+        name: 'CustomerOutlet',
+        component: () => import('@/views/customer/outlet'),
+        meta: { title: 'Outlets', icon: 'table' }
+      },
+      {
+        path: 'agent',
+        name: 'CustomerAgent',
+        component: () => import('@/views/customer/agent'),
+        meta: { title: 'Agents', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/revenue',
+    component: Layout,
+    redirect: '/revenue/outlet',
+    name: 'Revenue',
+    meta: { 
+      title: 'Revenue', 
+      icon: 'example',
+      roles: ['outlet']
+    },
+    children: [
+      {
+        path: 'outlet',
+        name: 'OutletRevenue',
+        component: () => import('@/views/revenue/outlet'),
+        meta: { title: 'Outlet', icon: 'table' }
+      },
+      {
+        path: 'branches/:id',
+        name: 'BranchesRevenue',
+        hidden: true,
+        component: () => import('@/views/revenue/branch'),
+        meta: { title: 'Branches', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/commission',
+    component: Layout,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/agent/index'),
+        name: 'CommissionReport',
+        meta: { 
+          title: 'Comm. Report', 
+          icon: 'example',
+          roles: ['agent']
+        }
+      }
+    ]
+    
+  },
+
+  {
+    path: '/payment',
+    component: Layout,
+    redirect: '/payment/overall',
+    name: 'Customer',
+    meta: { 
+      title: 'Payment', 
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'deposit',
+        name: 'PaymentDeposit',
+        component: () => import('@/views/payments/deposit'),
+        meta: { title: 'Deposit', icon: 'table' }
+      },
+      {
+        path: 'reload',
+        name: 'PaymentReload',
+        component: () => import('@/views/payments/reload'),
+        meta: { title: 'Reload', icon: 'table' }
+      },
+      {
+        path: 'promo',
+        name: 'PaymentPromo',
+        component: () => import('@/views/payments/promo'),
+        meta: { title: 'Promo Used', icon: 'table' }
+      },
+      {
+        path: 'charges',
+        name: 'PaymentCharges',
+        component: () => import('@/views/payments/order'),
+        meta: { title: 'Charges', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/analytics',
+    component: Layout,
+    redirect: '/analytics/account',
+    name: 'Analytic',
+    meta: { 
+      title: 'Analytics', 
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'Account',
+        name: 'AnalyticAccount',
+        component: () => import('@/views/analytics/account'),
+        meta: { title: 'Account', icon: 'example' }
+      },
+      {
+        path: 'Payment',
+        name: 'AnalyticPayment',
+        component: () => import('@/views/analytics/payment'),
+        meta: { title: 'Payment', icon: 'example' }
+      }
+    ]
+  },
+
+  { path: '*', redirect: '/404', hidden: true }
+]
