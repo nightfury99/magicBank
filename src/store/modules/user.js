@@ -8,7 +8,6 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    useroutlets: [],
   },
 
   mutations: {
@@ -26,9 +25,6 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
-    },
-    SET_USER_OUTLETS: (state, useroutlets) => {
-      state.useroutlets = useroutlets
     }
   },
 
@@ -39,9 +35,9 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password)
           .then(resp => {
-            const data = resp.data
-            setToken(data.jwt)
-            commit('SET_TOKEN', data.jwt)
+            const data = resp.data.data
+            setToken(data.access_token)
+            commit('SET_TOKEN', data.access_token)
             resolve()
           })
           .catch(error => {
@@ -54,28 +50,18 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          const data = response.data
-          
-          let roles = []
-          let uoutlets = []
+          const data = response.data.data
 
-          roles.push(data.groups.name)
-          
-          if (roles.length) {
-            commit('SET_ROLES', roles)
+          if (data.roles.length) {
+            commit('SET_ROLES', data.roles)
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
-          commit('SET_NAME', data.username)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_USER_ID', data._id)
 
-          var x
-          for (x = 0; x < data.useroutlets.length; x++) {
-            uoutlets.push(data.useroutlets[x].outlet_id)
-          }
+          commit('SET_NAME', data.name)
+          commit('SET_AVATAR', data.avatar)
+          commit('SET_USER_ID', data.id)
           
-          commit('SET_USER_OUTLETS', uoutlets)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -88,7 +74,6 @@ const user = {
         commit('SET_USER_ID', '')
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
-        commit('SET_USER_OUTLETS', [])
         removeToken()
         resolve()
       })

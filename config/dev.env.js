@@ -4,6 +4,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  AUTH_API: '"http://auth.chargeup.asia:1337"',
-  BASE_API: '"http://api.chargeup.asia/v1"',
+  BASE_API: '"http://13.229.122.17/api"',
 })
