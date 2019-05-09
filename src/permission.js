@@ -23,10 +23,12 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => {
-          
+          // const roles = []  // note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
+
+          // roles.push(res.data.groups.name)
           var roles = res.data.data.roles
           store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
-           
+
             router.addRoutes(accessRoutes)
             router.options.routes = router.options.routes.concat(accessRoutes)
 

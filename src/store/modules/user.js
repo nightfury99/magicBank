@@ -7,7 +7,7 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: [],
+    roles: []
   },
 
   mutations: {
@@ -29,7 +29,7 @@ const user = {
   },
 
   actions: {
-    
+
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
@@ -61,7 +61,7 @@ const user = {
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_USER_ID', data.id)
-          
+
           resolve(response)
         }).catch(error => {
           reject(error)
