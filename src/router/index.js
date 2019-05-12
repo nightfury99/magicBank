@@ -52,162 +52,20 @@ export const asyncRoutes = [
     path: '/newsboard',
     component: Layout,
     redirect: '/newsboard/index',
+    meta: { 
+      title: 'News', 
+      icon: 'example',
+      roles: ['management']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/newsboard/index'),
         name: 'Newsboard',
-        meta: { 
-          title: 'News', 
-          icon: 'example',
-          roles: ['management']
-        }
       }
     ]
     
   },
-
-  // {
-  //   path: '/customer',
-  //   component: Layout,
-  //   redirect: '/customer/all',
-  //   name: 'Customer',
-  //   meta: { 
-  //     title: 'User', 
-  //     icon: 'example',
-  //     roles: ['admin']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'all',
-  //       name: 'CustomerAll',
-  //       component: () => import('@/views/customer/all'),
-  //       meta: { title: 'All User', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'outlet',
-  //       name: 'CustomerOutlet',
-  //       component: () => import('@/views/customer/outlet'),
-  //       meta: { title: 'Outlets', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'agent',
-  //       name: 'CustomerAgent',
-  //       component: () => import('@/views/customer/agent'),
-  //       meta: { title: 'Agents', icon: 'table' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/revenue',
-  //   component: Layout,
-  //   redirect: '/revenue/outlet',
-  //   name: 'Revenue',
-  //   meta: { 
-  //     title: 'Revenue', 
-  //     icon: 'example',
-  //     roles: ['outlet']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'outlet',
-  //       name: 'OutletRevenue',
-  //       component: () => import('@/views/revenue/outlet'),
-  //       meta: { title: 'Outlet', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'branches/:id',
-  //       name: 'BranchesRevenue',
-  //       hidden: true,
-  //       component: () => import('@/views/revenue/branch'),
-  //       meta: { title: 'Branches', icon: 'table' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/commission',
-  //   component: Layout,
-  //   redirect: 'noredirect',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/agent/index'),
-  //       name: 'CommissionReport',
-  //       meta: { 
-  //         title: 'Comm. Report', 
-  //         icon: 'example',
-  //         roles: ['agent']
-  //       }
-  //     }
-  //   ]
-    
-  // },
-
-  // {
-  //   path: '/payment',
-  //   component: Layout,
-  //   redirect: '/payment/overall',
-  //   name: 'Customer',
-  //   meta: { 
-  //     title: 'Payment', 
-  //     icon: 'example',
-  //     roles: ['admin']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'deposit',
-  //       name: 'PaymentDeposit',
-  //       component: () => import('@/views/payments/deposit'),
-  //       meta: { title: 'Deposit', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'reload',
-  //       name: 'PaymentReload',
-  //       component: () => import('@/views/payments/reload'),
-  //       meta: { title: 'Reload', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'promo',
-  //       name: 'PaymentPromo',
-  //       component: () => import('@/views/payments/promo'),
-  //       meta: { title: 'Promo Used', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'charges',
-  //       name: 'PaymentCharges',
-  //       component: () => import('@/views/payments/order'),
-  //       meta: { title: 'Charges', icon: 'table' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/analytics',
-  //   component: Layout,
-  //   redirect: '/analytics/account',
-  //   name: 'Analytic',
-  //   meta: { 
-  //     title: 'Analytics', 
-  //     icon: 'example',
-  //     roles: ['admin']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'Account',
-  //       name: 'AnalyticAccount',
-  //       component: () => import('@/views/analytics/account'),
-  //       meta: { title: 'Account', icon: 'example' }
-  //     },
-  //     {
-  //       path: 'Payment',
-  //       name: 'AnalyticPayment',
-  //       component: () => import('@/views/analytics/payment'),
-  //       meta: { title: 'Payment', icon: 'example' }
-  //     }
-  //   ]
-  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
