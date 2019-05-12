@@ -12,7 +12,7 @@
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 4}"
                 placeholder="Write something"
-                v-model="textarea2">
+                v-model="new_post">
               </el-input>
             </el-row>
             <el-row>
@@ -69,17 +69,17 @@ export default {
     return {
       avatar:"https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
       newsfeed: [],
-
+      new_post: '',
     }
   },
 
   async mounted () {
     this.newsfeed = (await getNewsboardIndex()).data.data
-    console.log(this.newsfeed)
-    console.log(this.newsfeed.length)
+    // console.log(this.newsfeed)
+    // console.log(this.newsfeed.length)
 
     for (let key in this.newsfeed) {
-      console.log(this.newsfeed[key].id)
+      // console.log(this.newsfeed[key].id)
     }
   },
 

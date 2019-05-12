@@ -51,35 +51,16 @@ export const asyncRoutes = [
   {
     path: '/newsboard',
     component: Layout,
-    redirect: 'noredirect',
+    redirect: '/newsboard/index',
     children: [
       {
         path: 'index',
         component: () => import('@/views/newsboard/index'),
         name: 'Newsboard',
         meta: { 
-          title: 'Newsboard', 
+          title: 'News', 
           icon: 'example',
-          roles: ['admin']
-        }
-      }
-    ]
-    
-  },
-
-  {
-    path: '/commission',
-    component: Layout,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/agent/index'),
-        name: 'CommissionReport',
-        meta: { 
-          title: 'Comm. Report', 
-          icon: 'example',
-          roles: ['agent']
+          roles: ['management']
         }
       }
     ]
