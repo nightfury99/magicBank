@@ -32,22 +32,22 @@
     <el-row>
       <el-col :span="14">
         <el-card>
-          <el-row>
+          <el-row v-for="(news, index) in newsfeed" :key="index">
             <el-card shadow="never">
               <el-row>
-                <el-col :span="3">
-                  <img :src=this.avatar class="user-avatar">
+                <el-col :span="2">
+                  <img :src="avatar" class="user-avatar">
                 </el-col>
                 <el-col :span="10">
-                  <h4>Steve Halam</h4>
-                  <h5>10 minutes ago</h5>
+                  <h4>{{ newsfeed[index].created_by.name }}</h4>
+                  <h5>{{ newsfeed[index].created_at | moment("from", "now") }}</h5>
                 </el-col>
                 <el-col :span="11">
                   <i class="el-icon-collection-tag"></i>
                 </el-col>
               </el-row>
               <el-row>
-                <p>Hi</p>
+                <p>{{ newsfeed[index].description }}</p>
               </el-row>
             </el-card>
           </el-row>
@@ -60,6 +60,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getNewsboardIndex, postNewsboardStore } from '@/api/newsboard'
+// import moment from 'moment'
 
 export default {
   name: 'Dashboard',
@@ -67,9 +68,24 @@ export default {
   data() {
     return {
       avatar:"https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
-
+      newsfeed: [],
 
     }
+  },
+
+  async mounted () {
+    this.newsfeed = (await getNewsboardIndex()).data.data
+    console.log(this.newsfeed)
+    console.log(this.newsfeed.length)
+
+    for (let key in this.newsfeed) {
+      console.log(this.newsfeed[key].id)
+    }
+  },
+
+  async updated ()
+  {
+    this.newsfeed = (await getNewsboardIndex()).data.data
   },
 
   computed: {
