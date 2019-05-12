@@ -6,6 +6,7 @@ import { asyncRoutes, constantRouterMap } from '@/router'
  * @param route
  */
 function hasPermission(roles, route) {
+  
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role))
   } else {
@@ -20,10 +21,10 @@ function hasPermission(roles, route) {
  */
 export function filterAsyncRoutes(routes, roles) {
   const res = []
-
+  
   routes.forEach(route => {
     const tmp = { ...route }
-
+    
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
@@ -53,7 +54,7 @@ const permission = {
         
         let accessedRoutes
 
-        if (roles.includes('admin')) {
+        if (roles.includes('management')) {
           accessedRoutes = asyncRoutes
         } else {
           accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)

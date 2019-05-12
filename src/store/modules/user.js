@@ -7,7 +7,7 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: [],
+    roles: []
   },
 
   mutations: {
@@ -29,7 +29,7 @@ const user = {
   },
 
   actions: {
-    
+
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
@@ -52,8 +52,16 @@ const user = {
         getInfo(state.token).then(response => {
           const data = response.data.data
 
-          if (data.roles.length) {
-            commit('SET_ROLES', data.roles)
+          const roles = []
+          const resRolesArr = data.roles
+
+          var x
+          for(x = 0; x < resRolesArr.length; x++) {
+            roles.push(resRolesArr[x].slug)
+          }
+
+          if (roles.length) {
+            commit('SET_ROLES', roles)
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
@@ -61,7 +69,7 @@ const user = {
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_USER_ID', data.id)
-          
+
           resolve(response)
         }).catch(error => {
           reject(error)

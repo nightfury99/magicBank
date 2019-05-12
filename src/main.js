@@ -27,6 +27,8 @@ import '../mock' // simulation data
 
 Vue.use(ElementUI, { locale })
 
+Vue.use(require('vue-moment'));
+
 Vue.config.productionTip = false
 
 new Vue({
