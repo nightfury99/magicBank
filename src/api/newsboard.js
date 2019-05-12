@@ -7,10 +7,13 @@ export function getNewsboardIndex() {
   })
 }
 
-export function postNewsboardStore() {
+export function postNewsboardStore(new_post) {
   return request({
-    url: '/newsboard',
-    method: 'post'
+    url: '/newsboard/store',
+    method: 'post',
+    data: {
+      description: new_post
+    }
   })
 }
 

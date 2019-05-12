@@ -23,7 +23,7 @@
               <el-button size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
             </el-row>
             <el-row type="flex" class="row-bg" justify="end">
-              <el-button type="warning">Post</el-button>
+              <el-button type="warning" @click="postMessage" >Post</el-button>
             </el-row>
           </div>
         </el-card>
@@ -68,9 +68,9 @@ export default {
 
   data() {
     return {
-      avatar:"https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
+      avatar: "https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
       newsfeed: [],
-      new_post: '',
+      new_post: ''
     }
   },
 
@@ -79,13 +79,12 @@ export default {
     // console.log(this.newsfeed)
     // console.log(this.newsfeed.length)
 
-    for (let key in this.newsfeed) {
+    // for (const key in this.newsfeed) {
       // console.log(this.newsfeed[key].id)
-    }
+    // }
   },
 
-  async updated ()
-  {
+  async updated () {
     this.newsfeed = (await getNewsboardIndex()).data.data
   },
 
@@ -98,6 +97,17 @@ export default {
 
   methods: {
 
+    async postMessage () {
+      console.log(this.new_post)
+      try {
+        await postNewsboardStore(this.new_post)
+      } catch (err) {
+        console.log(err)
+      }
+      this.new_post = ''
+      // this.message = (await AssetService.message()).data
+    }
+    
   }
 }
 </script>
