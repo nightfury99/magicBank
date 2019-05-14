@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard-container">
+<<<<<<< HEAD
     <el-row>
       <el-col :span="14">
         <el-card class="box-card">
@@ -54,6 +55,9 @@
         </el-card>
       </el-col>
     </el-row>
+=======
+
+>>>>>>> b3b99b783efeb4caebb1f3031671c504a7eb8765
   </div>
 </template>
 
@@ -64,6 +68,7 @@ import { getNewsboardIndex, postNewsboardStore } from '@/api/newsboard'
 
 export default {
   name: 'Dashboard',
+<<<<<<< HEAD
 
   data() {
     return {
@@ -88,6 +93,11 @@ export default {
     this.newsfeed = (await getNewsboardIndex()).data.data
   },
 
+=======
+  components: {
+    
+  },
+>>>>>>> b3b99b783efeb4caebb1f3031671c504a7eb8765
   computed: {
     ...mapGetters([
       'name',
