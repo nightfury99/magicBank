@@ -45,23 +45,29 @@
                     </el-form-item>
 
                     <el-form-item label="Assign To" :label-width="formLabelWidth">
-                        <el-select v-model="newAssignment.assignee_id" placeholder="Select">
-                            <el-option v-for="item in users" :key="item" :label="item.name" :value="item.id"> </el-option>
-                        </el-select>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-select v-model="newAssignment.assignee_id" placeholder="Select" style="width:100%">
+                                    <el-option v-for="item in users" :key="item" :label="item.name" :value="item.id"> </el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-form-item>
 
                     <el-form-item label="Date" :label-width="formLabelWidth">
-                        <el-col :span="11">
-                            <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width: 100%;"></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-                            <el-date-picker type="date" placeholder="Due date" v-model="newAssignment.end" style="width: 100%;"></el-date-picker>
-                        </el-col>
+                        <el-row>
+                            <el-col :span="10">
+                                <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width:100%"></el-date-picker>
+                            </el-col>
+                            <el-col :span="1" :offset="1"> to </el-col>
+                            <el-col :span="10" :offset="1">
+                                <el-date-picker type="date" placeholder="Due date" v-model="newAssignment.end" style="width:100%"></el-date-picker>
+                            </el-col>
+                        </el-row>
                     </el-form-item>
 
                     <el-form-item label="Description" :label-width="formLabelWidth">
-                        <el-input type="textarea" v-model="newAssignment.description"></el-input>
+                        <el-input type="textarea" v-model="newAssignment.description" :rows="5"></el-input>
                     </el-form-item>
 
                 </el-form>
