@@ -48,7 +48,8 @@
                     </el-col>
                     <el-col :span="11">
                       <el-row type="flex" class="row-bg" justify="end">
-                        <el-button icon="el-icon-star-on" circle></el-button>
+                        <el-button type="text" icon="el-icon-star-on" @click="dialogVisible = true"></el-button>
+                        <el-button type="text" icon="el-icon-circle-close" @click="dialogVisible = true" v-if="news.created_by.name == name"></el-button>
                       </el-row>
                     </el-col>
                   </el-row>
@@ -72,10 +73,11 @@
             <el-card shadow="never">
               <el-row>
                 <el-col :span="2">
-                  <img :src="avatar" class="user-avatar">
+                  <img :src="avatar" @click="dialogVisible = true" class="user-avatar">
                 </el-col>
                 <el-col :span="10">
-                  <h4>{{ news.newsboard.created_by }}</h4>
+                  <!-- <el-button type="text" @click="dialogVisible = true" icon="el-icon-star-on">{{ news.newsboard.created_by }}</el-button> -->
+                  <h4 @click="dialogVisible = true">{{ news.newsboard.created_by }}</h4>
                   <h5>{{ news.created_at | moment("from", "now") }}</h5>
                 </el-col>
                 <el-col :span="11">
@@ -90,6 +92,19 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- News Post Dialog -->
+    <el-dialog
+      title="Tips"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>This is a message</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
+      </span>
+    </el-dialog>
     
   </div>
 </template>
@@ -106,7 +121,8 @@ export default {
       avatar: "https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
       newsfeed: [],
       newsfeedFavourite: [],
-      new_post: ''
+      new_post: '',
+      dialogVisible: false
     }
   },
 
