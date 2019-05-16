@@ -1,46 +1,81 @@
 <template>
   <div class="app-container">
 
-    <el-row>
+    <el-row :gutter="20">
       <el-col :span="14">
+
+        <!-- Create Post Panel -->
+        <el-row>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix" style="font-weight:500;">
+              <span>Create Post</span>
+            </div>
+            <div>
+              <el-row>
+                <el-input
+                  type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 4}"
+                  placeholder="Write something"
+                  v-model="new_post">
+                </el-input>
+              </el-row>
+              <el-row>
+                <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
+                <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
+                <el-button size="mini" type="info" plain icon="el-icon-user-solid">Tag</el-button>
+                <el-button size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
+              </el-row>
+              <el-row type="flex" class="row-bg" justify="end">
+                <el-button type="warning" @click="postMessage" >Post</el-button>
+              </el-row>
+            </div>
+          </el-card>
+        </el-row>
+
+        <!-- Newsfeed -->
+        <el-row>
+          <el-col :span="24"><el-row>
+            <el-card>
+              <el-row v-for="(news, index) in newsfeed" :key="index">
+                <el-card shadow="never">
+                  <el-row>
+                    <el-col :span="2">
+                      <img :src="avatar" class="user-avatar">
+                    </el-col>
+                    <el-col :span="10">
+                      <h4>{{ news.created_by.name }}</h4>
+                      <h5>{{ news.created_at | moment("from", "now") }}</h5>
+                    </el-col>
+                    <el-col :span="11">
+                      <el-row type="flex" class="row-bg" justify="end">
+                        <el-button icon="el-icon-star-on" circle></el-button>
+                      </el-row>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <p>{{ news.description }}</p>
+                  </el-row>
+                </el-card>
+              </el-row>
+            </el-card></el-row>
+          </el-col>
+        </el-row>
+      </el-col>
+
+      <!-- Favourite Panel -->
+      <el-col :span="10">
         <el-card class="box-card">
           <div slot="header" class="clearfix" style="font-weight:500;">
-            <span>Create Post</span>
+            <span>Favourite</span>
           </div>
-          <div>
-            <el-row>
-              <el-input
-                type="textarea"
-                :autosize="{ minRows: 2, maxRows: 4}"
-                placeholder="Write something"
-                v-model="new_post">
-              </el-input>
-            </el-row>
-            <el-row>
-              <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
-              <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
-              <el-button size="mini" type="info" plain icon="el-icon-user-solid">Tag</el-button>
-              <el-button size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
-            </el-row>
-            <el-row type="flex" class="row-bg" justify="end">
-              <el-button type="warning" @click="postMessage" >Post</el-button>
-            </el-row>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <el-row>
-      <el-col :span="14">
-        <el-card>
-          <el-row v-for="(news, index) in newsfeed" :key="index">
+          <el-row v-for="(news, index) in newsfeedFavourite" :key="index">
             <el-card shadow="never">
               <el-row>
                 <el-col :span="2">
                   <img :src="avatar" class="user-avatar">
                 </el-col>
                 <el-col :span="10">
-                  <h4>{{ news.created_by.name }}</h4>
+                  <h4>{{ news.newsboard.created_by }}</h4>
                   <h5>{{ news.created_at | moment("from", "now") }}</h5>
                 </el-col>
                 <el-col :span="11">
@@ -48,7 +83,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <p>{{ news.description }}</p>
+                <p>{{ news.newsboard.description }}</p>
               </el-row>
             </el-card>
           </el-row>
@@ -61,7 +96,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getNewsboardIndex, postNewsboardStore } from '@/api/newsboard'
+import { getNewsboardIndex, getNewsboardFavourite, postNewsboardStore } from '@/api/newsboard'
 
 export default {
   name: 'Dashboard',
@@ -70,13 +105,17 @@ export default {
     return {
       avatar: "https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
       newsfeed: [],
+      newsfeedFavourite: [],
       new_post: ''
     }
   },
 
   async mounted () {
     this.newsfeed = (await getNewsboardIndex()).data.data
-    // console.log(this.newsfeed)
+    this.newsfeedFavourite = (await getNewsboardFavourite()).data.data
+    console.log(this.newsfeed)
+    console.log(this.newsfeedFavourite)
+    
     // console.log(this.newsfeed.length)
 
     // for (const key in this.newsfeed) {
@@ -86,6 +125,7 @@ export default {
 
   async updated () {
     this.newsfeed = (await getNewsboardIndex()).data.data
+    this.newsfeedFavourite = (await getNewsboardFavourite()).data.data
   },
 
   computed: {
@@ -97,6 +137,7 @@ export default {
 
   methods: {
 
+    // post message from Create Post panel
     async postMessage () {
       console.log(this.new_post)
       try {

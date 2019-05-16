@@ -2,7 +2,14 @@ import request from '@/utils/request'
 
 export function getNewsboardIndex() {
   return request({
-    url: '/newsboard',
+    url: '/newsboard/all',
+    method: 'get'
+  })
+}
+
+export function getNewsboardFavourite() {
+  return request({
+    url: '/newsboard/favourite/all',
     method: 'get'
   })
 }
