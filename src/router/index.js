@@ -67,5 +67,24 @@ export const asyncRoutes = [
     
   },
 
+  {
+    path: '/assignment',
+    component: Layout,
+    redirect: '/assignment/index',
+    meta: { 
+      title: 'Assignment', 
+      icon: 'example',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/assignment/index'),
+        name: 'Assignment',
+      }
+    ]
+    
+  },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
