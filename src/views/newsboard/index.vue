@@ -212,10 +212,10 @@ export default {
 
     // get newsboard list
     async newsList (val) {
-
-      console.log(val.page)
-
-      this.newsfeedQuery.page = val.page
+      
+      if(val) {
+        this.newsfeedQuery.page = val.page
+      }
 
       let meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
 
