@@ -73,9 +73,7 @@
                   <pagination
                     background
                     layout="prev, pager, next"
-                    :total="totalNewsPage" 
-                    :current-page.sync="newsfeedQuery.page"
-                    :page-size="15"
+                    :page-count="newsfeedQuery.page_count"
                     @pagination="newsList" />
                 </el-col>
               </el-row>
@@ -117,9 +115,7 @@
               <pagination
                 background
                 layout="prev, pager, next"
-                :total="totalNewsFavouritePage" 
-                :current-page.sync="newsFavouriteQuery.page"
-                :page-size="15"
+                :page-count="newsFavouriteQuery.page_count"
                 @pagination="newsFavouriteList" />
             </el-col>
           </el-row>
@@ -176,13 +172,15 @@ export default {
       totalNewsPage: 0,
       newsfeedQuery: {
         page: 1,
-        limit: 50
+        limit: 50,
+        page_count: 1
       },
 
       totalNewsFavouritePage: 0,
       newsFavouriteQuery: {
         page: 1,
-        limit: 50
+        limit: 50,
+        page_count: 1
       },
     }
   },
@@ -220,7 +218,8 @@ export default {
       let meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
 
       this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
-      this.totalNewsPage = meta.total_pages
+      this.totalNewsPage = meta.total
+      this.newsfeedQuery.page_count = meta.total_pages
 
       console.log(this.totalNewsPage)
     },
@@ -228,10 +227,15 @@ export default {
     // get favourite newsboard list
     async newsFavouriteList (val) {
 
+      if(val) {
+        this.newsFavouriteQuery.page = val.page
+      }
+
       let meta = (await getNewsboardFavourite(this.newsFavouriteQuery)).data.meta.pagination
 
       this.newsfeedFavourite = (await getNewsboardFavourite(this.newsFavouriteQuery)).data.data
       this.totalNewsFavouritePage = meta.total
+      this.newsFavouriteQuery.page_count = meta.total_pages
 
       console.log(this.totalNewsFavouritePage)
     },
