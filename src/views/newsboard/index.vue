@@ -220,7 +220,7 @@ export default {
       let meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
 
       this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
-      this.totalNewsPage = meta.total
+      this.totalNewsPage = meta.total_pages
 
       console.log(this.totalNewsPage)
     },
