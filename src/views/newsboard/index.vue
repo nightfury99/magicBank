@@ -11,23 +11,27 @@
               <span>Create Post</span>
             </div>
             <div>
+
               <el-row>
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 2, maxRows: 4}"
                   placeholder="Write something"
-                  v-model="new_post">
+                  v-model="newPost">
                 </el-input>
               </el-row>
+              
               <el-row>
                 <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
                 <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
                 <el-button size="mini" type="info" plain icon="el-icon-user-solid">Tag</el-button>
                 <el-button size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
               </el-row>
+              
               <el-row type="flex" class="row-bg" justify="end">
                 <el-button type="warning" @click="postMessage" >Post</el-button>
               </el-row>
+
             </div>
           </el-card>
         </el-row>
@@ -38,26 +42,44 @@
             <el-card>
               <el-row v-for="(news, index) in newsfeed" :key="index">
                 <el-card shadow="never">
+                  
                   <el-row>
                     <el-col :span="2">
                       <img :src="avatar" class="user-avatar">
                     </el-col>
+                    
                     <el-col :span="10">
                       <h4>{{ news.created_by.name }}</h4>
                       <h5>{{ news.created_at | moment("from", "now") }}</h5>
                     </el-col>
+                    
                     <el-col :span="11">
                       <el-row type="flex" class="row-bg" justify="end">
-                        <el-button type="text" icon="el-icon-star-on" @click="dialogVisible = true"></el-button>
-                        <el-button type="text" icon="el-icon-circle-close" @click="dialogVisible = true" v-if="news.created_by.name == name"></el-button>
+                        <el-button type="text" class="icon-news" @click="dialogVisible = true"><svg-icon icon-class="tag-outline" /></el-button>
+                        <el-button type="text" class="icon-news" icon="el-icon-delete" @click="changeDeleteId(news.id)" v-if="news.created_by.name == name"></el-button>
                       </el-row>
                     </el-col>
                   </el-row>
+                  
                   <el-row>
                     <p>{{ news.description }}</p>
                   </el-row>
+                  
                 </el-card>
               </el-row>
+
+              <el-row>
+                <el-col :span="24" align="center">
+                  <pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="totalNewsPage" 
+                    :current-page.sync="newsfeedQuery.page"
+                    :page-size="15"
+                    @pagination="newsList" />
+                </el-col>
+              </el-row>
+
             </el-card></el-row>
           </el-col>
         </el-row>
@@ -77,7 +99,7 @@
                 </el-col>
                 <el-col :span="10">
                   <!-- <el-button type="text" @click="dialogVisible = true" icon="el-icon-star-on">{{ news.newsboard.created_by }}</el-button> -->
-                  <h4 @click="dialogVisible = true">{{ news.newsboard.created_by }}</h4>
+                  <h4 :style="{ cursor: 'pointer'}" @click="dialogVisible = true">{{ news.newsboard.created_by }}</h4>
                   <h5>{{ news.created_at | moment("from", "now") }}</h5>
                 </el-col>
                 <el-col :span="11">
@@ -89,20 +111,42 @@
               </el-row>
             </el-card>
           </el-row>
+
+          <el-row>
+            <el-col :span="24" align="center">
+              <pagination
+                background
+                layout="prev, pager, next"
+                :total="totalNewsFavouritePage" 
+                :current-page.sync="newsFavouriteQuery.page"
+                :page-size="15"
+                @pagination="newsFavouriteList" />
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
     </el-row>
 
-    <!-- News Post Dialog -->
+    <!-- Dialog for Specific News Post-->
     <el-dialog
-      title="Tips"
       :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose">
+      width="30%">
       <span>This is a message</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">Cancel</el-button>
         <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
+      </span>
+    </el-dialog>
+    
+    <!-- Dialog for News Delete -->
+    <el-dialog
+      title="Delete Confirmation"
+      :visible.sync="dialogDelete"
+      width="30%">
+      <span>Delete this post?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogDelete = false">Cancel</el-button>
+        <el-button type="primary" @click="deleteMessage">Delete</el-button>
       </span>
     </el-dialog>
     
@@ -111,38 +155,51 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getNewsboardIndex, getNewsboardFavourite, postNewsboardStore } from '@/api/newsboard'
+import { getNewsboardIndex, getNewsboardFavourite, postNewsboardStore, deleteNewsboard } from '@/api/newsboard'
+import Vue from 'vue';
+import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'Dashboard',
+  // name: 'Dashboard',
+  
 
   data() {
     return {
       avatar: "https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
       newsfeed: [],
       newsfeedFavourite: [],
-      new_post: '',
-      dialogVisible: false
+      newPost: '',
+      dialogVisible: false,
+      dialogDelete: false,
+      idDelete: '',
+
+      totalNewsPage: 0,
+      newsfeedQuery: {
+        page: 1,
+        limit: 50
+      },
+
+      totalNewsFavouritePage: 0,
+      newsFavouriteQuery: {
+        page: 1,
+        limit: 50
+      },
     }
   },
+  components: { Pagination },
 
-  async mounted () {
-    this.newsfeed = (await getNewsboardIndex()).data.data
-    this.newsfeedFavourite = (await getNewsboardFavourite()).data.data
-    console.log(this.newsfeed)
-    console.log(this.newsfeedFavourite)
-    
-    // console.log(this.newsfeed.length)
+  created () {
+    // this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
+    // this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
+    this.newsList()
+    this.newsFavouriteList()
 
-    // for (const key in this.newsfeed) {
-      // console.log(this.newsfeed[key].id)
-    // }
   },
 
-  async updated () {
-    this.newsfeed = (await getNewsboardIndex()).data.data
-    this.newsfeedFavourite = (await getNewsboardFavourite()).data.data
-  },
+  // async updated () {
+  //   this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
+  //   this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
+  // },
 
   computed: {
     ...mapGetters([
@@ -153,16 +210,61 @@ export default {
 
   methods: {
 
+    // get newsboard list
+    async newsList (val) {
+
+      console.log(val.page)
+
+      this.newsfeedQuery.page = val.page
+
+      let meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
+
+      this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
+      this.totalNewsPage = meta.total
+
+      console.log(this.totalNewsPage)
+    },
+
+    // get favourite newsboard list
+    async newsFavouriteList (val) {
+
+      let meta = (await getNewsboardFavourite(this.newsFavouriteQuery)).data.meta.pagination
+
+      this.newsfeedFavourite = (await getNewsboardFavourite(this.newsFavouriteQuery)).data.data
+      this.totalNewsFavouritePage = meta.total
+
+      console.log(this.totalNewsFavouritePage)
+    },
+
     // post message from Create Post panel
     async postMessage () {
-      console.log(this.new_post)
+      console.log(this.newPost)
       try {
-        await postNewsboardStore(this.new_post)
+        await postNewsboardStore(this.newPost)
       } catch (err) {
         console.log(err)
       }
-      this.new_post = ''
-      // this.message = (await AssetService.message()).data
+      this.newPost = ''
+      this.newsList()
+    },
+    
+    // get desired newsboard id to delete
+    async changeDeleteId (id) {
+      // console.log(id)
+      this.idDelete = id
+      this.dialogDelete = true
+    },
+
+    // delete newsboard
+    async deleteMessage () {
+      console.log(this.idDelete)
+      try {
+        await deleteNewsboard(this.idDelete)
+      } catch (err) {
+        console.log(err)
+      }
+      this.dialogDelete = false
+      this.newsList()
     }
     
   }
@@ -205,6 +307,10 @@ export default {
   border-radius: 50%;
 }
 
+.icon-news {
+  font-size: 20px;
+}
+
 h4 {
   display: block;
   /* font-size: 0.83em; */
@@ -224,4 +330,3 @@ h5 {
   font-weight: normal;
 }
 </style>
-
