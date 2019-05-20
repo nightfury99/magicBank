@@ -59,9 +59,9 @@
         <el-form-item label="Name" prop="name">
           <el-input v-model="newBranch.name" />
         </el-form-item>
-        <el-form-item label="Date" prop="timestamp">
+        <!-- <el-form-item label="Date" prop="timestamp">
           <el-date-picker v-model="newBranch.created_at" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="Code" prop="code">
           <el-input v-model="newBranch.code" />
         </el-form-item>
@@ -182,7 +182,6 @@ export default {
     handleUpdate(row) {
       this.resetTemp()
       this.newBranch = Object.assign({}, row) // copy obj
-      this.newBranch.created_at = new Date(this.newBranch.created_at)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -193,7 +192,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.newBranch)
-          tempData.updated_at = +new Date(tempData.updated_at) 
+          // tempData.updated_at = +new Date(tempData.updated_at) 
           updateBranch(tempData)
             .then(resp => {
                 for (const v of this.branch) {

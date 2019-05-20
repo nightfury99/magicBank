@@ -25,8 +25,8 @@ export function createBranch(data) {
 
 export function updateBranch(data) {
   return request({
-    url: '/branch/{branch_id}/update',
-    method: 'put',
+    url: `/branch/${data.id}/update`,
+    method: 'post',
     data
   })
 }
