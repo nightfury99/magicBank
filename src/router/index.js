@@ -73,7 +73,7 @@ export const asyncRoutes = [
     redirect: '/assignment/index',
     meta: { 
       title: 'Assignment', 
-      icon: 'example',
+      icon: 'edit',
       roles: ['management']
     },
     children: [
@@ -81,6 +81,25 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/assignment/index'),
         name: 'Assignment',
+      }
+    ]
+    
+  },
+
+  {
+    path: '/branch',
+    component: Layout,
+    redirect: '/branch/index',
+    meta: { 
+      title: 'Branch', 
+      icon: 'list',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/branch/index'),
+        name: 'Branch',
       }
     ]
     
