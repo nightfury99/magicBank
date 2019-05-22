@@ -42,29 +42,29 @@
             <el-card>
               <el-row v-for="(news, index) in newsfeed" :key="index">
                 <el-card shadow="never">
-                  
+
                   <el-row>
                     <el-col :span="2">
                       <img :src="avatar" class="user-avatar">
                     </el-col>
-                    
+
                     <el-col :span="10">
                       <h4>{{ news.created_by.name }}</h4>
                       <h5>{{ news.created_at | moment("from", "now") }}</h5>
                     </el-col>
-                    
+
                     <el-col :span="11">
                       <el-row type="flex" class="row-bg" justify="end">
                         <el-button type="text" class="icon-news" @click="dialogVisible = true"><svg-icon icon-class="tag-outline" /></el-button>
-                        <el-button type="text" class="icon-news" icon="el-icon-delete" @click="changeDeleteId(news.id)" v-if="news.created_by.name == name"></el-button>
+                        <el-button type="text" class="icon-news" icon="el-icon-delete" @click="changeDeleteId(news.id)" v-if="news.created_by.name == name"/>
                       </el-row>
                     </el-col>
                   </el-row>
-                  
+
                   <el-row>
                     <p>{{ news.description }}</p>
                   </el-row>
-                  
+
                 </el-card>
               </el-row>
 
@@ -93,7 +93,7 @@
             <el-card shadow="never">
               <el-row>
                 <el-col :span="2">
-                  <img :src="avatar" @click="dialogVisible = true" class="user-avatar">
+                  <img :src="avatar" class="user-avatar" @click="dialogVisible = true">
                 </el-col>
                 <el-col :span="10">
                   <!-- <el-button type="text" @click="dialogVisible = true" icon="el-icon-star-on">{{ news.newsboard.created_by }}</el-button> -->
@@ -101,7 +101,7 @@
                   <h5>{{ news.created_at | moment("from", "now") }}</h5>
                 </el-col>
                 <el-col :span="11">
-                  <i class="el-icon-collection-tag"></i>
+                  <i class="el-icon-collection-tag"/>
                 </el-col>
               </el-row>
               <el-row>
@@ -113,9 +113,9 @@
           <el-row>
             <el-col :span="24" align="center">
               <pagination
+                :page-count="newsFavouriteQuery.page_count"
                 background
                 layout="prev, pager, next"
-                :page-count="newsFavouriteQuery.page_count"
                 @pagination="newsFavouriteList" />
             </el-col>
           </el-row>
@@ -133,11 +133,11 @@
         <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
       </span>
     </el-dialog>
-    
+
     <!-- Dialog for News Delete -->
     <el-dialog
-      title="Delete Confirmation"
       :visible.sync="dialogDelete"
+      title="Delete Confirmation"
       width="30%">
       <span>Delete this post?</span>
       <span slot="footer" class="dialog-footer">
@@ -145,23 +145,21 @@
         <el-button type="primary" @click="deleteMessage">Delete</el-button>
       </span>
     </el-dialog>
-    
+
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { getNewsboardIndex, getNewsboardFavourite, postNewsboardStore, deleteNewsboard } from '@/api/newsboard'
-import Vue from 'vue';
 import Pagination from '@/components/Pagination'
 
 export default {
-  // name: 'Dashboard',
-  
+  components: { Pagination },
 
   data() {
     return {
-      avatar: "https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg",
+      avatar: 'https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg',
       newsfeed: [],
       newsfeedFavourite: [],
       newPost: '',
@@ -181,23 +179,9 @@ export default {
         page: 1,
         limit: 50,
         page_count: 1
-      },
+      }
     }
   },
-  components: { Pagination },
-
-  created () {
-    // this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
-    // this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
-    this.newsList()
-    this.newsFavouriteList()
-
-  },
-
-  // async updated () {
-  //   this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
-  //   this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
-  // },
 
   computed: {
     ...mapGetters([
@@ -206,16 +190,27 @@ export default {
     ])
   },
 
+  created() {
+    // this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
+    // this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
+    this.newsList()
+    this.newsFavouriteList()
+  },
+
+  // async updated () {
+  //   this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
+  //   this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
+  // },
+
   methods: {
 
     // get newsboard list
-    async newsList (val) {
-      
-      if(val) {
+    async newsList(val) {
+      if (val) {
         this.newsfeedQuery.page = val.page
       }
 
-      let meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
+      const meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
 
       this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
       this.totalNewsPage = meta.total
@@ -225,13 +220,12 @@ export default {
     },
 
     // get favourite newsboard list
-    async newsFavouriteList (val) {
-
-      if(val) {
+    async newsFavouriteList(val) {
+      if (val) {
         this.newsFavouriteQuery.page = val.page
       }
 
-      let meta = (await getNewsboardFavourite(this.newsFavouriteQuery)).data.meta.pagination
+      const meta = (await getNewsboardFavourite(this.newsFavouriteQuery)).data.meta.pagination
 
       this.newsfeedFavourite = (await getNewsboardFavourite(this.newsFavouriteQuery)).data.data
       this.totalNewsFavouritePage = meta.total
@@ -241,7 +235,7 @@ export default {
     },
 
     // post message from Create Post panel
-    async postMessage () {
+    async postMessage() {
       console.log(this.newPost)
       try {
         await postNewsboardStore(this.newPost)
@@ -251,16 +245,16 @@ export default {
       this.newPost = ''
       this.newsList()
     },
-    
+
     // get desired newsboard id to delete
-    async changeDeleteId (id) {
+    async changeDeleteId(id) {
       // console.log(id)
       this.idDelete = id
       this.dialogDelete = true
     },
 
     // delete newsboard
-    async deleteMessage () {
+    async deleteMessage() {
       console.log(this.idDelete)
       try {
         await deleteNewsboard(this.idDelete)
@@ -270,7 +264,7 @@ export default {
       this.dialogDelete = false
       this.newsList()
     }
-    
+
   }
 }
 </script>

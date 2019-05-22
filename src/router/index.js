@@ -51,17 +51,17 @@ export const asyncRoutes = [
   {
     path: '/newsboard',
     component: Layout,
-    redirect: '/newsboard/index',
-    meta: { 
-      title: 'News', 
-      icon: 'example',
-      roles: ['management']
-    },
+    redirect: 'noredirect',
     children: [
       {
         path: 'index',
         component: () => import('@/views/newsboard/index'),
         name: 'Newsboard',
+        meta: { 
+          title: 'News', 
+          icon: 'example',
+          roles: ['management']
+        }
       }
     ]
     
@@ -71,16 +71,16 @@ export const asyncRoutes = [
     path: '/assignment',
     component: Layout,
     redirect: '/assignment/index',
-    meta: { 
-      title: 'Assignment', 
-      icon: 'example',
-      roles: ['management']
-    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/assignment/index'),
         name: 'Assignment',
+        meta: { 
+          title: 'Assignment', 
+          icon: 'example',
+          roles: ['management']
+        }
       }
     ]
     

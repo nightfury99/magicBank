@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 export function getAssignments() {
-    return request({
-      url: '/assignment/all',
-      method: 'get'
-    })
-  }
+  return request({
+    url: '/assignment/all',
+    method: 'get'
+  })
+}
 
 export function createAssignment(param) {
   return request({
