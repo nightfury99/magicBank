@@ -27,7 +27,7 @@
                 <el-button size="mini" type="info" plain icon="el-icon-user-solid">Tag</el-button>
                 <el-button size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
               </el-row>
-              
+
               <el-row type="flex" class="row-bg" justify="end">
                 <el-button type="warning" @click="postMessage" >Post</el-button>
               </el-row>

@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 import qs from 'qs'
 
+export function getUserIndex(query) {
+    return request({
+      url: `/user/all`,
+      method: 'get'
+    })
+  }
+
 // export function getUsers() {
 //     return request({
 //         url: '/user?_limit=3000',

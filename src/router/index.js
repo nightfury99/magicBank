@@ -85,6 +85,25 @@ export const asyncRoutes = [
     ]
     
   },
+  
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user/index'),
+        name: 'User',
+        meta: { 
+          title: 'User', 
+          icon: 'example',
+          roles: ['management']
+        }
+      }
+    ]
+    
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -143,7 +143,6 @@ import moment from 'moment'
 }
 </script>
 
-
 <style scoped>
     .title {
         font-size: 16px;
