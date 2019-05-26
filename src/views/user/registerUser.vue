@@ -34,7 +34,7 @@
               </el-row>
           </el-form-item>
         </el-col>
-        
+
         <el-col :span="12">
             <el-form-item label="Branch">
               <el-row>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { postUser, getRoleIndex, getBranchIndex, postUserstore } from '@/api/user'
+import { getRoleIndex, getBranchIndex, postUserStore } from '@/api/user'
 
 export default {
   data() {
@@ -97,10 +97,11 @@ export default {
       this.branches = (await getBranchIndex()).data.data
     },
 
+    // register/post new user info 
     async registerNewUser() {
       console.log(this.newUser)
       try {
-        await postUserstore(this.newUser)
+        await postUserStore(this.newUser)
         console.log(this.newUser)
       } catch (err) {
         console.log(err)

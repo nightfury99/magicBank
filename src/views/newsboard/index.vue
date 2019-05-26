@@ -191,16 +191,9 @@ export default {
   },
 
   created() {
-    // this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
-    // this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
     this.newsList()
     this.newsFavouriteList()
   },
-
-  // async updated () {
-  //   this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
-  //   this.newsfeedFavourite = (await getNewsboardFavourite(this.newsfeedQuery)).data.data
-  // },
 
   methods: {
 

@@ -26,16 +26,19 @@
 				{{ scope.row.name }}
 				</template>
 			</el-table-column>
+
 			<el-table-column align="center" label="Nickname" >
 				<template slot-scope="scope">
 				{{ scope.row.nickname}}
 				</template>
 			</el-table-column>
+
 			<el-table-column align="center" label="Role" width="150">
 				<template align="center" slot-scope="scope">
 					<el-tag type="warning" size="mini">{{ scope.row.roles[0].name }}</el-tag>
 				</template>
 			</el-table-column>
+			
 			<el-table-column align="center" label="Branch" width="140">
 				<template align="center" slot-scope="scope">
 				{{ scope.row.branches[0].name }}
@@ -47,12 +50,14 @@
 				{{ scope.row.email }}
 				</template>
 			</el-table-column>
+
 			<el-table-column align="center" label="Status">
 				<template slot-scope="scope">
 					<el-tag v-if="scope.row.status == 1" type="success" size="mini">Active</el-tag>
 					<el-tag v-else type="danger" size="mini">Inactive</el-tag>
 				</template>
 			</el-table-column>
+
 			<el-table-column align="center" label="Action" width="200">
 				<template align="center" slot-scope="scope">
 					<el-tooltip content="View" placement="top">
@@ -62,7 +67,7 @@
 						<el-button size="mini" type="primary" icon="el-icon-edit" circle></el-button>
 					</el-tooltip>
 					<el-tooltip content="Delete" placement="top">
-						<el-button size="mini" type="danger" icon="el-icon-delete" circle></el-button>
+						<el-button size="mini" type="danger" icon="el-icon-delete" @click="changeDeleteId(scope.row.id)" circle></el-button>
 					</el-tooltip>
 				</template>
 			</el-table-column>
@@ -79,12 +84,24 @@
 		</el-col>
 	</el-row>
 
+	<!-- Dialog for User Delete -->
+    <el-dialog
+      :visible.sync="dialogDelete"
+      title="Delete Confirmation"
+      width="30%">
+      <span>Delete this user?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogDelete = false">Cancel</el-button>
+        <el-button type="primary" @click="deleteUserId">Delete</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getUserIndex } from '@/api/user'
+import { getUserIndex, deleteUser } from '@/api/user'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
 
@@ -93,7 +110,10 @@ export default {
 	return {
 	  user: [],
 	  listLoading: false,
-	  status: 1,
+		status: 1,
+		
+		idDelete: '',
+    dialogDelete: false,
 		
 		totalUserPage: 0,
 	  userQuery: {
@@ -101,9 +121,11 @@ export default {
 			limit: 50,
 			page_count: 1
 		},
+
 	  search: ''
 	}
-  },
+	},
+	
   components: { Pagination },
   computed: {
 	...mapGetters([
@@ -114,62 +136,51 @@ export default {
 	this.userList()
 	},
 	
+	methods: {
 
-  methods: {
+		// navigate to specific route
+		navigateTo (route) {
+			this.$router.push(route)
+		},
 
-	navigateTo (route) {
-		this.$router.push(route)
-	},
+		// list all users
+		async userList(val) {
+			this.listLoading = true
 
-	async userList(val) {
-	  this.listLoading = true
+			if (val) {
+				this.userQuery.page = val.page
+			}
 
-		if (val) {
-			this.userQuery.page = val.page
-		}
+			const meta = (await getUserIndex(this.userQuery)).data.meta.pagination
+			this.user = (await getUserIndex(this.userQuery)).data.data
 
-		const meta = (await getUserIndex(this.userQuery)).data.meta.pagination
+			this.totalUserPage = meta.total
+			this.userQuery.page_count = meta.total_pages
 
-		this.user = (await getUserIndex(this.userQuery)).data.data
-		this.totalUserPage = meta.total
-		this.userQuery.page_count = meta.total_pages
+			// console.log(this.totalUserPage)
 
-		console.log(this.totalUserPage)
+			this.listLoading = false
 
-		this.listLoading = false
+		},
 
-	},
+		// get desired user id to delete
+    async changeDeleteId(id) {
+      console.log(id)
+      this.idDelete = id
+      this.dialogDelete = true
+    },
 
-	// searchRecord: async function() {
-		
-	//   this.listLoading = true
-
-	//   this.user = []
-
-	//   getUserIndex()
-	// 	.then(res => {
-	// 		var data = res.data.data
-	// 		var meta = res.data.meta.pagination
-
-	// 		console.log(meta)
-
-	// 		console.log(data)
-
-	// 		if (data.length > 0) {
-	// 			this.user = data
-	// 			this.totalUserPage = meta.total
-	// 			this.userQuery.page_count = meta.total_pages
-	// 		} else {
-	// 			this.user = []
-	// 		}
-
-	// 		this.listLoading = false
-	// 	})
-	// 	.catch(error => {
-	// 		console.log(error.response)
-	// 	})
-	// },
-
+    // delete user
+    async deleteUserId() {
+      console.log(this.idDelete)
+      try {
+        await deleteUser(this.idDelete)
+      } catch (err) {
+        console.log(err)
+      }
+      this.dialogDelete = false
+      this.userList()
+    }
 
   }
 }

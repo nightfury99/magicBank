@@ -59,7 +59,7 @@ export const asyncRoutes = [
         name: 'Newsboard',
         meta: { 
           title: 'News', 
-          icon: 'example',
+          icon: 'news',
           roles: ['management']
         }
       }

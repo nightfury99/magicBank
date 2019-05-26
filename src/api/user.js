@@ -22,7 +22,7 @@ export function getBranchIndex() {
   })
 }
 
-export function postUserstore(new_user) {
+export function postUserStore(new_user) {
   return request({
     url: '/user/create',
     method: 'post',
@@ -32,6 +32,13 @@ export function postUserstore(new_user) {
       role_id: new_user.role_id,
       branch_id: new_user.branch_id
     }
+  })
+}
+
+export function deleteUser(id) {
+  return request({
+    url: `/user/${id}/delete`,
+    method: 'delete'
   })
 }
 
