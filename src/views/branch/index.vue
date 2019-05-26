@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="branchQuery.name" placeholder="Name" style="width: 400px;" class="filter-item" />
+      <el-input v-model="branchQuery.name" :disabled="true" placeholder="Name" style="width: 400px;" class="filter-item" />
       <el-button class="filter-item" type="primary" icon="el-icon-search">
         Search
       </el-button>
