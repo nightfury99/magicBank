@@ -46,7 +46,7 @@
 
                     <el-form-item label="Assign To" :label-width="formLabelWidth">
                         <el-row>
-                            <el-col :span="20">
+                            <el-col :span="24">
                                 <el-select v-model="newAssignment.assignee_id" placeholder="Select" style="width:100%">
                                     <el-option v-for="item in users" :key="item" :label="item.name" :value="item.id"> </el-option>
                                 </el-select>
@@ -56,7 +56,7 @@
 
                     <el-form-item label="Date" :label-width="formLabelWidth">
                         <el-row>
-                            <el-col :span="10">
+                            <el-col :span="11">
                                 <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width:100%"></el-date-picker>
                             </el-col>
                             <el-col :span="1" :offset="1"> to </el-col>

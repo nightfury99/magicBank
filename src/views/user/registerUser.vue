@@ -25,23 +25,25 @@
 
         <el-col :span="12">
           <el-form-item label="Role">
-              <el-select v-model="newUser.role_id" placeholder="Please select role">
+              <el-row>
+              <el-col :span="24">
+              <el-select v-model="newUser.role_id" placeholder="Please select role" style="width:100%">
                 <el-option v-for="(item, index) in roles" :key="index" :label="item.name" :value="item.id" />
               </el-select>
+              </el-col>
+              </el-row>
           </el-form-item>
         </el-col>
+        
         <el-col :span="12">
-            <!-- <el-form-item label="Status">
-            <el-radio-group v-model="newUser.status">
-              <el-radio-button label="1">Active</el-radio-button>
-              <el-radio-button label="0">Deactive</el-radio-button>
-            </el-radio-group>
-            </el-form-item> -->
-
             <el-form-item label="Branch">
-              <el-select v-model="newUser.branch_id" placeholder="Please select branch">
+              <el-row>
+              <el-col :span="24">
+              <el-select v-model="newUser.branch_id" placeholder="Please select branch" style="width:100%">
                 <el-option v-for="(item, index) in branches" :key="index" :label="item.name" :value="item.id" />
               </el-select>
+              </el-col>
+              </el-row>
             </el-form-item>
         </el-col>
       </el-row>
