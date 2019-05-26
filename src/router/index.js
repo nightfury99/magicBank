@@ -90,17 +90,51 @@ export const asyncRoutes = [
     path: '/user',
     component: Layout,
     redirect: '/user/index',
+    name: 'User',
+    meta: { 
+      title: 'User', 
+      icon: 'user',
+      roles: ['management']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/user/index'),
-        name: 'User',
+        name: 'allUsers',
         meta: { 
-          title: 'User', 
-          icon: 'example',
-          roles: ['management']
+          title: 'All Users', 
+          icon: 'peoples',
+        }
+      },
+      {
+        path: 'registerUser',
+        component: () => import('@/views/user/registerUser'),
+        name: 'registerUser',
+        meta: { 
+          title: 'Register', 
+          icon: 'form',
         }
       }
+      // {
+      //   path: 'view/:userID',
+      //   component: () => import('@/views/user/viewUser'),
+      //   name: 'User',
+      //   meta: { 
+      //     title: 'User', 
+      //     icon: 'example',
+      //     roles: ['management']
+      //   }
+      // },
+      // {
+      //   path: 'edit/:userID',
+      //   component: () => import('@/views/user/editUser'),
+      //   name: 'User',
+      //   meta: { 
+      //     title: 'User', 
+      //     icon: 'example',
+      //     roles: ['management']
+      //   }
+      // }
     ]
     
   },

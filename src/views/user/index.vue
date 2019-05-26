@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+
 	<el-row>
 	  <el-col :span="13" :offset="5">
 		<el-input
@@ -8,9 +9,10 @@
 		  placeholder="Type to search"/>
 	  </el-col>
 	  <el-col :span="5" :offset="1">
-		<el-button style="float: right" type="warning">Add New User</el-button>
+		<el-button style="float: right" type="warning" @click="navigateTo({name: 'registerUser'})" >Register New User</el-button>
 	  </el-col>
 	</el-row>
+	
 	<el-row>
 		<el-table
 		v-loading="listLoading"
@@ -24,19 +26,9 @@
 				{{ scope.row.name }}
 				</template>
 			</el-table-column>
-			<el-table-column label="NRIC" >
+			<el-table-column align="center" label="Nickname" >
 				<template slot-scope="scope">
-				{{ }}
-				</template>
-			</el-table-column>
-			<el-table-column label="Phone. No">
-				<template slot-scope="scope">
-				{{ }}
-				</template>
-			</el-table-column>
-			<el-table-column align="center" label="Email" width="270">
-				<template slot-scope="scope">
-				{{ scope.row.email }}
+				{{ scope.row.nickname}}
 				</template>
 			</el-table-column>
 			<el-table-column align="center" label="Role" width="150">
@@ -46,19 +38,31 @@
 			</el-table-column>
 			<el-table-column align="center" label="Branch" width="140">
 				<template align="center" slot-scope="scope">
-				{{ }}
+				{{ scope.row.branches[0].name }}
+				</template>
+			</el-table-column>
+
+			<el-table-column align="center" label="Email" width="270">
+				<template slot-scope="scope">
+				{{ scope.row.email }}
+				</template>
+			</el-table-column>
+			<el-table-column align="center" label="Status">
+				<template slot-scope="scope">
+					<el-tag v-if="scope.row.status == 1" type="success" size="mini">Active</el-tag>
+					<el-tag v-else type="danger" size="mini">Inactive</el-tag>
 				</template>
 			</el-table-column>
 			<el-table-column align="center" label="Action" width="200">
 				<template align="center" slot-scope="scope">
 					<el-tooltip content="View" placement="top">
-						<el-button icon="el-icon-search" circle></el-button>
+						<el-button size="mini" icon="el-icon-search" circle></el-button>
 					</el-tooltip>
 					<el-tooltip content="Edit" placement="top">
-						<el-button type="primary" icon="el-icon-edit" circle></el-button>
+						<el-button size="mini" type="primary" icon="el-icon-edit" circle></el-button>
 					</el-tooltip>
 					<el-tooltip content="Delete" placement="top">
-						<el-button type="danger" icon="el-icon-delete" circle></el-button>
+						<el-button size="mini" type="danger" icon="el-icon-delete" circle></el-button>
 					</el-tooltip>
 				</template>
 			</el-table-column>
@@ -70,9 +74,8 @@
 			<pagination
 				background
 				layout="prev, pager, next"
-				:total="total" 
-				:current-page.sync="listQuery.page"
-				@pagination="searchRecord" />
+				:page-count="userQuery.page_count"
+				@pagination="userList" />
 		</el-col>
 	</el-row>
 
@@ -88,16 +91,16 @@ import Pagination from '@/components/Pagination'
 export default {
   data() {
 	return {
-	  moment: moment,  
-	  user: null,
-	  range: [],
+	  user: [],
 	  listLoading: false,
 	  status: 1,
-	  total: 0,
-	  listQuery: {
-		page: 1,
-		limit: 50
-	  },
+		
+		totalUserPage: 0,
+	  userQuery: {
+			page: 1,
+			limit: 50,
+			page_count: 1
+		},
 	  search: ''
 	}
   },
@@ -108,54 +111,65 @@ export default {
 	])
   },
   created() {
+	this.userList()
+	},
 	
-	if(this.$route.query.from) {
-	  this.range.push(this.$route.query.from)
-	  this.range.push(this.$route.query.to)
-	} else {
-	  this.defaultRange()
-	}
 
-	this.searchRecord()
-  },
   methods: {
 
-	searchRecord: async function() {
-		
-	  this.listLoading = true
-
-	  this.user = []
-
-	  getUserIndex()
-		.then(res => {
-			var data = res.data.data
-			var meta = res.data.meta
-
-			console.log(data)
-
-			if (data.length > 0) {
-				this.user = data
-				this.total = meta.total_records
-			} else {
-				this.user = []
-			}
-
-			this.listLoading = false
-		})
-		.catch(error => {
-			console.log(error.response)
-		})
+	navigateTo (route) {
+		this.$router.push(route)
 	},
 
-	defaultRange: function() {
-	  var start = new Date()
-	  start.setDate(1)
+	async userList(val) {
+	  this.listLoading = true
 
-	  var end = new Date()
+		if (val) {
+			this.userQuery.page = val.page
+		}
 
-	  this.range.push(start)
-	  this.range.push(end)
-	}
+		const meta = (await getUserIndex(this.userQuery)).data.meta.pagination
+
+		this.user = (await getUserIndex(this.userQuery)).data.data
+		this.totalUserPage = meta.total
+		this.userQuery.page_count = meta.total_pages
+
+		console.log(this.totalUserPage)
+
+		this.listLoading = false
+
+	},
+
+	// searchRecord: async function() {
+		
+	//   this.listLoading = true
+
+	//   this.user = []
+
+	//   getUserIndex()
+	// 	.then(res => {
+	// 		var data = res.data.data
+	// 		var meta = res.data.meta.pagination
+
+	// 		console.log(meta)
+
+	// 		console.log(data)
+
+	// 		if (data.length > 0) {
+	// 			this.user = data
+	// 			this.totalUserPage = meta.total
+	// 			this.userQuery.page_count = meta.total_pages
+	// 		} else {
+	// 			this.user = []
+	// 		}
+
+	// 		this.listLoading = false
+	// 	})
+	// 	.catch(error => {
+	// 		console.log(error.response)
+	// 	})
+	// },
+
 
   }
 }
