@@ -51,17 +51,17 @@ export const asyncRoutes = [
   {
     path: '/newsboard',
     component: Layout,
-    redirect: '/newsboard/index',
-    meta: { 
-      title: 'News', 
-      icon: 'example',
-      roles: ['management']
-    },
+    redirect: 'noredirect',
     children: [
       {
         path: 'index',
         component: () => import('@/views/newsboard/index'),
         name: 'Newsboard',
+        meta: { 
+          title: 'News', 
+          icon: 'news',
+          roles: ['management']
+        }
       }
     ]
     
@@ -71,17 +71,70 @@ export const asyncRoutes = [
     path: '/assignment',
     component: Layout,
     redirect: '/assignment/index',
-    meta: { 
-      title: 'Assignment', 
-      icon: 'edit',
-      roles: ['management']
-    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/assignment/index'),
         name: 'Assignment',
+        meta: { 
+          title: 'Assignment', 
+          icon: 'example',
+          roles: ['management']
+        }
       }
+    ]
+    
+  },
+  
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    name: 'User',
+    meta: { 
+      title: 'User', 
+      icon: 'user',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user/index'),
+        name: 'allUsers',
+        meta: { 
+          title: 'All Users', 
+          icon: 'peoples',
+        }
+      },
+      {
+        path: 'registerUser',
+        component: () => import('@/views/user/registerUser'),
+        name: 'registerUser',
+        meta: { 
+          title: 'Register', 
+          icon: 'form',
+        }
+      }
+      // {
+      //   path: 'view/:userID',
+      //   component: () => import('@/views/user/viewUser'),
+      //   name: 'User',
+      //   meta: { 
+      //     title: 'User', 
+      //     icon: 'example',
+      //     roles: ['management']
+      //   }
+      // },
+      // {
+      //   path: 'edit/:userID',
+      //   component: () => import('@/views/user/editUser'),
+      //   name: 'User',
+      //   meta: { 
+      //     title: 'User', 
+      //     icon: 'example',
+      //     roles: ['management']
+      //   }
+      // }
     ]
     
   },

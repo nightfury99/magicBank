@@ -1,6 +1,47 @@
 import request from '@/utils/request'
 import qs from 'qs'
 
+export function getUserIndex(query) {
+  return request({
+    url: `/user/all?page=${query.page}`,
+    method: 'get'
+  })
+}
+
+export function getRoleIndex() {
+  return request({
+    url: '/role/all',
+    method: 'get'
+  })
+}
+
+export function getBranchIndex() {
+  return request({
+    url: '/branch/all',
+    method: 'get'
+  })
+}
+
+export function postUserStore(new_user) {
+  return request({
+    url: '/user/create',
+    method: 'post',
+    data: {
+      name: new_user.name,
+      email: new_user.email,
+      role_id: new_user.role_id,
+      branch_id: new_user.branch_id
+    }
+  })
+}
+
+export function deleteUser(id) {
+  return request({
+    url: `/user/${id}/delete`,
+    method: 'delete'
+  })
+}
+
 // export function getUsers() {
 //     return request({
 //         url: '/user?_limit=3000',
