@@ -4,7 +4,7 @@
     <el-col :span="16" :offset="4">
     <el-card class="box-card">
 
-    <el-form :label-position="labelPosition" label-width="120px">
+    <el-form status-icon :rules="rules" :label-position="labelPosition" label-width="120px">
       <el-form-item label="Name">
         <el-col :span="24">
           <el-input v-model="newUser.name"/>
@@ -13,13 +13,13 @@
 
       <el-row>      
         <el-col :span="12">
-          <el-form-item label="Email">
-            <el-input v-model="newUser.email"/>
+          <el-form-item label="Email" prop="email">
+            <el-input v-model="newUser.email" autocomplete="off"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Retype Email">
-            <el-input v-model="newUser.reemail"/>
+          <el-form-item label="Retype Email" prop="checkEmail">
+            <el-input v-model="newUser.checkEmail" autocomplete="off"/>
           </el-form-item>
         </el-col>
 
@@ -69,7 +69,7 @@ export default {
       newUser: {
         name: '',
 				email: '',
-				reemail: '',
+				checkEmail: '',
 				role_id: '',
 				status: 1,
 				branch_id: '',
@@ -100,14 +100,16 @@ export default {
     // register/post new user info 
     async registerNewUser() {
       console.log(this.newUser)
+
       try {
         await postUserStore(this.newUser)
         console.log(this.newUser)
       } catch (err) {
         console.log(err)
       }
+
+      this.$message( this.newUser.name + ' ' +'is registered' )
       this.newUser = ''
-      this.$message('submit!')
 
       this.$router.push({
         name: 'allUsers'
