@@ -4,90 +4,101 @@
         
         <!-- First column -->
         <el-col :span="10">
-        <el-card class="box-card; scroll" style="height: 910px;">
+            <el-card class="box-card; scroll" style="height: 910px;">
 
-            <!-- Card header         -->
-            <div slot="header" class="clearfix">
-                <span>Assignment List</span>
-                <el-button style="float: right" size="mini" type="warning" @click="modalAssignment=true" icon="el-icon-plus" circle></el-button>
+                <!-- Card header         -->
+                <div slot="header" class="clearfix">
+                    <span>Assignment List</span>
+                    <el-button style="float: right" size="mini" type="warning" @click="modalAssignment=true" icon="el-icon-plus" circle></el-button>
 
-            </div>
+                </div>
 
-            <!-- Assignment cards list -->
-            <div v-for="(assignment, i) in assignments" :key="i">
-                <el-card shadow="hover" class="box-card" @click.native="descriptionMethod(assignment)">
-                    <div>
-                        <el-tag style="float: right" type="success" size="mini">
-                            {{assignment.status}}
-                        </el-tag>
+                <!-- Assignment cards list -->
+                <div v-for="(assignment, i) in assignments" :key="i">
+                    <el-card shadow="hover" class="box-card" @click.native="descriptionMethod(assignment)">
+                        <div>
+                            <el-tag style="float: right" type="success" size="mini">
+                                {{assignment.status}}
+                            </el-tag>
 
-                        <div class="title">
-                            {{assignment.title}}
+                            <div class="title">
+                                {{assignment.title}}
+                            </div>
+                            <div class="date" style="float: right">
+                                {{ moment(assignment.created_at).format('MMMM Do YYYY') }}
+
+                            </div>
+
+                            <div class="assignor-name">
+                                {{assignment.assigned_by.name}}
+                            </div>
+                            <div class="assignee-name">
+                                {{assignment.assigned_to.name}}
+                            </div>
+
+                            <!-- <div class="description">
+                                {{assignment.description}}
+                            </div> -->
                         </div>
-                        <div class="date" style="float: right">
-                            {{ moment(assignment.created_at).format('MMMM Do YYYY') }}
+                    </el-card>
 
-                        </div>
+                    <!-- New assignment modal pop-up -->
+                    <el-dialog title="New Assignment" :visible.sync="modalAssignment">
+                    <el-form>                    
 
-                        <div class="assignor-name">
-                            {{assignment.assigned_by.name}}
-                        </div>
-                        <div class="assignee-name">
-                            {{assignment.assigned_to.name}}
-                        </div>
+                        <el-form-item label="Title" :label-width="formLabelWidth">
+                            <el-input v-model="newAssignment.title"></el-input>
+                        </el-form-item>
 
-                        <!-- <div class="description">
-                            {{assignment.description}}
-                        </div> -->
-                    </div>
-                </el-card>
+                        <el-form-item label="Assign To" :label-width="formLabelWidth">
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-select v-model="newAssignment.assignee_id" filterable placeholder="Select" style="width:100%">
+                                        <el-option 
+                                            v-for="item in users" 
+                                            :key="item.id" :label="item.name" 
+                                            :value="item.id"> </el-option>
+                                    </el-select>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
 
-                <!-- New assignment modal pop-up -->
-                <el-dialog title="New Assignment" :visible.sync="modalAssignment">
-                <el-form>                    
+                        <el-form-item label="Date" :label-width="formLabelWidth">
+                            <el-row>
+                                <el-col :span="10">
+                                    <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width:100%"></el-date-picker>
+                                </el-col>
+                                <el-col :span="2" :offset="1">To</el-col>
+                                <el-col :span="10">
+                                    <el-date-picker type="date" placeholder="Due date" v-model="newAssignment.end" style="width:100%"></el-date-picker>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
 
-                    <el-form-item label="Title" :label-width="formLabelWidth">
-                        <el-input v-model="newAssignment.title"></el-input>
-                    </el-form-item>
+                        <el-form-item label="Description" :label-width="formLabelWidth">
+                            <el-input type="textarea" v-model="newAssignment.description" :rows="5"></el-input>
+                        </el-form-item>
 
-                    <el-form-item label="Assign To" :label-width="formLabelWidth">
-                        <el-row>
-                            <el-col :span="24">
-                                <el-select v-model="newAssignment.assignee_id" filterable placeholder="Select" style="width:100%">
-                                    <el-option 
-                                        v-for="item in users" 
-                                        :key="item" :label="item.name" 
-                                        :value="item.id"> </el-option>
-                                </el-select>
-                            </el-col>
-                        </el-row>
-                    </el-form-item>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="modalAssignment = false">Cancel</el-button>
+                        <el-button type="primary" @click.prevent="add">Create</el-button>
+                    </span>
+                    </el-dialog>
 
-                    <el-form-item label="Date" :label-width="formLabelWidth">
-                        <el-row>
-                            <el-col :span="10">
-                                <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width:100%"></el-date-picker>
-                            </el-col>
-                            <el-col :span="2" :offset="1"> to </el-col>
-                            <el-col :span="10" :offset="1">
-                                <el-date-picker type="date" placeholder="Due date" v-model="newAssignment.end" style="width:100%"></el-date-picker>
-                            </el-col>
-                        </el-row>
-                    </el-form-item>
+                </div>
 
-                    <el-form-item label="Description" :label-width="formLabelWidth">
-                        <el-input type="textarea" v-model="newAssignment.description" :rows="5"></el-input>
-                    </el-form-item>
-
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="modalAssignment = false">Cancel</el-button>
-                    <el-button type="primary" @click.prevent="add">Create</el-button>
-                </span>
-                </el-dialog>
-
-            </div>
-        </el-card>
+                <el-row>
+                    <el-col :span="24" align="center">
+                        <pagination
+                            background
+                            layout="prev, pager, next"
+                            :page-count="query.page_count"
+                            :total="query.total"
+                            @pagination="getAssignments" />
+                    </el-col>
+                </el-row>
+            </el-card>
         </el-col>
 
         <!-- Second column -->
@@ -148,13 +159,13 @@
 <script>
 import { getAssignments, createAssignment, getUsers } from '@/api/assignment'
 import moment from 'moment'
-import description from './description.vue'
+import Pagination from '@/components/Pagination'
 
   export default {
     
     name: 'index',
     components: {
-        description
+        Pagination
     },
       
     data() {
@@ -167,7 +178,12 @@ import description from './description.vue'
         options: [],
         value: '',
         selectAssignment: {},
-        users: []
+        users: [],
+        query: {
+            page: 1,
+            page_count: 1,
+            total: 0,
+        },
      }
     },
 
@@ -186,10 +202,18 @@ import description from './description.vue'
             return moment(date).format('MMMM Do YYYY');
         },
 
-        getAssignments() {
-            getAssignments()
+        getAssignments(val) {
+
+            if (val) {
+                this.query.page = val.page
+            }
+
+            getAssignments(this.query)
                 .then(resp => {
                     this.assignments = resp.data.data
+                    this.query.page_count = resp.data.meta.pagination.total_pages
+                    this.query.total = resp.data.meta.pagination.total
+
                     this.selectAssignment = this.assignments[0]
                 })
         },
@@ -222,7 +246,6 @@ import description from './description.vue'
     }
 }
 </script>
-
 
 <style scoped>
 
