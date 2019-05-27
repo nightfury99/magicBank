@@ -15,7 +15,7 @@
 
             <!-- Assignment cards list -->
             <div v-for="(assignment, i) in assignments" :key="i">
-                <el-card shadow="hover" class="box-card">
+                <el-card shadow="hover" class="box-card" @click.native="descriptionMethod(assignment)">
                     <div>
                         <el-tag style="float: right" type="success" size="mini">
                             {{assignment.status}}
@@ -24,9 +24,9 @@
                         <div class="title">
                             {{assignment.title}}
                         </div>
-
                         <div class="date" style="float: right">
                             {{ moment(assignment.created_at).format('MMMM Do YYYY') }}
+
                         </div>
 
                         <div class="assignor-name">
@@ -39,9 +39,6 @@
                         <!-- <div class="description">
                             {{assignment.description}}
                         </div> -->
-
-                        <el-button size="mini" type="primary" plain @click="descriptionMethod">More info</el-button>
-
                     </div>
                 </el-card>
 
@@ -95,13 +92,50 @@
 
         <!-- Second column -->
         <el-col :span="14">
-        <el-container style="height: 910px; border: 1px solid #eee">
+
+        <div>
+
+        <el-card class="box-card; scroll" shadow="never" style="height: 910px;">
             
-            <div :visible.sync="descriptionMethod">
-                <description/>
-            </div>
-            
-        </el-container>
+            <!-- <description :assignment="selectAssignment" /> -->
+
+                <!-- Container header         -->
+                <el-header class="container-header" v-if="selectAssignment">
+                    {{ selectAssignment.title }}
+                </el-header>
+
+                <!-- Container content -->
+                <el-main>
+                    <el-row :gutter="20">
+
+                    <el-col :span="2">
+                        <div class="user-avatar"> </div>
+                    </el-col>
+
+                    <el-col :span="10">
+                        <div class="assignor-name-desc" v-if="selectAssignment">
+                            {{ selectAssignment.assigned_by.name }}
+                        </div>
+
+                        <div class="date-desc" v-if="selectAssignment">
+                            {{ moment(selectAssignment.created_at).format('MMMM Do YYYY') }}
+                        </div>
+
+                        <div class="assignee-name-desc" v-if="selectAssignment">
+                            To: {{selectAssignment.assigned_to.name }}
+                        </div>
+                    </el-col>
+                    </el-row>
+                    
+                    <el-row :gutter="20" class="description-box" v-if="selectAssignment">
+                        {{selectAssignment.description}}
+                    </el-row>
+                </el-main>
+
+        </el-card>
+
+        </div>
+        
         </el-col>
 
 
@@ -132,7 +166,8 @@ import description from './description.vue'
         assignments: [],
         options: [],
         value: '',
-        descriptionMethod: []
+        selectAssignment: {},
+        users: []
      }
     },
 
@@ -155,6 +190,7 @@ import description from './description.vue'
             getAssignments()
                 .then(resp => {
                     this.assignments = resp.data.data
+                    this.selectAssignment = this.assignments[0]
                 })
         },
 
@@ -165,8 +201,8 @@ import description from './description.vue'
                 })
         },
 
-        descriptionMethod() {
-
+        descriptionMethod: function(assignment) {
+            this.selectAssignment = assignment
         },
 
         add: function(e) {
@@ -189,6 +225,7 @@ import description from './description.vue'
 
 
 <style scoped>
+
     .title {
         font-size: 15px;
         font-weight: 600;
@@ -217,6 +254,44 @@ import description from './description.vue'
         padding-bottom: 10px;
     }
 
+    .container-header {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 20px;
+    }
+
+    .container-main-center {
+        font-size: 16px;
+        margin: 350px;
+        text-align: center;
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .assignor-name-desc {
+        font-size: 14px;
+        padding-bottom: 6px;
+    }
+
+    .date-desc {
+        font-size: 14px;
+        padding-bottom: 6px;
+        color: #7f8c8d;
+    }
+
+    .assignee-name-desc {
+        font-size: 14px;
+        padding-bottom: 6px;
+    }
+
+    .description-box {
+        padding: 32px;
+    }
+
     .tags {
         font-size: 14px;
         color: #f39c12;
@@ -225,6 +300,10 @@ import description from './description.vue'
     .el-card {
         margin-bottom: 10px;
         overflow-y: auto;
+    }
+
+    .el-card:hover {
+        cursor: pointer;
     }
 
     .el-tag + .el-tag {
