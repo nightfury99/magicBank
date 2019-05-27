@@ -1,38 +1,44 @@
 <template>
     <div class="app-container">
         <el-row :gutter="20">
-        <el-col :span="14">
-        <el-card class="box-card">
+        
+        <!-- First column -->
+        <el-col :span="10">
+        <el-card class="box-card; scroll" style="height: 910px;">
 
             <!-- Card header         -->
             <div slot="header" class="clearfix">
-                <span>Assignment</span>
+                <span>Assignment List</span>
                 <el-button style="float: right" size="mini" type="warning" @click="modalAssignment=true" icon="el-icon-plus" circle></el-button>
 
             </div>
 
             <!-- Assignment cards list -->
             <div v-for="(assignment, i) in assignments" :key="i">
-                <el-card class="box-card">
+                <el-card shadow="hover" class="box-card" @click.native="descriptionMethod(assignment)">
                     <div>
-                        <el-tag style="float: right" type="success" size="mini">ACTIVE</el-tag>
+                        <el-tag style="float: right" type="success" size="mini">
+                            {{assignment.status}}
+                        </el-tag>
 
                         <div class="title">
                             {{assignment.title}}
                         </div>
-
                         <div class="date" style="float: right">
-                            {{assignment.startdate}}
+                            {{ moment(assignment.created_at).format('MMMM Do YYYY') }}
+
                         </div>
 
-                        <div class="name">
-                            {{assignment.assigned_by.name}} <i class="el-icon-caret-right" /> {{assignment.assigned_to.name}}
+                        <div class="assignor-name">
+                            {{assignment.assigned_by.name}}
+                        </div>
+                        <div class="assignee-name">
+                            {{assignment.assigned_to.name}}
                         </div>
 
-                        <div class="description">
+                        <!-- <div class="description">
                             {{assignment.description}}
-                        </div>
-
+                        </div> -->
                     </div>
                 </el-card>
 
@@ -46,9 +52,12 @@
 
                     <el-form-item label="Assign To" :label-width="formLabelWidth">
                         <el-row>
-                            <el-col :span="20">
-                                <el-select v-model="newAssignment.assignee_id" placeholder="Select" style="width:100%">
-                                    <el-option v-for="item in users" :key="item" :label="item.name" :value="item.id"> </el-option>
+                            <el-col :span="24">
+                                <el-select v-model="newAssignment.assignee_id" filterable placeholder="Select" style="width:100%">
+                                    <el-option 
+                                        v-for="item in users" 
+                                        :key="item" :label="item.name" 
+                                        :value="item.id"> </el-option>
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -59,7 +68,7 @@
                             <el-col :span="10">
                                 <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width:100%"></el-date-picker>
                             </el-col>
-                            <el-col :span="1" :offset="1"> to </el-col>
+                            <el-col :span="2" :offset="1"> to </el-col>
                             <el-col :span="10" :offset="1">
                                 <el-date-picker type="date" placeholder="Due date" v-model="newAssignment.end" style="width:100%"></el-date-picker>
                             </el-col>
@@ -75,11 +84,61 @@
                     <el-button @click="modalAssignment = false">Cancel</el-button>
                     <el-button type="primary" @click.prevent="add">Create</el-button>
                 </span>
-            </el-dialog>
+                </el-dialog>
 
             </div>
         </el-card>
         </el-col>
+
+        <!-- Second column -->
+        <el-col :span="14">
+
+        <div>
+
+        <el-card class="box-card; scroll" shadow="never" style="height: 910px;">
+            
+            <!-- <description :assignment="selectAssignment" /> -->
+
+                <!-- Container header         -->
+                <el-header class="container-header" v-if="selectAssignment">
+                    {{ selectAssignment.title }}
+                </el-header>
+
+                <!-- Container content -->
+                <el-main>
+                    <el-row :gutter="20">
+
+                    <el-col :span="2">
+                        <div class="user-avatar"> </div>
+                    </el-col>
+
+                    <el-col :span="10">
+                        <div class="assignor-name-desc" v-if="selectAssignment">
+                            {{ selectAssignment.assigned_by.name }}
+                        </div>
+
+                        <div class="date-desc" v-if="selectAssignment">
+                            {{ moment(selectAssignment.created_at).format('MMMM Do YYYY') }}
+                        </div>
+
+                        <div class="assignee-name-desc" v-if="selectAssignment">
+                            To: {{selectAssignment.assigned_to.name }}
+                        </div>
+                    </el-col>
+                    </el-row>
+                    
+                    <el-row :gutter="20" class="description-box" v-if="selectAssignment">
+                        {{selectAssignment.description}}
+                    </el-row>
+                </el-main>
+
+        </el-card>
+
+        </div>
+        
+        </el-col>
+
+
         </el-row>
 
     </div>
@@ -100,7 +159,9 @@ import moment from 'moment'
         inputVisible: false,
         assignments: [],
         options: [],
-        value: ''
+        value: '',
+        selectAssignment: {},
+        users: []
      }
     },
 
@@ -111,10 +172,19 @@ import moment from 'moment'
 
     methods: {
 
+        moment: function (date) {
+            return moment(date);
+        },
+
+        date: function (date) {
+            return moment(date).format('MMMM Do YYYY');
+        },
+
         getAssignments() {
             getAssignments()
                 .then(resp => {
                     this.assignments = resp.data.data
+                    this.selectAssignment = this.assignments[0]
                 })
         },
 
@@ -123,6 +193,10 @@ import moment from 'moment'
                 .then(resp => {
                     this.users = resp.data.data
                 })
+        },
+
+        descriptionMethod: function(assignment) {
+            this.selectAssignment = assignment
         },
 
         add: function(e) {
@@ -145,20 +219,27 @@ import moment from 'moment'
 
 
 <style scoped>
+
     .title {
-        font-size: 16px;
-        font-weight: bold;
-        padding-bottom: 5px;
+        font-size: 15px;
+        font-weight: 600;
+        padding-bottom: 6px;
     }
 
     .date {
         font-size: 14px;
     }
 
-    .name {
+    .assignor-name {
         font-size: 14px;
-        color: #2980b9;
-        padding-bottom: 10px;
+        font-weight: 500;
+        padding-bottom: 4px;
+    }
+
+    .assignee-name {
+        font-size: 14px;
+        color: #60a3bc;
+        padding-bottom: 6px;
     }
 
     .description {
@@ -167,9 +248,56 @@ import moment from 'moment'
         padding-bottom: 10px;
     }
 
+    .container-header {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 20px;
+    }
+
+    .container-main-center {
+        font-size: 16px;
+        margin: 350px;
+        text-align: center;
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .assignor-name-desc {
+        font-size: 14px;
+        padding-bottom: 6px;
+    }
+
+    .date-desc {
+        font-size: 14px;
+        padding-bottom: 6px;
+        color: #7f8c8d;
+    }
+
+    .assignee-name-desc {
+        font-size: 14px;
+        padding-bottom: 6px;
+    }
+
+    .description-box {
+        padding: 32px;
+    }
+
     .tags {
         font-size: 14px;
         color: #f39c12;
+    }
+
+    .el-card {
+        margin-bottom: 10px;
+        overflow-y: auto;
+    }
+
+    .el-card:hover {
+        cursor: pointer;
     }
 
     .el-tag + .el-tag {
@@ -189,5 +317,7 @@ import moment from 'moment'
         margin-left: 10px;
         vertical-align: bottom;
     }
+
+    
 
 </style>
