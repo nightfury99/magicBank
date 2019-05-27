@@ -148,8 +148,14 @@
 <script>
 import { getAssignments, createAssignment, getUsers } from '@/api/assignment'
 import moment from 'moment'
+import description from './description.vue'
 
   export default {
+    
+    name: 'index',
+    components: {
+        description
+    },
       
     data() {
       return {
