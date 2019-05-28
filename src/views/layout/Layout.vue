@@ -20,6 +20,12 @@ export default {
     Sidebar,
     AppMain
   },
+  created() {
+    this.bindNotificationGlobal()
+  },  
+  beforeDestroy() {
+    this.$pusher.unsubscribe('global')
+  },
   mixins: [ResizeMixin],
   computed: {
     sidebar() {
@@ -40,6 +46,17 @@ export default {
   methods: {
     handleClickOutside() {
       this.$store.dispatch('CloseSideBar', { withoutAnimation: false })
+    },
+
+    bindNotificationGlobal() {
+      var channel = this.$pusher.subscribe('my-channel');
+      channel.bind('my-event', (data) => {
+        this.$notify({
+          title: 'Information',
+          message: `${data}`,
+          type: 'info'
+        });
+      })
     }
   }
 }

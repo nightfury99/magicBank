@@ -28,6 +28,13 @@ import '../mock' // simulation data
 Vue.use(ElementUI, { locale })
 
 Vue.use(require('vue-moment'));
+Vue.use(require('vue-pusher'), {
+  api_key: 'cd5529914d6717c12260',
+  options: {
+    cluster: 'ap1',
+    forceTLS: true,
+  }
+});
 
 Vue.config.productionTip = false
 
