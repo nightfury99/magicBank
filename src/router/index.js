@@ -114,9 +114,9 @@ export const asyncRoutes = [
           title: 'Register', 
           icon: 'form',
         }
-      }
+      },
       // {
-      //   path: 'view/:userID',
+      //   path: 'view/:userId',
       //   component: () => import('@/views/user/viewUser'),
       //   name: 'User',
       //   meta: { 
@@ -125,16 +125,17 @@ export const asyncRoutes = [
       //     roles: ['management']
       //   }
       // },
-      // {
-      //   path: 'edit/:userID',
-      //   component: () => import('@/views/user/editUser'),
-      //   name: 'User',
-      //   meta: { 
-      //     title: 'User', 
-      //     icon: 'example',
-      //     roles: ['management']
-      //   }
-      // }
+      {
+        path: ':userId/edit',
+        component: () => import('@/views/user/editUser'),
+        name: 'editUser',
+        hidden: true,
+        meta: { 
+          title: `Edit`, 
+          icon: 'example',
+          roles: ['management']
+        }
+      }
     ]
     
   },

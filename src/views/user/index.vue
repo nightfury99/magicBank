@@ -64,7 +64,7 @@
 						<el-button size="mini" icon="el-icon-search" circle></el-button>
 					</el-tooltip>
 					<el-tooltip content="Edit" placement="top">
-						<el-button size="mini" type="primary" icon="el-icon-edit" circle></el-button>
+						<el-button size="mini" type="primary" icon="el-icon-edit" @click="navigateTo ({name: 'editUser', params:{userId: scope.row.id}})" circle></el-button>
 					</el-tooltip>
 					<el-tooltip content="Delete" placement="top">
 						<el-button size="mini" type="danger" icon="el-icon-delete" @click="changeDeleteId(scope.row.id)" circle></el-button>
@@ -156,8 +156,6 @@ export default {
 
 			this.totalUserPage = meta.total
 			this.userQuery.page_count = meta.total_pages
-
-			// console.log(this.totalUserPage)
 
 			this.listLoading = false
 

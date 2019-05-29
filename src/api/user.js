@@ -8,6 +8,13 @@ export function getUserIndex(query) {
   })
 }
 
+export function getUserShow(userId) {
+  return request({
+    url: `/user/${userId}`,
+    method: 'get'
+  })
+}
+
 export function getRoleIndex() {
   return request({
     url: '/role/all',
