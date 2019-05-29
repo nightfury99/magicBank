@@ -4,8 +4,40 @@ stages:
 
 variables:
   PROD_BUCKET: s3://lgea-crm
+  DEV_BUCKET: s3://lgea-crm-dev
 
-build prod:
+#FOR DEV
+build:dev:
+  image: node:10-stretch-slim
+  stage: build
+  except:
+    # triggers on every branch, except master
+    - master
+  script:
+    # Install dependencies
+    - npm install
+    # Build App
+    - npm run build
+  artifacts:
+    paths:
+      # Build folder
+      - dist/
+    expire_in: 1 hour
+
+deploy:dev:
+  image: python:3.6-slim
+  stage: deploy
+  except:
+    # triggers on every branch, except master
+    - master
+  script:
+    - pip install awscli
+    - aws s3 sync ./dist ${DEV_BUCKET}
+  dependencies:
+    - build:dev
+
+# FOR PRODUCTION
+build:prod:
   image: node:10-stretch-slim
   stage: build
   only:
@@ -22,7 +54,7 @@ build prod:
       - dist/
     expire_in: 1 hour
 
-deploy prod:
+deploy:prod:
   image: python:3.6-slim
   stage: deploy
   only:
@@ -31,3 +63,5 @@ deploy prod:
   script:
     - pip install awscli
     - aws s3 sync ./dist ${PROD_BUCKET}
+  dependencies:
+    - build:prod
