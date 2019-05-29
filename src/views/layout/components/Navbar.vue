@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <!-- <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/> -->
+    <hamburger :is-active="false" class="hamburger-container"/>
     <breadcrumb />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
@@ -61,6 +61,7 @@ export default {
     height: 50px;
     float: left;
     padding: 0 10px;
+    display:none;
   }
   .screenfull {
     position: absolute;
