@@ -12,6 +12,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import * as VueGoogleMaps from 'vue2-google-maps'
+
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -35,6 +37,12 @@ Vue.use(require('vue-pusher'), {
     forceTLS: true,
   }
 });
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4'
+  }
+})
 
 Vue.config.productionTip = false
 
