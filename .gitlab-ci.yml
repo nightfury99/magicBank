@@ -1,0 +1,33 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  PROD_BUCKET: s3://lgea-crm
+
+build prod:
+  image: node:10-stretch-slim
+  stage: build
+  only:
+    # only trigger this step on master branch
+    - master
+  script:
+    # Install dependencies
+    - npm install
+    # Build App
+    - npm run build
+  artifacts:
+    paths:
+      # Build folder
+      - dist/
+    expire_in: 1 hour
+
+deploy prod:
+  image: python:3.6-slim
+  stage: deploy
+  only:
+    # only trigger this step on master branch
+    - master
+  script:
+    - pip install awscli
+    - aws s3 sync ./dist ${PROD_BUCKET}
