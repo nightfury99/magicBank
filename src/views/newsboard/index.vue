@@ -206,6 +206,8 @@ export default {
       const meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
 
       this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
+
+      console.log(this.newsfeed)
       this.totalNewsPage = meta.total
       this.newsfeedQuery.page_count = meta.total_pages
     },

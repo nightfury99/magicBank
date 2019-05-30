@@ -23,7 +23,7 @@
         <el-col :span="12">
           <el-form-item label="Phone No.">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.name"/>
+              <el-input :disabled="true" v-model="user.phone_no"/>
             </el-col>
           </el-form-item>
         </el-col>
@@ -32,7 +32,7 @@
           <el-form-item label="Role">
               <el-row>
               <el-col :span="24">
-              <el-select v-model="user.roles[0].id" placeholder="Please select role" style="width:100%">
+              <el-select v-model="user.role_id" placeholder="Please select role" style="width:100%">
                 <el-option v-for="(item, index) in roles" :key="index" :label="item.name" :value="item.id" />
               </el-select>
               </el-col>
@@ -44,7 +44,7 @@
             <el-form-item label="Branch">
               <el-row>
               <el-col :span="24">
-              <el-select v-model="user.branches[0].id" placeholder="Please select branch" style="width:100%">
+              <el-select v-model="user.branch_id" placeholder="Please select branch" style="width:100%">
                 <el-option v-for="(item, index) in branches" :key="index" :label="item.name" :value="item.id" />
               </el-select>
               </el-col>
@@ -54,7 +54,7 @@
 
         <el-col :span="12">
           <el-form-item label="Status">
-            <el-radio-group v-model="user.status" @change="searchRecord">
+            <el-radio-group v-model="user.status">
               <el-radio-button label="1">Active</el-radio-button>
               <el-radio-button label="0">Deactivated</el-radio-button>
             </el-radio-group>
@@ -74,19 +74,21 @@
 </template>
 
 <script>
-import { getUserShow, postUserStore, getRoleIndex, getBranchIndex } from '@/api/user'
+import { getUserShow, putUser, getRoleIndex, getBranchIndex } from '@/api/user'
 
 export default {
   data() {
     return {
 			labelPosition: 'right',
       user: {
-        name: null,
-				email: null,
-				checkEmail: null,
-				roles: null,
-				status: null,
-				branches: null,
+        id: '',
+        name: '',
+        nickname: '',
+        phone_no: '',
+        email: '',
+        status: '',
+        branch_id: '',
+        role_id: ''
       },
       value: '',
       roles: [],
@@ -108,7 +110,21 @@ export default {
 
       const userId = this.$store.state.route.params.userId
 
-      this.user = (await getUserShow(userId)).data.data
+      getUserShow(userId)
+        .then(res => {
+          const data = res.data.data
+          this.user.name = data.name,
+          this.user.id = data.id,
+          this.user.nickname = data.nickname,
+          this.user.phone_no = data.phone_no,
+          this.user.email = data.email
+          this.user.status = data.status,
+          this.user.branch_id = data.branches[0].id,
+          this.user.role_id = data.roles[0].id
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
 
       console.log(this.user)
     },
@@ -123,23 +139,23 @@ export default {
       this.branches = (await getBranchIndex()).data.data
     },
 
-    // register/post new user info 
-    async registerNewUser() {
+    // update user info 
+    async updateUser() {
       console.log(this.user)
 
       try {
-        await postUserStore(this.user)
+        await putUser(this.user)
         console.log(this.user)
+        
+        this.$message( this.user.name + ' profile ' +'is updated ' )
+
+        this.$router.push({
+          name: 'allUsers'
+        })
       } catch (err) {
         console.log(err)
       }
 
-      this.$message( this.user.name + ' ' +'is registered' )
-      this.user = ''
-
-      this.$router.push({
-        name: 'allUsers'
-      })
     },
 
   }

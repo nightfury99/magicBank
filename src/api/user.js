@@ -29,6 +29,26 @@ export function getBranchIndex() {
   })
 }
 
+export function putUser(user) {
+  return request({
+    url: `/user/${user.id}/update`,
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify({
+      name: user.name,
+      phone_no: user.phone_no,
+      nickname: user.nickname,
+      email: user.email,
+      role_id: user.role_id,
+      branch_id: user.branch_id,
+      is_active: user.status
+
+    })
+  })
+}
+
 export function postUserStore(new_user) {
   return request({
     url: '/user/create',
