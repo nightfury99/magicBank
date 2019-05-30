@@ -156,7 +156,7 @@ export default {
 
 			this.totalUserPage = meta.total
 			this.userQuery.page_count = meta.total_pages
-
+			
 			this.listLoading = false
 
 		},
