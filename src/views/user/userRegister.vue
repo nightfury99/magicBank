@@ -14,7 +14,7 @@
       <el-row>      
         <el-col :span="12">
           <el-form-item label="Email" prop="email">
-            <el-input v-model="newUser.email" autocomplete="off"/>
+            <el-input v-validate="'required|email'" name="email" type="text" v-model="newUser.email" autocomplete="off"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -112,7 +112,7 @@ export default {
       this.newUser = ''
 
       this.$router.push({
-        name: 'allUsers'
+        name: 'userList'
       })
     },
 

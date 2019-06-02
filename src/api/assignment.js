@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function getAssignments(query) {
   return request({
-    url: `/assignment/all?page=${query.page}`,
+    url: `/assignments?page=${query.page}`,
     method: 'get'
   })
 }
 
 export function createAssignment(param) {
   return request({
-    url: '/assignment/store',
+    url: '/assignments',
     method: 'post',
     data: param,
   })
@@ -17,7 +17,7 @@ export function createAssignment(param) {
 
 export function getUsers() {
   return request({
-    url: '/user/all',
+    url: '/users',
     method: 'get'
   })
 }
