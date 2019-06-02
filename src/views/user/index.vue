@@ -9,7 +9,7 @@
 		  placeholder="Type to search"/>
 	  </el-col>
 	  <el-col :span="5" :offset="1">
-		<el-button style="float: right" type="warning" @click="navigateTo({name: 'userRegister'})" >Register New User</el-button>
+			<el-button style="float: right" type="warning" @click="navigateTo({name: 'registerUser'})" >Register New User</el-button>
 	  </el-col>
 	</el-row>
 	
@@ -21,19 +21,13 @@
 		border
 		fit
 		highlight-current-row>
-			<el-table-column label="Name" width="310">
+			<el-table-column label="Name" width="250">
 				<template slot-scope="scope">
-				{{ scope.row.name }}
+				{{ scope.row.nickname }} <br><el-tag type="info" size="mini">{{ scope.row.name}}</el-tag>
 				</template>
 			</el-table-column>
 
-			<el-table-column align="center" label="Nickname" >
-				<template slot-scope="scope">
-				{{ scope.row.nickname}}
-				</template>
-			</el-table-column>
-
-			<el-table-column align="center" label="Role" width="150">
+			<el-table-column align="center" label="Role" width="130">
 				<template align="center" slot-scope="scope">
 					<el-tag type="warning" size="mini">{{ scope.row.roles[0].name }}</el-tag>
 				</template>
@@ -45,20 +39,20 @@
 				</template>
 			</el-table-column>
 
-			<el-table-column align="center" label="Email" width="270">
+			<el-table-column align="center" label="Email" width="250">
 				<template slot-scope="scope">
-				{{ scope.row.email }}
+				<el-tag type="info" size="mini">{{ scope.row.email }}</el-tag>
 				</template>
 			</el-table-column>
 
-			<el-table-column align="center" label="Status">
+			<el-table-column align="center" label="Status" width="100">
 				<template slot-scope="scope">
 					<el-tag v-if="scope.row.status == 1" type="success" size="mini">Active</el-tag>
 					<el-tag v-else type="danger" size="mini">Inactive</el-tag>
 				</template>
 			</el-table-column>
 
-			<el-table-column align="center" label="Action" width="200">
+			<el-table-column align="center" label="Action">
 				<template align="center" slot-scope="scope">
 					<el-tooltip :open-delay="tooltipDelay" content="Profile" placement="top">
 						<el-button size="mini" icon="el-icon-search" @click="navigateTo ({name: 'userProfile', params:{userId: scope.row.id}})" circle></el-button>

@@ -39,6 +39,24 @@ export const constantRouterMap = [
     }]
   },
   
+  {
+    path: '/map',
+    component: Layout,
+    redirect: '/map/index',
+    meta: { 
+      title: 'Sales Map', 
+      icon: 'list',
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/map/index'),
+        name: 'Customer Map',
+      }
+    ]
+    
+  },
+
 ]
 
 export default new Router({

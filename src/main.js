@@ -12,6 +12,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import * as VueGoogleMaps from 'vue2-google-maps'
+
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -31,6 +33,21 @@ import '../mock' // simulation data
 Vue.use(ElementUI, { locale })
 Vue.use(VeeValidate)
 Vue.use(require('vue-moment'))
+
+Vue.use(require('vue-moment'));
+Vue.use(require('vue-pusher'), {
+  api_key: 'cd5529914d6717c12260',
+  options: {
+    cluster: 'ap1',
+    forceTLS: true,
+  }
+});
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4'
+  }
+})
 
 sync(store, router)
 

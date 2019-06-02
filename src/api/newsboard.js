@@ -1,29 +1,30 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
 export function getNewsboardIndex(query) {
   return request({
-    url: `/newsboard/all?page=${query.page}`,
+    url: `/newsboards?page=${query.page}`,
     method: 'get'
   })
 }
 
 export function getNewsboardFavourite(query) {
   return request({
-    url: `/newsboard/favourite/all?page=${query.page}`,
+    url: `/newsboards/${query.newsboardId}/favourite?page=${query.page}`,
     method: 'get'
   })
 }
 
 export function deleteNewsboard(id) {
   return request({
-    url: `/newsboard/${id}/delete`,
+    url: `/newsboards/${id}`,
     method: 'delete'
   })
 }
 
 export function postNewsboardStore(new_post) {
   return request({
-    url: '/newsboard/store',
+    url: '/newsboards',
     method: 'post',
     data: {
       description: new_post
@@ -31,9 +32,10 @@ export function postNewsboardStore(new_post) {
   })
 }
 
-export function pacthNewsboardEdit() {
+export function updateNewsboard(data) {
   return request({
-    url: '/newsboard',
-    method: 'patch'
+    url: '/newsboards',
+    method: 'put',
+    data: qs.stringify(data)
   })
 }
