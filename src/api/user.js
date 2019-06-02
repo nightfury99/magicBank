@@ -8,6 +8,13 @@ export function getUserIndex(query) {
   })
 }
 
+export function getUserShow(userId) {
+  return request({
+    url: `/user/${userId}`,
+    method: 'get'
+  })
+}
+
 export function getRoleIndex() {
   return request({
     url: '/role',
@@ -19,6 +26,26 @@ export function getBranchIndex() {
   return request({
     url: '/branches',
     method: 'get'
+  })
+}
+
+export function putUser(user) {
+  return request({
+    url: `/user/${user.id}/update`,
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify({
+      name: user.name,
+      phone_no: user.phone_no,
+      nickname: user.nickname,
+      email: user.email,
+      role_id: user.role_id,
+      branch_id: user.branch_id,
+      is_active: user.status
+
+    })
   })
 }
 
