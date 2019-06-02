@@ -3,28 +3,55 @@ import qs from 'qs'
 
 export function getUserIndex(query) {
   return request({
-    url: `/user/all?page=${query.page}`,
+    url: `/users?page=${query.page}`,
+    method: 'get'
+  })
+}
+
+export function getUserShow(userId) {
+  return request({
+    url: `/user/${userId}`,
     method: 'get'
   })
 }
 
 export function getRoleIndex() {
   return request({
-    url: '/role/all',
+    url: '/role',
     method: 'get'
   })
 }
 
 export function getBranchIndex() {
   return request({
-    url: '/branch/all',
+    url: '/branches',
     method: 'get'
+  })
+}
+
+export function putUser(user) {
+  return request({
+    url: `/user/${user.id}/update`,
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify({
+      name: user.name,
+      phone_no: user.phone_no,
+      nickname: user.nickname,
+      email: user.email,
+      role_id: user.role_id,
+      branch_id: user.branch_id,
+      is_active: user.status
+
+    })
   })
 }
 
 export function postUserStore(new_user) {
   return request({
-    url: '/user/create',
+    url: '/users',
     method: 'post',
     data: {
       name: new_user.name,
@@ -37,7 +64,7 @@ export function postUserStore(new_user) {
 
 export function deleteUser(id) {
   return request({
-    url: `/user/${id}/delete`,
+    url: `/users/${id}`,
     method: 'delete'
   })
 }

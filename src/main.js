@@ -17,6 +17,9 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import { sync } from 'vuex-router-sync'
+import VeeValidate from 'vee-validate'
+
 /**
  * This project originally used easy-mock to simulate data,
  * but its official service is very unstable,
@@ -28,6 +31,8 @@ import '@/permission' // permission control
 import '../mock' // simulation data
 
 Vue.use(ElementUI, { locale })
+Vue.use(VeeValidate)
+Vue.use(require('vue-moment'))
 
 Vue.use(require('vue-moment'));
 Vue.use(require('vue-pusher'), {
@@ -43,6 +48,8 @@ Vue.use(VueGoogleMaps, {
     key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4'
   }
 })
+
+sync(store, router)
 
 Vue.config.productionTip = false
 

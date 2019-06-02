@@ -25,6 +25,7 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
+  // { path: '/reset', component: () => import('@/views/reset'), hidden: true },
 
   {
     path: '/',
@@ -78,7 +79,6 @@ export const asyncRoutes = [
         meta: { 
           title: 'News', 
           icon: 'news',
-          roles: ['management']
         }
       }
     ]
@@ -118,41 +118,43 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/user/index'),
-        name: 'allUsers',
+        name: 'userList',
         meta: { 
-          title: 'All Users', 
+          title: 'List', 
           icon: 'peoples',
         }
       },
       {
-        path: 'registerUser',
-        component: () => import('@/views/user/registerUser'),
-        name: 'registerUser',
+        path: 'register',
+        component: () => import('@/views/user/userRegister'),
+        name: 'userRegister',
         meta: { 
           title: 'Register', 
           icon: 'form',
         }
+      },
+      {
+        path: 'profile/:userId',
+        component: () => import('@/views/user/userProfile'),
+        name: 'userProfile',
+        hidden: true,
+        meta: { 
+          title:'Profile', 
+          icon: 'example',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'update/:userId',
+        component: () => import('@/views/user/userUpdate'),
+        name: 'userUpdate',
+        hidden: true,
+        meta: { 
+          title: 'Update', 
+          icon: 'example',
+          roles: ['management']
+        }
       }
-      // {
-      //   path: 'view/:userID',
-      //   component: () => import('@/views/user/viewUser'),
-      //   name: 'User',
-      //   meta: { 
-      //     title: 'User', 
-      //     icon: 'example',
-      //     roles: ['management']
-      //   }
-      // },
-      // {
-      //   path: 'edit/:userID',
-      //   component: () => import('@/views/user/editUser'),
-      //   name: 'User',
-      //   meta: { 
-      //     title: 'User', 
-      //     icon: 'example',
-      //     roles: ['management']
-      //   }
-      // }
     ]
     
   },
