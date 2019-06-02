@@ -150,7 +150,7 @@ export default {
         this.$message( this.user.name + ' profile ' +'is updated ' )
 
         this.$router.push({
-          name: 'allUsers'
+          name: 'userList'
         })
       } catch (err) {
         console.log(err)

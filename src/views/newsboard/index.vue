@@ -53,7 +53,7 @@
                       <h5>{{ news.created_at | moment("from", "now") }}</h5>
                     </el-col>
 
-                    <el-col :span="11">
+                    <el-col :span="12">
                       <el-row type="flex" class="row-bg" justify="end">
                         <el-button type="text" class="icon-news" @click="dialogVisible = true"><svg-icon icon-class="tag-outline" /></el-button>
                         <el-button type="text" class="icon-news" icon="el-icon-delete" @click="changeDeleteId(news.id)" v-if="news.created_by.name == name"/>
@@ -96,7 +96,6 @@
                   <img :src="avatar" class="user-avatar" @click="dialogVisible = true">
                 </el-col>
                 <el-col :span="10">
-                  <!-- <el-button type="text" @click="dialogVisible = true" icon="el-icon-star-on">{{ news.newsboard.created_by }}</el-button> -->
                   <h4 :style="{ cursor: 'pointer'}" @click="dialogVisible = true">{{ news.newsboard.created_by }}</h4>
                   <h5>{{ news.created_at | moment("from", "now") }}</h5>
                 </el-col>
@@ -204,10 +203,8 @@ export default {
       }
 
       const meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
-
       this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
 
-      console.log(this.newsfeed)
       this.totalNewsPage = meta.total
       this.newsfeedQuery.page_count = meta.total_pages
     },

@@ -9,7 +9,7 @@
 		  placeholder="Type to search"/>
 	  </el-col>
 	  <el-col :span="5" :offset="1">
-		<el-button style="float: right" type="warning" @click="navigateTo({name: 'registerUser'})" >Register New User</el-button>
+		<el-button style="float: right" type="warning" @click="navigateTo({name: 'userRegister'})" >Register New User</el-button>
 	  </el-col>
 	</el-row>
 	
@@ -60,13 +60,13 @@
 
 			<el-table-column align="center" label="Action" width="200">
 				<template align="center" slot-scope="scope">
-					<el-tooltip content="View" placement="top">
-						<el-button size="mini" icon="el-icon-search" circle></el-button>
+					<el-tooltip :open-delay="tooltipDelay" content="Profile" placement="top">
+						<el-button size="mini" icon="el-icon-search" @click="navigateTo ({name: 'userProfile', params:{userId: scope.row.id}})" circle></el-button>
 					</el-tooltip>
-					<el-tooltip content="Edit" placement="top">
-						<el-button size="mini" type="primary" icon="el-icon-edit" @click="navigateTo ({name: 'editUser', params:{userId: scope.row.id}})" circle></el-button>
+					<el-tooltip :open-delay="tooltipDelay" content="Update" placement="top">
+						<el-button size="mini" type="primary" icon="el-icon-edit" @click="navigateTo ({name: 'userUpdate', params:{userId: scope.row.id}})" circle></el-button>
 					</el-tooltip>
-					<el-tooltip content="Delete" placement="top">
+					<el-tooltip :open-delay="tooltipDelay" content="Delete" placement="top">
 						<el-button size="mini" type="danger" icon="el-icon-delete" @click="changeDeleteId(scope.row.id)" circle></el-button>
 					</el-tooltip>
 				</template>
@@ -107,23 +107,24 @@ import Pagination from '@/components/Pagination'
 
 export default {
   data() {
-	return {
-	  user: [],
-	  listLoading: false,
-		status: 1,
-		
-		idDelete: '',
-    dialogDelete: false,
-		
-		totalUserPage: 0,
-	  userQuery: {
-			page: 1,
-			limit: 50,
-			page_count: 1
-		},
+		return {
+			user: [],
+			listLoading: false,
+			tooltipDelay: 500,
+			status: 1,
+			
+			idDelete: '',
+			dialogDelete: false,
+			
+			totalUserPage: 0,
+			userQuery: {
+				page: 1,
+				limit: 50,
+				page_count: 1
+			},
 
-	  search: ''
-	}
+			search: ''
+		}
 	},
 	
   components: { Pagination },
@@ -133,7 +134,7 @@ export default {
 	])
   },
   created() {
-	this.userList()
+		this.userList()
 	},
 	
 	methods: {
@@ -147,15 +148,23 @@ export default {
 		async userList(val) {
 			this.listLoading = true
 
+			console.log(val)
+			console.log(this.userQuery)
+
+
 			if (val) {
 				this.userQuery.page = val.page
+				console.log(this.userQuery)
 			}
 
 			const meta = (await getUserIndex(this.userQuery)).data.meta.pagination
+
 			this.user = (await getUserIndex(this.userQuery)).data.data
 
 			this.totalUserPage = meta.total
 			this.userQuery.page_count = meta.total_pages
+
+			console.log(this.user)
 			
 			this.listLoading = false
 
