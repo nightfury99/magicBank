@@ -9,7 +9,7 @@
 		  placeholder="Type to search"/>
 	  </el-col>
 	  <el-col :span="5" :offset="1">
-		<el-button style="float: right" type="warning" @click="navigateTo({name: 'registerUser'})" >Register New User</el-button>
+			<el-button style="float: right" type="warning" @click="navigateTo({name: 'registerUser'})" >Register New User</el-button>
 	  </el-col>
 	</el-row>
 	
@@ -23,13 +23,7 @@
 		highlight-current-row>
 			<el-table-column label="Name" width="310">
 				<template slot-scope="scope">
-				{{ scope.row.name }}
-				</template>
-			</el-table-column>
-
-			<el-table-column align="center" label="Nickname" >
-				<template slot-scope="scope">
-				{{ scope.row.nickname}}
+				{{ scope.row.nickname }} <br><el-tag type="info" size="mini">{{ scope.row.name}}</el-tag>
 				</template>
 			</el-table-column>
 

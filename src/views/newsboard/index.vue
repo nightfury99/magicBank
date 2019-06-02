@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
 
-    <el-row :gutter="20">
+    <el-row type="flex" justify="center">
       <el-col :span="14">
 
         <!-- Create Post Panel -->
@@ -83,44 +83,6 @@
         </el-row>
       </el-col>
 
-      <!-- Favourite Panel -->
-      <el-col :span="10">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix" style="font-weight:500;">
-            <span>Favourite</span>
-          </div>
-          <el-row v-for="(news, index) in newsfeedFavourite" :key="index">
-            <el-card shadow="never">
-              <el-row>
-                <el-col :span="2">
-                  <img :src="avatar" class="user-avatar" @click="dialogVisible = true">
-                </el-col>
-                <el-col :span="10">
-                  <!-- <el-button type="text" @click="dialogVisible = true" icon="el-icon-star-on">{{ news.newsboard.created_by }}</el-button> -->
-                  <h4 :style="{ cursor: 'pointer'}" @click="dialogVisible = true">{{ news.newsboard.created_by }}</h4>
-                  <h5>{{ news.created_at | moment("from", "now") }}</h5>
-                </el-col>
-                <el-col :span="11">
-                  <i class="el-icon-collection-tag"/>
-                </el-col>
-              </el-row>
-              <el-row>
-                <p>{{ news.newsboard.description }}</p>
-              </el-row>
-            </el-card>
-          </el-row>
-
-          <el-row>
-            <el-col :span="24" align="center">
-              <pagination
-                background
-                layout="prev, pager, next"
-                :page-count="newsFavouriteQuery.page_count"
-                @pagination="newsFavouriteList" />
-            </el-col>
-          </el-row>
-        </el-card>
-      </el-col>
     </el-row>
 
     <!-- Dialog for Specific News Post-->
@@ -192,7 +154,7 @@ export default {
 
   created() {
     this.newsList()
-    this.newsFavouriteList()
+    // this.newsFavouriteList()
   },
 
   methods: {

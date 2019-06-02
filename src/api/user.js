@@ -3,28 +3,28 @@ import qs from 'qs'
 
 export function getUserIndex(query) {
   return request({
-    url: `/user/all?page=${query.page}`,
+    url: `/users?page=${query.page}`,
     method: 'get'
   })
 }
 
 export function getRoleIndex() {
   return request({
-    url: '/role/all',
+    url: '/role',
     method: 'get'
   })
 }
 
 export function getBranchIndex() {
   return request({
-    url: '/branch/all',
+    url: '/branches',
     method: 'get'
   })
 }
 
 export function postUserStore(new_user) {
   return request({
-    url: '/user/create',
+    url: '/users',
     method: 'post',
     data: {
       name: new_user.name,
@@ -37,7 +37,7 @@ export function postUserStore(new_user) {
 
 export function deleteUser(id) {
   return request({
-    url: `/user/${id}/delete`,
+    url: `/users/${id}`,
     method: 'delete'
   })
 }
