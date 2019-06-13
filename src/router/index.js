@@ -160,6 +160,53 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/customer',
+    component: Layout,
+    redirect: '/customer/index',
+    name: 'Customer',
+    meta: { 
+      title: 'Customer', 
+      icon: 'peoples',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/customer/index'),
+        name: 'Customer',
+        meta: { 
+          title: 'Customer List', 
+          icon: 'peoples',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'sales',
+        component: () => import('@/views/customer/sales'),
+        name: 'customerSales',
+        hidden: true,
+        meta: { 
+          title: 'Customer Sales', 
+          icon: 'example',
+          roles: ['management'],
+        }
+      },
+      {
+        path: 'credit',
+        component: () => import('@/views/customer/credit'),
+        name: 'customerCredit',
+        hidden: true,
+        meta: { 
+          title: 'Customer Credit', 
+          icon: 'example',
+          roles: ['management'],
+        }
+      }
+    ]
+    
+  },
+
+  {
     path: '/branch',
     component: Layout,
     redirect: '/branch/index',
@@ -177,6 +224,7 @@ export const asyncRoutes = [
     ]
     
   },
+
 
   { path: '*', redirect: '/404', hidden: true }
 ]
