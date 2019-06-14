@@ -70,7 +70,12 @@ export const asyncRoutes = [
   {
     path: '/newsboard',
     component: Layout,
-    redirect: 'noredirect',
+    redirect: '/newsboard/index',
+    meta: { 
+      title: 'News', 
+      icon: 'example',
+      roles: ['outlet']
+    },
     children: [
       {
         path: 'index',
@@ -78,6 +83,16 @@ export const asyncRoutes = [
         name: 'Newsboard',
         meta: { 
           title: 'News', 
+          icon: 'news',
+        }
+      },
+      {
+        path: '/one/:id',
+        component: () => import('@/views/newsboard/one'),
+        name: 'SingleNews',
+        hidden: true,
+        meta: { 
+          title: 'Single News', 
           icon: 'news',
         }
       }

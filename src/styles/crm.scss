@@ -1,0 +1,25 @@
+.crm-box-container {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    padding-bottom: 20px;
+    &:not(:first-child) {
+        margin-top: 10px;
+    }
+}
+
+.crm-box-header, .crm-box-content {
+    padding: 20px;
+}
+
+.crm-timestamp {
+    color: grey;
+    font-weight: normal;
+    font-size:12px;
+}
+
+
+// GMAPS position
+.pac-container {
+    z-index: 9999;
+  }
