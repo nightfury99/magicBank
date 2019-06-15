@@ -11,7 +11,7 @@
                   type="textarea"
                   :autosize="{ minRows: 2}"
                   placeholder="Write something"
-                  v-model="newPost">
+                  v-model="post.description">
             </el-input>
             <div class="menu">
               <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
@@ -31,13 +31,13 @@
 
         <div class="crm-box-container">
 
-          <el-row class="crm-box-content" v-for="(news, index) in newsfeed" :key="index">
+          <el-row class="news crm-box-content" v-for="(news, index) in newsfeed" :key="index">
             <div>
                 <el-row>
                   
                   <el-col :span="23">
                     <router-link :to="{ name: 'SingleNews', params: { id: news.id }}">
-                      <span style="font-weight: 500">{{ news.created_by.name }}</span>
+                      <span class="crm-heading-medium-title">{{ news.created_by.name }}</span>
                     </router-link>
                       <span class="crm-timestamp clearfix" justify="end">{{ news.created_at | moment("from", "now") }}</span>
                   </el-col>
@@ -47,9 +47,21 @@
                   
                 </el-row>
 
-                <el-row>
+                <el-row class="">
                   <p>{{ news.description }}</p>
                 </el-row>
+
+                <div class="interaction">
+                  
+                  <el-row>
+                      <el-col :span="24" align="end">
+                        <el-button type="text">{{ news.total_comments }} Comments</el-button>
+                        <el-button @click="triggerLike" type="text">{{ news.total_likes }} Likes</el-button>
+                        <el-button @click="triggerFavourite" type="text">{{ news.total_favourite }} Favourites</el-button> 
+                      </el-col>
+                  </el-row>
+              </div>
+              
             </div>
           </el-row>
 
@@ -316,7 +328,7 @@ export default {
   border-radius: 50%;
 }
 
-.crm-box-content {
+.news.crm-box-content {
   border-bottom: 1px solid;
   border-color: #e3e3e3;
 }
@@ -351,7 +363,10 @@ h5 {
 .places-search {
   border:none;
   padding: 10px;
-  margin-top:
+}
+
+.interaction {
+  margin-top: 10px;
 }
 
 </style>

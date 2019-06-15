@@ -41,7 +41,7 @@
                 <div class="comment divider" v-for="(comment, index) in comments" :key="index">
                     <el-row>
                         <el-col :span="23">
-                            <span style="font-weight: 500">{{ comment.name }}</span>
+                            <span class="crm-heading-medium-title">{{ comment.name }}</span>
                             <span class="crm-timestamp flex" justify="end">{{ comment.created_at | moment("from", "now") }}</span>
                         </el-col>
                         <el-col :span="1">
