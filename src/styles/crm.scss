@@ -1,0 +1,75 @@
+.crm-box-container {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    padding-bottom: 20px;
+    &:not(:first-child) {
+        margin-top: 10px;
+    }
+}
+
+.crm-box-header, .crm-box-content {
+    padding: 20px;
+}
+
+.crm-timestamp {
+    color: grey;
+    font-weight: normal;
+    font-size:12px;
+}
+
+
+// GMAPS position
+.pac-container {
+    z-index: 9999;
+}
+
+// Typograph
+.crm-heading-title {
+    font-size: 26px;
+    font-weight: 300;
+}
+
+.crm-heading-medium-title {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.crm-heading-small-title {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.crm-heading-content {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+// BORDER
+.crm-border-bottom {
+    border-bottom: 1px solid;
+    border-color:#D3D3D3;
+}
+
+// DIMENSION
+.crm-row-bg {
+    margin-top: 5px;
+    margin-bottom:5px;
+}
+
+// COLOR
+.crm-color-primary {
+
+}
+
+.crm-color-primary-light {
+    background-color: #FFFFE0;
+}
+
+.crm-color-status-open {
+    background-color: #006400;
+}
+
+.crm-color-status-stop {
+    background-color: #FF4500;
+}

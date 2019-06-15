@@ -3,87 +3,78 @@
         <el-row :gutter="20">
         
         <!-- First column -->
-        <el-col :span="10">
-            <el-card class="box-card; scroll" style="height: 910px;">
-
-                <!-- Card header         -->
-                <div slot="header" class="clearfix">
+        <el-col :span="12">
+            <div class="scroll crm-box-container" style="height: 90vh; overflow: scroll; padding-bottom: 30px;">
+                
+                <div class="crm-box-header">
                     <span>Assignment List</span>
                     <el-button style="float: right" size="mini" type="warning" @click="modalAssignment=true" icon="el-icon-plus" circle></el-button>
-
                 </div>
 
                 <!-- Assignment cards list -->
                 <div v-for="(assignment, i) in assignments" :key="i">
-                    <el-card shadow="hover" class="box-card" @click.native="descriptionMethod(assignment)">
-                        <div>
-                            <el-tag style="float: right" type="success" size="mini">
-                                {{assignment.status}}
-                            </el-tag>
+                    <div type="flex assignment" @click="descriptionMethod(assignment)">
+                        <div 
+                            class="list crm-box-content data" 
+                            :class="assignment.status == 1 ? 'crm-color-primary-light' : ''">
+                            
+                            <span class="crm-heading-medium-title">
+                                {{ assignment.assigned_by.name }}
+                            </span>
 
-                            <div class="title">
-                                {{assignment.title}}
-                            </div>
-                            <div class="date" style="float: right">
-                                {{ moment(assignment.created_at).format('MMMM Do YYYY') }}
+                            <span class="crm-timestamp" style="float: right">
+                                {{ assignment.created_at | moment("from", "now") }}
+                            </span>
 
-                            </div>
-
-                            <div class="assignor-name">
-                                {{assignment.assigned_by.name}}
-                            </div>
-                            <div class="assignee-name">
-                                {{assignment.assigned_to.name}}
+                            <div class="crm-heading-content">
+                                {{ assignment.title }}
                             </div>
 
-                            <!-- <div class="description">
-                                {{assignment.description}}
-                            </div> -->
                         </div>
-                    </el-card>
+                    </div>
 
                     <!-- New assignment modal pop-up -->
                     <el-dialog title="New Assignment" :visible.sync="modalAssignment">
-                    <el-form>                    
+                        <el-form>                    
 
-                        <el-form-item label="Title" :label-width="formLabelWidth">
-                            <el-input v-model="newAssignment.title"></el-input>
-                        </el-form-item>
+                            <el-form-item label="Title" :label-width="formLabelWidth">
+                                <el-input v-model="newAssignment.title"></el-input>
+                            </el-form-item>
 
-                        <el-form-item label="Assign To" :label-width="formLabelWidth">
-                            <el-row>
-                                <el-col :span="24">
-                                    <el-select v-model="newAssignment.assignee_id" filterable placeholder="Select" style="width:100%">
-                                        <el-option 
-                                            v-for="item in users" 
-                                            :key="item.id" :label="item.name" 
-                                            :value="item.id"> </el-option>
-                                    </el-select>
-                                </el-col>
-                            </el-row>
-                        </el-form-item>
+                            <el-form-item label="Assign To" :label-width="formLabelWidth">
+                                <el-row>
+                                    <el-col :span="24">
+                                        <el-select v-model="newAssignment.assignee_id" filterable placeholder="Select" style="width:100%">
+                                            <el-option 
+                                                v-for="item in users" 
+                                                :key="item.id" :label="item.name" 
+                                                :value="item.id"> </el-option>
+                                        </el-select>
+                                    </el-col>
+                                </el-row>
+                            </el-form-item>
 
-                        <el-form-item label="Date" :label-width="formLabelWidth">
-                            <el-row>
-                                <el-col :span="10">
-                                    <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width:100%"></el-date-picker>
-                                </el-col>
-                                <el-col :span="2" :offset="1">To</el-col>
-                                <el-col :span="10">
-                                    <el-date-picker type="date" placeholder="Due date" v-model="newAssignment.end" style="width:100%"></el-date-picker>
-                                </el-col>
-                            </el-row>
-                        </el-form-item>
+                            <el-form-item label="Date" :label-width="formLabelWidth">
+                                <el-row>
+                                    <el-col :span="10">
+                                        <el-date-picker type="date" placeholder="Start date" v-model="newAssignment.start" style="width:100%"></el-date-picker>
+                                    </el-col>
+                                    <el-col :span="2" :offset="1">To</el-col>
+                                    <el-col :span="10">
+                                        <el-date-picker type="date" placeholder="Due date" v-model="newAssignment.end" style="width:100%"></el-date-picker>
+                                    </el-col>
+                                </el-row>
+                            </el-form-item>
 
-                        <el-form-item label="Description" :label-width="formLabelWidth">
-                            <el-input type="textarea" v-model="newAssignment.description" :rows="5"></el-input>
-                        </el-form-item>
+                            <el-form-item label="Description" :label-width="formLabelWidth">
+                                <el-input type="textarea" v-model="newAssignment.description" :rows="5"></el-input>
+                            </el-form-item>
 
-                    </el-form>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button @click="modalAssignment = false">Cancel</el-button>
-                        <el-button type="primary" @click.prevent="add">Create</el-button>
-                    </span>
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="modalAssignment = false">Cancel</el-button>
+                            <el-button type="primary" @click.prevent="add">Create</el-button>
+                        </span>
                     </el-dialog>
 
                 </div>
@@ -98,55 +89,53 @@
                             @pagination="getAssignments" />
                     </el-col>
                 </el-row>
-            </el-card>
+            </div>
         </el-col>
 
         <!-- Second column -->
-        <el-col :span="14">
+        <el-col :span="12">
+            <div class="crm-box-container" style="overflow: scroll; height: 90vh;">
+                
+                <div class="crm-box-header crm-border-bottom clearfix">
+                    <el-button type="success" icon="el-icon-sucess" style="float: right;">Complete</el-button>
+                </div>
 
-        <div>
+                <div class="crm-box-content">
 
-        <el-card class="box-card; scroll" shadow="never" style="height: 910px;">
-            
-            <!-- <description :assignment="selectAssignment" /> -->
-
-                <!-- Container header         -->
-                <el-header class="container-header" v-if="selectAssignment">
-                    {{ selectAssignment.title }}
-                </el-header>
-
-                <!-- Container content -->
-                <el-main>
-                    <el-row :gutter="20">
-
-                    <el-col :span="2">
-                        <div class="user-avatar"> </div>
-                    </el-col>
-
-                    <el-col :span="10">
-                        <div class="assignor-name-desc" v-if="selectAssignment">
-                            {{ selectAssignment.assigned_by.name }}
-                        </div>
-
-                        <div class="date-desc" v-if="selectAssignment">
-                            {{ moment(selectAssignment.created_at).format('MMMM Do YYYY') }}
-                        </div>
-
-                        <div class="assignee-name-desc" v-if="selectAssignment">
-                            To: {{selectAssignment.assigned_to.name }}
-                        </div>
-                    </el-col>
-                    </el-row>
+                    <div style="margin-bottom:10px;" v-if="selectAssignment">
+                        
+                        <el-row>
+                            <el-col :span="20">
+                                <span class="crm-heading-small-title">
+                                    <span class="assignee-name">{{ selectAssignment.assigned_by.name }}</span> to <span class="assignee-name">{{ selectAssignment.assigned_to.name }}</span>
+                                </span>
+                            </el-col>
+                            <el-col :span="4">
+                                <div class="crm-timestamp crm-row-bg" v-if="selectAssignment">
+                                    {{ moment(selectAssignment.created_at).format('DD MMM YYYY') }}
+                                </div>
+                            </el-col>
+                        </el-row>
+                        
+                        <el-row>
+                            
+                        </el-row>
+                        
+                    </div>
                     
-                    <el-row :gutter="20" class="description-box" v-if="selectAssignment">
+                    <!-- Container header -->
+                    <div class="crm-heading-title" v-if="selectAssignment">
+                        {{ selectAssignment.title }}
+                    </div>
+
+                    <!-- Container content -->
+                    <div class="crm-heading-content" v-if="selectAssignment">
                         {{selectAssignment.description}}
-                    </el-row>
-                </el-main>
+                    </div>
 
-        </el-card>
+                </div>
 
-        </div>
-        
+            </div>
         </el-col>
 
 
@@ -162,8 +151,7 @@ import moment from 'moment'
 import Pagination from '@/components/Pagination'
 
   export default {
-    
-    name: 'index',
+
     components: {
         Pagination
     },
@@ -196,10 +184,6 @@ import Pagination from '@/components/Pagination'
 
         moment: function (date) {
             return moment(date);
-        },
-
-        date: function (date) {
-            return moment(date).format('MMMM Do YYYY');
         },
 
         getAssignments(val) {
@@ -248,17 +232,6 @@ import Pagination from '@/components/Pagination'
 </script>
 
 <style scoped>
-
-    .title {
-        font-size: 15px;
-        font-weight: 600;
-        padding-bottom: 6px;
-    }
-
-    .date {
-        font-size: 14px;
-    }
-
     .assignor-name {
         font-size: 14px;
         font-weight: 500;
@@ -277,12 +250,6 @@ import Pagination from '@/components/Pagination'
         padding-bottom: 10px;
     }
 
-    .container-header {
-        font-size: 16px;
-        font-weight: bold;
-        padding: 20px;
-    }
-
     .container-main-center {
         font-size: 16px;
         margin: 350px;
@@ -295,24 +262,10 @@ import Pagination from '@/components/Pagination'
         border-radius: 50%;
     }
 
-    .assignor-name-desc {
-        font-size: 14px;
-        padding-bottom: 6px;
-    }
-
     .date-desc {
         font-size: 14px;
         padding-bottom: 6px;
         color: #7f8c8d;
-    }
-
-    .assignee-name-desc {
-        font-size: 14px;
-        padding-bottom: 6px;
-    }
-
-    .description-box {
-        padding: 32px;
     }
 
     .tags {
@@ -347,6 +300,15 @@ import Pagination from '@/components/Pagination'
         vertical-align: bottom;
     }
 
+    .list.crm-box-content {
+        border-bottom: 1px solid;
+        border-color: #FFF8BC;
+        cursor: pointer;
+    }
+    
+    .data:hover, .crm-box-content.selected {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    }
     
 
 </style>

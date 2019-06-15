@@ -45,7 +45,8 @@ Vue.use(require('vue-pusher'), {
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4'
+    key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4',
+    libraries: "places"
   }
 })
 
