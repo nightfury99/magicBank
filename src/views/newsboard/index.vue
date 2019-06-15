@@ -14,12 +14,23 @@
                   v-model="post.description">
             </el-input>
             <div class="menu">
-              <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
-              <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
-              <el-button size="mini" type="info" plain icon="el-icon-user-solid">Tag</el-button>
-              
-              <el-button v-if="!post.location" @click="dialogMap = true" size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
-              <el-button v-else @click="dialogMap = true" size="mini" type="success" plain icon="el-icon-location-outline">Location</el-button>
+
+              <el-row>
+
+                <!-- Media upload button -->
+                <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
+
+                <!-- File upload button -->
+                <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
+
+                <!-- Tag button -->
+                <el-button size="mini" type="info" plain icon="el-icon-user-solid">Tag</el-button>
+                
+                <!-- Location button -->
+                <el-button v-if="!post.location" @click="dialogMap = true" size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
+                <el-button v-else @click="dialogMap = true" size="mini" type="success" plain icon="el-icon-location-outline">Location</el-button>
+
+              </el-row>
               
             </div>
             <el-row type="flex" class="row-bg" justify="end">
@@ -163,6 +174,7 @@ export default {
       newsfeed: [],
       newsfeedFavourite: [],
       newPost: '',
+      fileList: [],
       dialogVisible: false,
       dialogDelete: false,
       dialogMap: false,
@@ -281,7 +293,24 @@ export default {
     setLocation: function() {
       this.post.location = this.center.latLng.lat + ',' + this.center.latLng.lng
       this.dialogMap = false
-    }
+    },
+
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+
+    handlePreview(file) {
+      console.log(file);
+    },
+
+    handleExceed(files, fileList) {
+      this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`);
+    },
+
+    beforeRemove(file, fileList) {
+      return this.$confirm(`Cancel the transfert of ${ file.name } ?`);
+    },
+
   }
 }
 </script>
