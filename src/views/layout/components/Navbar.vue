@@ -13,6 +13,11 @@
             Home
           </el-dropdown-item>
         </router-link>
+        <router-link class="inlineBlock" to="/user/index">
+          <el-dropdown-item>
+            Profile
+          </el-dropdown-item>
+        </router-link>
         <el-dropdown-item divided>
           <span style="display:block;" @click="logout">LogOut</span>
         </el-dropdown-item>

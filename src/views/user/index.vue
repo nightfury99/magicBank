@@ -9,7 +9,7 @@
 		  placeholder="Type to search"/>
 	  </el-col>
 	  <el-col :span="5" :offset="1">
-			<el-button style="float: right" type="warning" @click="navigateTo({name: 'registerUser'})" >Register New User</el-button>
+			<el-button style="float: right" type="warning" @click="navigateTo({name: 'userRegister'})" >Register New User</el-button>
 	  </el-col>
 	</el-row>
 	
