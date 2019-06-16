@@ -196,7 +196,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'sales',
+        path: 'sales/:customerId',
         component: () => import('@/views/customer/sales'),
         name: 'customerSales',
         hidden: true,
@@ -207,7 +207,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'credit',
+        path: 'credit/:customerId',
         component: () => import('@/views/customer/credit'),
         name: 'customerCredit',
         hidden: true,
