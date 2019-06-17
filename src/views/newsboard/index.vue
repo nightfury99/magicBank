@@ -16,9 +16,9 @@
             <div class="menu">
 
               <el-row>
-
+                
                 <!-- Media upload button -->
-                <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
+                <el-button size="mini" type="info" plain icon="el-icon-picture">Media</el-button>
 
                 <!-- File upload button -->
                 <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
