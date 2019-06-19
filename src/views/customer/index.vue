@@ -77,8 +77,8 @@
                             </el-col>
 
                             <el-col :span="9">
-                                <el-button type="primary" plain @click="navigateTo ({name: 'customerCredit'})"> Credit </el-button>
-                                <el-button type="primary" plain @click="navigateTo ({name: 'customerSales'})"> Sales </el-button>
+                                <el-button type="primary" plain @click="navigateTo ({name: 'customerCredit', params:{customerId: selectCustomer.id}})"> Credit </el-button>
+                                <el-button type="primary" plain @click="navigateTo ({name: 'customerSales', params:{customerId: selectCustomer.id}})"> Sales </el-button>
                             </el-col>
 
                         </el-row>

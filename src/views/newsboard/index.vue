@@ -53,7 +53,7 @@
                       <span class="crm-timestamp clearfix" justify="end">{{ news.created_at | moment("from", "now") }}</span>
                   </el-col>
                   <el-col :span="1">
-                    <el-button @click="changeDeleteId(news.id)" type="text" size="mini" icon="el-icon-delete"></el-button>
+                    <el-button @click="changeDeleteId(news.id)" type="text" size="mini" icon="el-icon-delete" v-if="news.created_by.name == name"></el-button>
                   </el-col>
                   
                 </el-row>
@@ -114,6 +114,7 @@
       </span>
     </el-dialog>
 
+    <!-- Dialog for Location -->
     <el-dialog
       custom-class="dialog-map"
       :visible.sync="dialogMap"
@@ -290,6 +291,8 @@ export default {
 
     setLocation: function() {
       this.post.location = this.center.latLng.lat + ',' + this.center.latLng.lng
+      console.log(this.post.location)
+      console.log("hi")
       this.dialogMap = false
     },
 
