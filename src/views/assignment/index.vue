@@ -16,10 +16,13 @@
                     <div type="flex assignment" @click="descriptionMethod(assignment)">
                         <div 
                             class="list crm-box-content data" 
-                            :class="assignment.status == 1 ? 'crm-color-primary-light' : ''">
+                            :class="assignment.status == 'open' ? 'crm-color-primary-light' : ''">
                             
                             <span class="crm-heading-medium-title">
-                                {{ assignment.assigned_by.name }}
+                                {{ assignment.assigned_by.name }} 
+                                <el-tag type="success" size="mini"> 
+                                    {{ assignment.status.toUpperCase() }}
+                                </el-tag>  
                             </span>
 
                             <span class="crm-timestamp" style="float: right">
@@ -138,21 +141,21 @@
                 <el-row>
 
                     <div class="crm-box-header crm-border-bottom clearfix">
-                        <el-col :span="21">
-                        <el-tag type="success" style="float: right;"> 
-                            {{ selectAssignment.status }}
-                        </el-tag>
+                        <el-col :span="2">
+                            <el-tag type="success"> 
+                                {{ selectAssignment.status.toUpperCase() }}
+                            </el-tag>  
                         </el-col>
 
 
-                        <el-col :span="3">
-                        <el-button 
-                            @click="showAlert"
-                            type="success" 
-                            icon="el-icon-sucess" 
-                            size="small" 
-                            style="float: right;">
-                                Complete
+                        <el-col :offset="19" :span="3">
+                            <el-button 
+                                @click="showAlert"
+                                type="success" 
+                                icon="el-icon-sucess" 
+                                size="small" 
+                                style="float: right;">
+                                    Complete
                             </el-button>
                         </el-col>
 
@@ -321,7 +324,8 @@ Vue.use(VueSweetalert2)
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, confirm!'
-                }).then((result) => {
+            }).then((result) => {
+
                 if (result.value) {
                     this.$swal(
                     'Completed!',

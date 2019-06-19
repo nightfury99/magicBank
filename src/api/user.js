@@ -10,7 +10,7 @@ export function getUserIndex(query) {
 
 export function getUserShow(userId) {
   return request({
-    url: `/user/${userId}`,
+    url: `/users/${userId}`,
     method: 'get'
   })
 }
@@ -31,7 +31,7 @@ export function getBranchIndex() {
 
 export function putUser(user) {
   return request({
-    url: `/user/${user.id}/update`,
+    url: `/users/${user.id}`,
     method: 'put',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'

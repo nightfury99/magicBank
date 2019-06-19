@@ -16,8 +16,7 @@
                     <div v-for="(customer, i) in customers" :key="i">
                         <div type="flex assignment" @click="descriptionMethod(customer)">
                             <div 
-                                class="list crm-box-content data" 
-                                :class="customer.status == 1 ? 'crm-color-primary-light' : ''">
+                                class="list crm-box-content data crm-color-primary-light">
                                 
                                 <span class="crm-heading-medium-title">
                                     {{ customer.name }}
