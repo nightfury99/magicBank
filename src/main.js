@@ -18,7 +18,9 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import { sync } from 'vuex-router-sync'
+import AsyncComputed from 'vue-async-computed'
 import VeeValidate from 'vee-validate'
+import VueSocketCluster from 'vue-socket-cluster'
 
 /**
  * This project originally used easy-mock to simulate data,
@@ -32,22 +34,32 @@ import '../mock' // simulation data
 
 Vue.use(ElementUI, { locale })
 Vue.use(VeeValidate)
-Vue.use(require('vue-moment'))
+Vue.use(AsyncComputed)
 
-Vue.use(require('vue-moment'));
+Vue.use(require('vue-moment'))
 Vue.use(require('vue-pusher'), {
   api_key: 'cd5529914d6717c12260',
   options: {
     cluster: 'ap1',
-    forceTLS: true,
+    forceTLS: true
   }
-});
+})
 
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4',
-    libraries: "places"
+    libraries: 'places'
   }
+})
+
+Vue.use(VueSocketCluster, {
+  connections: [{
+    name: 'chat',
+    hostname: '127.0.0.1',
+    secure: false,
+    port: 8000,
+    rejectUnauthorized: false
+  }]
 })
 
 sync(store, router)
