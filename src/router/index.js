@@ -240,6 +240,52 @@ export const asyncRoutes = [
     
   },
 
+  
+  {
+    path: '/attribute',
+    component: Layout,
+    redirect: '/attribute/index',
+    name: 'Attribute',
+    meta: { 
+      title: 'Attribute', 
+      icon: 'list',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/attribute/index'),
+        name: 'Attribute',
+        meta: { 
+          title: 'Attribute List', 
+          icon: 'peoples',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'attributeView/:attributeId',
+        component: () => import('@/views/attribute/attributeView'),
+        name: 'attributeView',
+        hidden: true,
+        meta: { 
+          title: 'View Attribute', 
+          icon: 'example',
+          roles: ['management'],
+        }        
+      },
+      {
+        path: 'attributeCreate',
+        component: () => import('@/views/attribute/attributeCreate'),
+        name: 'attributeCreate',
+       
+        meta: { 
+          title: 'Create Attribute', 
+          icon: 'example',
+          roles: ['management'],
+        }
+      },
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
