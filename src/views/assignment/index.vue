@@ -26,7 +26,7 @@
                             </span>
 
                             <span class="crm-timestamp" style="float: right">
-                                {{ assignment.created_at | moment("from", "now") }}
+                                {{ assignment.start_at | moment("from", "now") }}
                             </span>
 
                             <div class="crm-heading-content">
@@ -39,18 +39,20 @@
                     <!-- New assignment modal pop-up -->
                     <el-dialog title="New Assignment" :visible.sync="modalAssignment">
                         <el-form>                    
-
+                            
+                            <!-- Title -->
                             <el-form-item label="Title" :label-width="formLabelWidth">
                                 <el-input v-model="newAssignment.title"></el-input>
                             </el-form-item>
 
+                            <!-- Assign to -->
                             <el-form-item label="Assign To" :label-width="formLabelWidth">
                                 <el-row>
                                     <el-col :span="24">
                                         <el-select 
                                             v-model="newAssignment.assignee_id" 
                                             filterable 
-                                            multiple 
+                                            multiple
                                             placeholder="Select" 
                                             style="width:100%">
                                             <el-option 
@@ -63,6 +65,7 @@
                                 </el-row>
                             </el-form-item>
 
+                            <!-- Date picker -->
                             <el-form-item label="Date" :label-width="formLabelWidth">
                                 <el-row>
                                     <el-col :span="11">
@@ -75,13 +78,14 @@
                                 </el-row>
                             </el-form-item>
 
+                            <!-- Description -->
                             <el-form-item label="Description" :label-width="formLabelWidth">
                                 <el-input type="textarea" v-model="newAssignment.description" :rows="5"></el-input>
                             </el-form-item>
 
                             <el-row>
                                 <el-col :span="12">
-
+                                <!-- Type selection     -->
                                 <el-form-item label="Type" :label-width="formLabelWidth">
                                     <el-select 
                                         v-model="newAssignment.type"
@@ -94,10 +98,10 @@
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-
                                 </el-col>
 
                                 <el-col :span="12">
+                                <!-- Upload button     -->
                                 <el-form-item label="Upload" :label-width="formLabelWidth">
                                     <el-upload
                                         class="upload-demo"
@@ -111,8 +115,8 @@
                                 </el-col>
                             </el-row>
 
-
                         </el-form>
+                        <!-- Create or cancel buttons -->
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="modalAssignment = false">Cancel</el-button>
                             <el-button type="primary" @click.prevent="add">Create</el-button>
@@ -121,6 +125,7 @@
 
                 </div>
 
+                <!-- Pagination -->
                 <el-row>
                     <el-col :span="24" align="center">
                         <pagination
@@ -142,12 +147,13 @@
 
                     <div class="crm-box-header crm-border-bottom clearfix">
                         <el-col :span="2">
+                            <!-- Status -->
                             <el-tag type="success"> 
                                 {{ selectAssignment.status.toUpperCase() }}
                             </el-tag>  
                         </el-col>
 
-
+                        <!-- Complete assignment button -->
                         <el-col :offset="19" :span="3">
                             <el-button 
                                 @click="showAlert"
@@ -168,6 +174,7 @@
                     <div style="margin-bottom:10px;" v-if="selectAssignment">
                         
                         <el-row>
+                            <!-- Assignor to Assignee -->
                             <el-col :span="20">
                                 <span class="crm-heading-small-title">
                                     <span class="assignee-name">{{ selectAssignment.assigned_by.name }}</span> to <span class="assignee-name">{{ selectAssignment.assigned_to.name }}</span>
@@ -177,7 +184,7 @@
                             <!-- Created at -->
                             <el-col :span="4">
                                 <div class="crm-timestamp crm-row-bg" v-if="selectAssignment">
-                                    {{ moment(selectAssignment.created_at).format('DD MMM YYYY') }}
+                                    {{ moment(selectAssignment.start_at).format('DD MMM YYYY') }}
                                 </div>
                             </el-col>
                         </el-row>
@@ -185,11 +192,11 @@
                         <el-row>
 
                             <!-- Due date -->
-                            <!-- <el-col :span="4">
-                                <div class="crm-timestamp crm-row-bg" v-if="selectAssignment">
-                                    {{ moment(selectAssignment.created_at).format('DD MMM YYYY') }}
+                            <el-col :span="4">
+                                <div style="float: right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
+                                    Due by: {{ moment(selectAssignment.end_at).format('DD MMM YYYY') }}
                                 </div>
-                            </el-col> -->
+                            </el-col>
                             
                         </el-row>
                         
@@ -239,6 +246,7 @@ Vue.use(VueSweetalert2)
         newAssignment: {},
         inputVisible: false,
         assignments: [],
+        asignee_id: [],
         options: [],
         value: '',
         selectAssignment: {},
@@ -305,12 +313,15 @@ Vue.use(VueSweetalert2)
             this.newAssignment.start = moment(this.newAssignment.start).format('YYYY-MM-DD')
             this.newAssignment.end = moment(this.newAssignment.end).format('YYYY-MM-DD')
 
+            console.log(this.newAssignment)
+            
             createAssignment(this.newAssignment)
                 .then(resp => {
                     this.modalAssignment = false
                     this.newAssignment = {}
 
                     this.getAssignments()
+
                 })
         },
 
