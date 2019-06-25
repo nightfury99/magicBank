@@ -50,67 +50,93 @@
                     <div style="margin-bottom:10px;" v-if="selectCustomer">
                     
                         <!-- Customer profile -->
-                        <el-row :gutter="20">
+                        <el-row :gutter="20" type="flex" justify="center">
 
-                            <el-col :span="3">
-                                <img src="https://placekitten.com/100/100">
-                            </el-col>
+                            <div class="crm-profile-picture">   
+                                <img src="http://place-puppy.com/150x150" style="border-radius: 100%">
+                            </div>
+                        
+                        </el-row>
 
-                            <el-col :span="12">
+                        <el-row :gutter="20" type="flex" justify="center">
 
-                                <div class="crm-heading-content" v-if="selectCustomer">
-                                    {{ 'Full Name :' + selectCustomer.name }}
+                            <el-col :span="10">
+
+                                <div class="crm-profile-name" text-align="center" v-if="selectCustomer">
+                                    {{ ' ' + selectCustomer.name }}
                                 </div>
 
-                                <div class="crm-heading-content" v-if="selectCustomer">
-                                    {{ 'Branch : TLC / LGEP' }}
+                                <div class="crm-profile-content" v-if="selectCustomer">
+                                    {{ 'Branch Name' }}
                                 </div>
 
-                                <div class="crm-heading-content" v-if="selectCustomer">
-                                    {{ 'Type : Suspect / Prospect / Customer' }}
+                                <div class="crm-profile-content" v-if="selectCustomer">
+                                    {{ 'Customer Type' }}
                                 </div>
 
-                                <div class="crm-heading-content" v-if="selectCustomer">
-                                    {{ 'Sales Rep : Sales Rep   : Nicholas' }}
+                                <div class="crm-profile-content" v-if="selectCustomer">
+                                    {{ 'Sales Rep   : John Wick' }}
                                 </div>
 
-                            </el-col>
-
-                            <el-col :span="9">
-                                <el-button type="primary" plain @click="navigateTo ({name: 'customerCredit', params:{customerId: selectCustomer.id}})"> Credit </el-button>
-                                <el-button type="primary" plain @click="navigateTo ({name: 'customerSales', params:{customerId: selectCustomer.id}})"> Sales </el-button>
                             </el-col>
 
                         </el-row>
 
                         <!-- Customer details -->
-                        <el-row :gutter="20">
-
-                            <div class="crm-heading-content" v-if="selectCustomer">
-                                {{ 'Company     : ABCD Sdn. Bhd. (ABD-DAS)' }}
+                        <el-card shadow="hover">
+                        <el-row :gutter="20" type="flex" justify="center">
+                            <el-col>
+                            <div class="crm-profile-company" v-if="selectCustomer">
+                                {{ 'ABCD Sdn. Bhd. (ABD-DAS)' }}
                             </div>
+                            </el-col>
+                        </el-row>
 
-                            <div class="crm-heading-content" v-if="selectCustomer">
-                                {{ 'Address :' + selectCustomer.address }}
-                            </div>
-
-                            <div class="crm-heading-content" v-if="selectCustomer">
-                                <svg-icon icon-class="email"/> {{ ' :' + selectCustomer.email }}
-                            </div>
-
-                            <div class="crm-heading-content" v-if="selectCustomer">
-                                <i class="el-icon-phone"/> {{ ' :' + selectCustomer.phone }}
-                            </div>
-
-                            <div class="crm-heading-content" v-if="selectCustomer">
-                                {{ 'Fax :' + selectCustomer.fax }}
-                            </div>
-                            
-                            <div class="crm-heading-content" v-if="selectCustomer">
+                        <el-row :gutter="20" type="flex" justify="center">
+                            <el-col :span="6">
+                            <div class="crm-profile-content" v-if="selectCustomer">
                                 <svg-icon icon-class="international"/> {{ ' :' + selectCustomer.website }}
                             </div>
+                            </el-col>
+                        </el-row>
+
+                        <el-row :gutter="20" type="flex" justify="center">
+
+                            <el-col :span="6">
+                            <div class="crm-profile-content" v-if="selectCustomer">
+                                <i class="el-icon-location" /> {{ ':' + selectCustomer.address }}
+                            </div>
+                            </el-col>
+
+                            <el-col :span="6">
+                            <div class="crm-profile-content" v-if="selectCustomer">
+                                <svg-icon icon-class="email"/> {{ ' :' + selectCustomer.email }}
+                            </div>
+                            </el-col>
+
+                            <el-col :span="6">
+                            <div class="crm-profile-content" v-if="selectCustomer">
+                                <i class="el-icon-phone"/> {{ ' :' + selectCustomer.phone }}
+                            </div>
+                            </el-col>
+
+                            <el-col :span="6">
+                            <div class="crm-profile-content" v-if="selectCustomer">
+                                {{ 'Fax :' + selectCustomer.fax }}
+                            </div>
+                            </el-col>
 
                         </el-row>
+
+                        <el-row :gutter="20" type="flex" justify="center">
+                            <el-col :span="12">
+                                <el-button type="primary" size="small" style="float: right" plain @click="navigateTo ({name: 'customerCredit', params:{customerId: selectCustomer.id}})"> CREDIT </el-button>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-button type="primary" size="small" style="float: left" plain @click="navigateTo ({name: 'customerSales', params:{customerId: selectCustomer.id}})"> SALES </el-button>
+                            </el-col>
+                        </el-row>
+                        </el-card>
 
                     </div>
 
@@ -192,6 +218,10 @@ export default {
     .data:hover, .crm-box-content.selected {
         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     }
+
+    .el-row {
+    margin-bottom: 20px;
+  }
 
 </style>
 
