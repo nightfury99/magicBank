@@ -1,43 +1,14 @@
 <template>
   <div class="app-container">
     <el-form label-position="top">
-
-      <el-form-item label="Name">
+      <el-form-item label="Question Name">
         <el-col :span="24">
-          <el-input placeholder="Enter Name" v-model="newQuestion.name"/>
+          <el-input placeholder="Enter Question Name" v-model="newQuestion.display_text"/>
         </el-col>
-      </el-form-item>
-
-      <el-form-item>
-        <el-col :span="24">
-          <el-switch v-model="newQuestion.hidden" active-text="Hidden"></el-switch>
-        </el-col>
-      </el-form-item>
-
-      <el-form-item label="Category">
-        <el-select v-model="newQuestion.category" placeholder="Select Category">
-          <el-option
-            v-for="category in categoryOption"
-            :key="category.value"
-            :label="category.label"
-            :value="category.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="Type">
-        <el-select v-model="newQuestion.type" placeholder="Select Type">
-          <el-option
-            v-for="type in typeOption"
-            :key="type.value"
-            :label="type.label"
-            :value="type.value"
-          ></el-option>
-        </el-select>
       </el-form-item>
 
       <el-form-item label="Section">
-        <el-select v-model="newQuestion.sectionOption" placeholder="Select Section">
+        <el-select v-model="newQuestion.section" placeholder="Select Section">
           <el-option
             v-for="section in sectionOption"
             :key="section.value"
@@ -47,10 +18,41 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Question Type">
+      <el-form-item label="Question Description">
+        <el-input
+          type="textarea"
+          :rows="3"
+          placeholder="Enter Question Description"
+          v-model="newQuestion.description"
+        ></el-input>
+      </el-form-item>
+
+      <el-form-item label="Category">
+        <el-select v-model="newQuestion.category_id" placeholder="Select Category">
+          <el-option
+            v-for="(category,index) in categoryOption"
+            :key="index"
+            :label="category.name"
+            :value="category.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="Type">
+        <el-select v-model="newQuestion.type_id" placeholder="Select Type">
+          <el-option
+            v-for="(type,index) in typeOption"
+            :key="index"
+            :label="type.name"
+            :value="type.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="Question Input Type">
         <el-select
-          v-model="newQuestion.questionType"
-          placeholder="Select Question Type"
+          v-model="newQuestion.input_type"
+          placeholder="Select Question Input Type"
           v-on:change="onChange()"
         >
           <el-option
@@ -60,15 +62,6 @@
             :value="questionType.value"
           ></el-option>
         </el-select>
-      </el-form-item>
-      
-      <el-form-item label="Question Text">
-        <el-input
-          type="textarea"
-          :rows="3"
-          placeholder="Enter Question Text"
-          v-model="newQuestion.questionText"
-        ></el-input>
       </el-form-item>
 
       <el-form-item
@@ -91,7 +84,7 @@
                 v-show="k == newQuestion.questionChoices.length -1"
               ></el-button>
             </el-input>
-          </el-col>
+          </el-col> 
         </div>
       </el-form-item>
 
@@ -103,8 +96,28 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="Table Properties" v-if="newQuestion.questionType=='table'">
+        <div>
+          <el-col :span="24" class="">
+            <el-input placeholder="Enter Table Column">
+          <el-col>
+        </div>
+      <el-form-item>
+
+      <el-form-item>
+        <el-col :span="24">
+          <el-switch v-model="newQuestion.is_hidden" active-text="Hidden"></el-switch>
+        </el-col>
+      </el-form-item>
+
+      <el-form-item>
+        <el-col :span="24">
+          <el-switch v-model="newQuestion.is_mandatory" active-text="Mandatory"></el-switch>
+        </el-col>
+      </el-form-item>
+      
       <el-row>
-        <el-button type="primary">Save</el-button>
+        <el-button type="primary" @click="createNewQuestion()">Save</el-button>
         <el-button type="primary">Cancel</el-button>
       </el-row>
     </el-form>
@@ -112,27 +125,15 @@
 </template>
 
 <script>
-import { getCategory } from '@/api/kyc/category'
+import { getCategory } from "@/api/kyc/category";
+import { getType } from "@/api/kyc/type";
+import { createQuestion } from "@/api/kyc/question";
 export default {
   data() {
     return {
       categoryOption: [],
-
-      typeOption: [
-        {
-          value: "sales",
-          label: "Sales"
-        },
-        {
-          value: "credit",
-          label: "Credit"
-        },
-        {
-          value: "profile",
-          label: "Profile"
-        }
-      ],
-
+      typeOption: [],
+      branches: [],
       sectionOption: [
         {
           value: "b",
@@ -176,18 +177,52 @@ export default {
       ],
 
       newQuestion: {
-        name: "",
-        hidden: true,
-        category: "",
-        type: "",
-        questionType: "text",
-        questionText: "",
-        questionChoices: [],
-        section: ""
+        field_name:"",
+        display_text:"",
+        section: "",
+        description:"",
+        origin:"entry",
+        category_id: "",
+        type_id: "",
+        default_data:"",
+        only_default:true,
+        input_type: "text",
+        fields: [],
+        is_hidden: true,
+        is_mandatory: true
+        
       }
     };
   },
+  mounted() {
+    this.getCategory();
+    this.getType();
+   
+  },
+  methods: {
+    async getCategory() {
+      this.categoryOption = (await getCategory()).data.data;
+    },
+    async getType() {
+      this.typeOption = (await getType()).data.data;
+    },
+    async createNewQuestion() {
+      console.log(this.newUser)
 
+      try {
+        await createQuestion(this.newQuestion)
+        console.log(this.newUser)
+      } catch (err) {
+        console.log(err)
+      }
+
+      this.$message( this.newQuestion.name + ' ' +'is registered' )
+      this.newQuestion = ''
+
+      this.$router.push({
+        name: 'index'
+      })
+    },
  
     onChange() {
       if (
@@ -213,16 +248,13 @@ export default {
         this.newQuestion.questionChoices = [];
       }
     },
-
     add(index) {
       this.newQuestion.questionChoices.push({ choice: "" });
     },
     remove(index) {
       this.newQuestion.questionChoices.splice(index, 1);
     }
-    
   }
-  
 };
 </script>
 
