@@ -1,9 +1,8 @@
 import request from '@/utils/request'
 
-export function getCategory() {
+export function getType() {
   return request({
-    url: '/kyc/category',
+    url: '/kyc/type',
     method: 'get'
   })
 }
-
