@@ -183,7 +183,7 @@
                             
                             <!-- Created at -->
                             <el-col :span="4">
-                                <div class="crm-timestamp crm-row-bg" v-if="selectAssignment">
+                                <div class="crm-timestamp crm-row-bg" style="float: right" v-if="selectAssignment">
                                     {{ moment(selectAssignment.start_at).format('DD MMM YYYY') }}
                                 </div>
                             </el-col>
@@ -192,7 +192,7 @@
                         <el-row>
 
                             <!-- Due date -->
-                            <el-col :span="4">
+                            <el-col>
                                 <div style="float: right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
                                     Due by: {{ moment(selectAssignment.end_at).format('DD MMM YYYY') }}
                                 </div>
@@ -202,15 +202,31 @@
                         
                     </div>
                     
-                    <!-- Container header -->
-                    <div class="crm-heading-title" v-if="selectAssignment">
-                        {{ selectAssignment.title }}
-                    </div>
+                    <el-row>
+                        <!-- Container header -->
+                        <div class="crm-heading-title" v-if="selectAssignment">
+                            {{ selectAssignment.title }}
+                        </div>
 
-                    <!-- Container content -->
-                    <div class="crm-heading-content" v-if="selectAssignment">
-                        {{selectAssignment.description}}
-                    </div>
+                        <!-- Container content -->
+                        <div class="crm-heading-content" v-if="selectAssignment">
+                            {{selectAssignment.description}}
+                        </div>
+                    </el-row>
+
+
+                    <el-row>
+                        <div class="crm-box-container">
+                            <div class="crm-box-content form">
+                                <text-area-emoji-picker 
+                                    v-model="data.body"
+                                    placeholder="Insert a comment"
+                                    @handleEnter="postMessage"
+                                    :disable="isSubmitted"
+                                    />
+                            </div>
+                        </div>
+                    </el-row>
 
                 </div>
 
@@ -230,13 +246,16 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import { getAssignments, createAssignment, getUsers } from '@/api/assignment'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
+import { mapGetters } from 'vuex'
+import TextAreaEmojiPicker from '@/components/TextAreaEmojiPicker'
 
 Vue.use(VueSweetalert2)
 
   export default {
 
     components: {
-        Pagination
+        Pagination,
+        TextAreaEmojiPicker
     },
       
     data() {
@@ -251,6 +270,7 @@ Vue.use(VueSweetalert2)
         value: '',
         selectAssignment: {},
         users: [],
+        isSubmitted: false,
         type: [{
           value: 'Sales',
           label: 'Sales'
@@ -265,6 +285,9 @@ Vue.use(VueSweetalert2)
             page: 1,
             page_count: 1,
             total: 0,
+        },
+        data: {
+            body: '',
         },
      }
     },
@@ -351,6 +374,10 @@ Vue.use(VueSweetalert2)
 </script>
 
 <style scoped>
+    .el-row {
+        margin-bottom: 20px;
+    }
+
     .assignor-name {
         font-size: 14px;
         font-weight: 500;
