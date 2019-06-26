@@ -100,7 +100,7 @@ import moment from 'moment'
 import Pagination from '@/components/Pagination'
 
 export default {
-  data() {
+  	data() {
 		return {
 			user: [],
 			listLoading: false,
@@ -121,13 +121,14 @@ export default {
 		}
 	},
 	
-  components: { Pagination },
-  computed: {
-	...mapGetters([
-	  'roles'
-	])
-  },
-  created() {
+	components: { Pagination },
+	computed: {
+		...mapGetters([
+		'roles'
+		])
+	},
+	
+  	created() {
 		this.userList()
 	},
 	

@@ -183,7 +183,11 @@
                             
                             <!-- Created at -->
                             <el-col :span="4">
+<<<<<<< HEAD
                                 <div class="crm-timestamp crm-row-bg" style="float: right" v-if="selectAssignment">
+=======
+                                <div class="crm-timestamp crm-row-bg" v-if="selectAssignment">
+>>>>>>> bbf453968b1e39699bbef074b6286a3ef4e0fed0
                                     {{ moment(selectAssignment.start_at).format('DD MMM YYYY') }}
                                 </div>
                             </el-col>
@@ -192,7 +196,11 @@
                         <el-row>
 
                             <!-- Due date -->
+<<<<<<< HEAD
                             <el-col>
+=======
+                            <el-col :span="4">
+>>>>>>> bbf453968b1e39699bbef074b6286a3ef4e0fed0
                                 <div style="float: right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
                                     Due by: {{ moment(selectAssignment.end_at).format('DD MMM YYYY') }}
                                 </div>
