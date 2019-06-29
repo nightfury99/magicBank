@@ -267,7 +267,7 @@ export const asyncRoutes = [
         name: 'Question',
         meta: {
           title: 'Question List',
-          icon: 'peoples',
+          icon: 'list',
           roles: ['management']
         }
       },
