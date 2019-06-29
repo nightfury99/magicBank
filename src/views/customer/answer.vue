@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <h1>KYC Question</h1>
-        <el-collapse v-model="activeName" accordion v-loading="loading">
+        <el-collapse v-model="activeName" accordion>
             <el-collapse-item title="Section A" name="A">
                 <el-form ref="formA" :model="formA" label-width="120px" disabled>
                     <el-form-item 
@@ -18,16 +18,26 @@
                     v-for="(item, index) in questionB"
                     :key="item.id"
                     :label="item.display_text">
-                        <el-input v-model="formB[index].value" :type="item.input_type" :value="item.default_data"></el-input>
+                        <el-input 
+                        v-model="formB[index].value" 
+                        :type="item.input_type" 
+                        :value="item.default_data">
+                        </el-input>
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
             <el-collapse-item title="Section C" name="C">
                 <el-form ref="formC" :model="formC" label-width="120px">
                     <el-form-item 
-                    v-for="item in questionC" 
+                    v-for="(item, index) in questionC" 
                     :key="item.id" 
-                    :label="item.display_text"></el-form-item>
+                    :label="item.display_text">
+                        <el-input 
+                        v-model="formC[index].value" 
+                        :type="item.input_type" 
+                        :value="item.default_data">
+                        </el-input>
+                    </el-form-item>
                 </el-form>
             </el-collapse-item>
         </el-collapse>
@@ -39,6 +49,7 @@
 
 <script>
 import { getQuestionIndex } from "@/api/kyc/question";
+import { sendAnswer } from "@/api/kyc/answer";
 
 export default {
     data() {
@@ -53,7 +64,7 @@ export default {
       };
     },
     created() {
-        // TODO: get type from parent
+        // get type params from parent
         this.type = this.$route.params.type; 
         // load questions
         this.questionList()
@@ -76,17 +87,28 @@ export default {
             return Bindex;
         },
         questionC: function() {
-            return this.question.filter(function(item) {
+            const C = this.question.filter(function(item) {
                 return item.section === "C"
-            })
+            });
+            var Cindex = []
+            C.forEach(function(item, index){
+                Cindex += (item, index)
+                this.formC[index].kyc_question_id = item.id
+            });
+            return Cindex;
         },
     },
     methods: {
         // get all question
 		async questionList() {
-			this.loading = true
+		    const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
             this.question = this.cleanQuestion(await getQuestionIndex(3).data.data)
-            this.loading = false
+            loading.close();
         },
         // clean question based on hidden and type
         cleanQuestion: function (list) {
@@ -97,6 +119,9 @@ export default {
         // submit answers
         submit() {
             console.log(formB)
+            console.log(formC)
+            //formB.forEach(sendAnswer(item))
+            //formC.forEach(sendAnswer(item))
         }
     }
 }

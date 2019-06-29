@@ -7,7 +7,7 @@ export function getQuestionIndex(query) {
   })
 }
 
-export function createQuestion(data) {  
+export function createQuestion(data) {
   return request({
     url: '/kyc/question',
     method: 'post',

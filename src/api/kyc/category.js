@@ -6,4 +6,3 @@ export function getCategory() {
     method: 'get'
   })
 }
-
