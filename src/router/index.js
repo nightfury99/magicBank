@@ -196,7 +196,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'answer',
+        path: 'answer/:type',
         component: () => import('@/views/customer/answer'),
         name: 'answer',
         meta: {

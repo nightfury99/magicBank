@@ -54,7 +54,7 @@ export default {
     },
     created() {
         // TODO: get type from parent
-
+        this.type = this.$route.params.type; 
         // load questions
         this.questionList()
     },
