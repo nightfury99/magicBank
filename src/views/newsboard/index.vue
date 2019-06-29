@@ -16,9 +16,9 @@
             <div class="menu">
 
               <el-row>
-
+                
                 <!-- Media upload button -->
-                <el-button size="mini" type="info" plain icon="el-icon-camera">Media</el-button>
+                <el-button size="mini" type="info" plain icon="el-icon-picture">Media</el-button>
 
                 <!-- File upload button -->
                 <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
@@ -53,7 +53,7 @@
                       <span class="crm-timestamp clearfix" justify="end">{{ news.created_at | moment("from", "now") }}</span>
                   </el-col>
                   <el-col :span="1">
-                    <el-button @click="changeDeleteId(news.id)" type="text" size="mini" icon="el-icon-delete"></el-button>
+                    <el-button @click="changeDeleteId(news.id)" type="text" size="mini" icon="el-icon-delete" v-if="news.created_by.name == name"></el-button>
                   </el-col>
                   
                 </el-row>
@@ -62,13 +62,11 @@
                   <p>{{ news.description }}</p>
                 </el-row>
 
-                <div class="interaction">
+                <div class="interaction crm-timestamp">
                   
                   <el-row>
                       <el-col :span="24" align="end">
-                        <el-button type="text">{{ news.total_comments }} Comments</el-button>
-                        <el-button @click="triggerLike" type="text">{{ news.total_likes }} Likes</el-button>
-                        <el-button @click="triggerFavourite" type="text">{{ news.total_favourite }} Favourites</el-button> 
+                        <b>{{ news.total_comments ? news.total_comments : 0 }}</b> Comments <b>{{ news.total_likes ? news.total_likes : 0 }}</b> Likes <b>{{ news.total_favourite ? news.total_favourite : 0  }}</b> Favourites
                       </el-col>
                   </el-row>
               </div>
@@ -116,6 +114,7 @@
       </span>
     </el-dialog>
 
+    <!-- Dialog for Location -->
     <el-dialog
       custom-class="dialog-map"
       :visible.sync="dialogMap"
@@ -292,6 +291,8 @@ export default {
 
     setLocation: function() {
       this.post.location = this.center.latLng.lat + ',' + this.center.latLng.lng
+      console.log(this.post.location)
+      console.log("hi")
       this.dialogMap = false
     },
 
@@ -396,6 +397,7 @@ h5 {
 
 .interaction {
   margin-top: 10px;
+  font-size:13px;
 }
 
 </style>
