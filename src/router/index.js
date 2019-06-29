@@ -196,6 +196,16 @@ export const asyncRoutes = [
         }
       },
       {
+        path: 'answer',
+        component: () => import('@/views/customer/answer'),
+        name: 'answer',
+        meta: {
+          title: 'KYC Question',
+          icon: 'peoples',
+          roles: ['management']
+        }
+      },
+      {
         path: 'sales/:customerId',
         component: () => import('@/views/customer/sales'),
         name: 'customerSales',

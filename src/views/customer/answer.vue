@@ -31,6 +31,9 @@
                 </el-form>
             </el-collapse-item>
         </el-collapse>
+        <el-row>
+            <el-button type="primary" @click="submit">Submit</el-button>
+        </el-row>
     </div>
 </template>
 
@@ -82,7 +85,7 @@ export default {
         // get all question
 		async questionList() {
 			this.loading = true
-            this.question = this.cleanQuestion(await getQuestionIndex().data.data)
+            this.question = this.cleanQuestion(await getQuestionIndex(3).data.data)
             this.loading = false
         },
         // clean question based on hidden and type
@@ -90,6 +93,10 @@ export default {
             return list.filter(function(item){
                 return (item.hidden != true) && (item.type.slug == this.type)
             })
+        },
+        // submit answers
+        submit() {
+            console.log(formB)
         }
     }
 }
