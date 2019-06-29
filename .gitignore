@@ -14,3 +14,7 @@ package-lock.json
 *.njsproj
 *.sln
 debug.log
+package.json
+package.json
+package.json
+*.json
