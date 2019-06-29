@@ -5,14 +5,15 @@
         <el-button
           style="float: right"
           type="primary"
-          @click="navigateTo({name: 'questionCreate'})"
+          @click= "navigateTo({name: 'questionCreate'})"
           icon="el-icon-plus"
         ></el-button>
       </el-col>
     </el-row>
     <el-row>
-      <el-table
-        v-loading="listLoading"
+      <el-table 
+        @row-click= "navigateTo({name:'questionCreate'})"
+        v-loading= "listLoading"
         :data="user.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         element-loading-text="Loading"
         border
