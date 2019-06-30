@@ -7,13 +7,13 @@ export function getQuestionIndex(query) {
     method: 'get'
   })
 }
-export function getQuestionShow(userId) {
+export function getQuestionShow(questionId) {
   return request({
-    url: `/kyc/question/${userId}`,
+    url: `/kyc/question/${questionId}`,
     method: 'get'
   })
 }
-export function createQuestion(data) {  
+export function createQuestion(data) {
   return request({
     url: '/kyc/question',
     method: 'post',
@@ -45,5 +45,11 @@ export function putQuestion(question) {
       }
 
     })
+  })
+}
+export function deleteQuestion(id) {
+  return request({
+    url: `/kyc/question/${id}`,
+    method: 'delete'
   })
 }
