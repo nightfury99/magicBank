@@ -257,7 +257,7 @@ export const asyncRoutes = [
     name: 'Question',
     meta: {
       title: 'Question',
-      icon: 'list',
+      icon: 'form',
       roles: ['management']
     },
     children: [
@@ -289,7 +289,7 @@ export const asyncRoutes = [
 
         meta: {
           title: 'Create Question',
-          icon: 'example',
+          icon: 'edit',
           roles: ['management']
         }
       }
