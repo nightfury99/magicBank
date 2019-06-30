@@ -1,12 +1,22 @@
 <template>
   <div class="app-container">
-    <el-row >
-      <el-col span="18"  >
-        <el-card class="box-card">
+    <el-row>
+      <div style="margin: 0px 100px 45px 100px">
+        <el-button
+          type="primary"
+          icon="el-icon-back"
+          v-on:click="navigateBack()"
+          style="float:left"
+        >Back</el-button>
+      </div>
+    </el-row>
+    <el-row>
+      <el-col>
+        <el-card class="box-card" style="margin: 10px 100px">
           <el-form label-position="top" :rules="rules" ref="newQuestion" :model="newQuestion">
             <el-form-item label="Question Name" prop="display_text">
               <el-col :span="24">
-                <el-input placeholder="Enter Question Name" v-model="newQuestion.display_text"/>
+                <el-input placeholder="Enter Question Name" v-model="newQuestion.display_text" />
               </el-col>
             </el-form-item>
 
@@ -98,7 +108,7 @@
       required: true, message: 'Question Choice cannot be empty', trigger: 'blur'
     }"
               >
-                <el-input v-model="field.data" placeholder="Enter Question Choice">
+                <el-input v-model="field.data" placeholder="Enter Question Choice" class="qChoice">
                   <el-button
                     slot="append"
                     icon="el-icon-minus"
@@ -116,44 +126,43 @@
             </div>
 
             <el-form-item label="Table Properties" v-if="newQuestion.input_type=='table'">
-              <div>
-                <el-col style="width:50%" class="qChoice">
-                  <el-form-item label="Table Column">
-                    <el-input-number
-                      placeholder="Enter Table Column"
-                      v-model.number.lazy="newQuestion.fields.column"
-                      :min="1"
-                      
-                    ></el-input-number>
-                  </el-form-item>
-                </el-col>
-                <el-col style="width:50%" class="qChoice">
-                  <el-form-item label="Table Row">
-                    <el-input-number
-                      placeholder="Enter Table Row"
-                      v-model.number.lazy="newQuestion.fields.row"
-                      :min="1"
-                      
-                    ></el-input-number>
-                  </el-form-item>
-                </el-col>
-                <el-form-item
-                  v-for="(field, index) in newQuestion.fields.column "
-                  :label="'Column Header ' + (index+1)"
-                  :key="field.key"
-                  :prop="'fields.choice.' + index + '.data'"
-                  :rules="{
+              <el-form-item
+                v-for="(field, index) in newQuestion.fields.choice "
+                :label="'Column Header ' + (index+1)"
+                :key="field.key"
+                :prop="'fields.choice.' + index + '.data'"
+                :rules="{
       required: true, message: 'Column Header cannot be empty', trigger: 'blur'
     }"
-                >
-                  <el-input v-model="field.data" placeholder="Enter Question Choice"></el-input>
-                </el-form-item>
-              </div>
+              >
+                <el-input v-model="field.data" placeholder="Enter Column Header">
+                  <el-button
+                    slot="append"
+                    icon="el-icon-minus"
+                    @click="removeChoice(field)"
+                    v-show="(index || (!index && newQuestion.fields.choice.length > 1 ))&&newQuestion.input_type!='switch'"
+                  ></el-button>
+                  <el-button
+                    slot="append"
+                    icon="el-icon-plus"
+                    @click="addChoice()"
+                    v-show="(index == newQuestion.fields.choice.length -1)&&newQuestion.input_type!='switch'"
+                  ></el-button>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item label="Table Rows">
+                <el-input-number
+                  placeholder="Enter Table Row"
+                  v-model.number.lazy="newQuestion.fields.row"
+                  :min="1"
+                ></el-input-number>
+              </el-form-item>
             </el-form-item>
 
             <el-form-item label="Default Value (Optional)">
               <el-col :span="24">
-                <el-input placeholder="Enter Default Value" v-model="newQuestion.default_data"/>
+                <el-input placeholder="Enter Default Value" v-model="newQuestion.default_data" />
               </el-col>
             </el-form-item>
 
@@ -240,8 +249,7 @@ export default {
               key: 1
             }
           ],
-          row: 0,
-          column: 0
+          row: 0
         },
         is_hidden: true,
         is_mandatory: true
@@ -269,7 +277,11 @@ export default {
           }
         ],
         type_id: [
-          { required: true, message: "Please Select Question Type", trigger: "change" }
+          {
+            required: true,
+            message: "Please Select Question Type",
+            trigger: "change"
+          }
         ],
         description: [
           {
@@ -296,6 +308,9 @@ export default {
     navigateTo(route) {
       this.$router.push(route);
     },
+    navigateBack() {
+      this.$router.go(-1);
+    },
     async getCategory() {
       this.categoryOption = (await getCategory()).data.data;
     },
@@ -303,16 +318,11 @@ export default {
       this.typeOption = (await getType()).data.data;
     },
     async createNewQuestion() {
-      console.log(this.newQuestion);
-      alert(this.newQuestion);
       try {
         await createQuestion(this.newQuestion);
-        this.$message(this.newQuestion.name + " " + "is registered");
-        this.newQuestion = "";
+        this.$message(this.newQuestion.display_text + " field " + "is saved");
 
-        this.$router.push({
-          name: "index"
-        });
+        this.$router.push("index");
         console.log(this.newQuestion);
       } catch (err) {
         console.log(err);
@@ -348,7 +358,7 @@ export default {
         this.newQuestion.fields.choice = [];
       }
     },
-    
+
     removeChoice(item) {
       var index = this.newQuestion.fields.choice.indexOf(item);
       if (index !== -1) {
@@ -361,11 +371,12 @@ export default {
         data: ""
       });
     },
-   
+
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.newQuestion.field_name = this.newQuestion.display_text;
+          this.newQuestion.fields = JSON.stringify(this.newQuestion.fields);
           this.createNewQuestion();
         } else {
           console.log("error submit!!");
@@ -380,7 +391,7 @@ export default {
 
 <style scoped>
 .qChoice {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   &:last-child {
     margin-bottom: 0;
   }

@@ -35,24 +35,7 @@ export function putQuestion(question) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    data: qs.stringify({
-      question: {
-        field_name: question.field_name,
-        display_text: question.display_text,
-        section: question.section,
-        description: question.description,
-        origin: question.origin,
-        category_id: question.category_id,
-        type_id: question.type_id,
-        default_data: question.default_data,
-        only_default: question.only_default,
-        input_type: question.input_type,
-        fields: question.fields,
-        is_hidden: question.is_hidden,
-        is_mandatory: question.is_mandatory
-      }
-
-    })
+    data: qs.stringify(question)
   })
 }
 export function deleteQuestion(id) {
