@@ -1,16 +1,18 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col>
+      <el-col >
+        <div style="margin: 0px 80px 40px 80px">
         <el-button
           style="float: right"
           type="primary"
           @click="navigateTo({name: 'questionCreate'})"
           icon="el-icon-plus"
         >Create Question</el-button>
+        </div>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row style="margin: 10px 80px"  >
       <el-table
         
         v-loading="listLoading"
@@ -39,7 +41,7 @@
         </el-table-column>
         <el-table-column align="center" label="Action" width="150" >
           <template align="center" slot-scope="scope" v-if="scope.row.origin!='epicor'">
-            <el-tooltip :open-delay="tooltipDelay" content="Profile" placement="top">
+            <el-tooltip :open-delay="tooltipDelay" content="View Question" placement="top">
               <el-button
                 size="mini"
                 icon="el-icon-search"
@@ -52,8 +54,8 @@
       </el-table>
     </el-row>
 
-    <el-row>
-      <el-col :span="24" align="center">
+    <el-row style="margin: 10px 80px">
+      <el-col :span="24" align="center" >
         <pagination
           background
           layout="prev, pager, next"
