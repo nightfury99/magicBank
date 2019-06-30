@@ -7,14 +7,14 @@
           type="primary"
           @click="navigateTo({name: 'questionCreate'})"
           icon="el-icon-plus"
-        ></el-button>
+        >Create Question</el-button>
       </el-col>
     </el-row>
     <el-row>
       <el-table
         
         v-loading="listLoading"
-        :data="user.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="question.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         element-loading-text="Loading"
         fit
         highlight-current-row
@@ -47,24 +47,6 @@
                 circle
               ></el-button>
             </el-tooltip>
-            <el-tooltip :open-delay="tooltipDelay" content="Update" placement="top">
-              <el-button
-                size="mini"
-                type="primary"
-                icon="el-icon-edit"
-                @click="navigateTo ({name: 'userUpdate', params:{questionId: scope.row.id}})"
-                circle
-              ></el-button>
-            </el-tooltip>
-            <el-tooltip :open-delay="tooltipDelay" content="Delete" placement="top">
-              <el-button
-                size="mini"
-                type="danger"
-                icon="el-icon-delete"
-                @click="changeDeleteId(scope.row.id)"
-                circle
-              ></el-button>
-            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -75,7 +57,7 @@
         <pagination
           background
           layout="prev, pager, next"
-          :page-count="userQuery.page_count"
+          :page-count="questionQuery.page_count"
           @pagination="questionList"
         />
       </el-col>
@@ -89,12 +71,12 @@ import { getQuestionIndex } from "@/api/kyc/question";
 export default {
   data() {
     return {
-      user: [],
+      question: [],
       listLoading: false,
       tooltipDelay: 500,
 
-      totalUserPage: 0,
-      userQuery: {
+      totalQuestionPage: 0,
+      questionQuery: {
         page: 1,
         limit: 50,
         page_count: 1
@@ -115,22 +97,22 @@ export default {
       this.listLoading = true;
 
       console.log(val);
-      console.log(this.userQuery);
+      console.log(this.questionQuery);
 
       if (val) {
-        this.userQuery.page = val.page;
-        console.log(this.userQuery);
+        this.questionQuery.page = val.page;
+        console.log(this.questionQuery);
       }
 
-      const meta = (await getQuestionIndex(this.userQuery)).data.meta
+      const meta = (await getQuestionIndex(this.questionQuery)).data.meta
         .pagination;
 
-      this.user = (await getQuestionIndex(this.userQuery)).data.data;
+      this.question = (await getQuestionIndex(this.questionQuery)).data.data;
 
-      this.totalUserPage = meta.total;
-      this.userQuery.page_count = meta.total_pages;
+      this.totalQuestionPage = meta.total;
+      this.questionQuery.page_count = meta.total_pages;
 
-      console.log(this.user);
+      console.log(this.question);
 
       this.listLoading = false;
     }
