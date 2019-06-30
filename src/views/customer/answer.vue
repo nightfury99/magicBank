@@ -9,7 +9,7 @@
                     :key="item.id"
                     :label="item.display_text">
                         <el-input :type="item.input_type" :value="item.default_data"></el-input>
-                    </el-form-item>
+                    </el-form-item> 
                 </el-form>
             </el-collapse-item>
             <el-collapse-item title="Section B" name="B">
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getQuestionIndex } from "@/api/kyc/question";
+import { getQuestionAll } from "@/api/kyc/question";
 import { sendAnswer } from "@/api/kyc/answer";
 
 export default {
@@ -107,7 +107,7 @@ export default {
                 spinner: 'el-icon-loading',
                 background: 'rgba(0, 0, 0, 0.7)'
             });
-            this.question = this.cleanQuestion(await getQuestionIndex(3).data.data)
+            this.question = this.cleanQuestion(await getQuestionAll().data.data)
             loading.close();
         },
         // clean question based on hidden and type
