@@ -1,19 +1,23 @@
 <template>
     <div class="app-container">
+
         <h1>KYC Question</h1>
+
         <el-collapse v-model="activeName" accordion>
+
             <el-collapse-item title="Section A" name="A">
-                <el-form ref="formA" :model="formA" label-width="120px" disabled>
-                    <el-form-item 
-                    v-for="item in questionA" 
+                <el-form label-width="200px" disabled>
+                    <el-form-item
+                    v-for="item in questionA"
                     :key="item.id"
                     :label="item.display_text">
                         <el-input :type="item.input_type" :value="item.default_data"></el-input>
                     </el-form-item> 
                 </el-form>
             </el-collapse-item>
+
             <el-collapse-item title="Section B" name="B">
-                <el-form ref="formB" :model="formB" label-width="120px">
+                <el-form label-width="200px">
                     <el-form-item
                     v-for="(item, index) in questionB"
                     :key="item.id"
@@ -26,24 +30,27 @@
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
+
             <el-collapse-item title="Section C" name="C">
-                <el-form ref="formC" :model="formC" label-width="120px">
+                <el-form label-width="200px">
                     <el-form-item 
                     v-for="(item, index) in questionC" 
                     :key="item.id" 
                     :label="item.display_text">
                         <el-input 
                         v-model="formC[index].value" 
-                        :type="item.input_type" 
-                        :value="item.default_data">
+                        :type="item.input_type">
                         </el-input>
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
+
         </el-collapse>
+
         <el-row>
             <el-button type="primary" @click="submit">Submit</el-button>
         </el-row>
+
     </div>
 </template>
 
@@ -56,72 +63,57 @@ export default {
       return {
         activeName: 'A',
         loading: false,
-        type,
+        typeParams: null,
         question: [],
-        formA: [],
         formB: [],
         formC: []
       };
     },
     created() {
         // get type params from parent
-        this.type = this.$route.params.type; 
+        this.typeParams = this.$route.params.type; 
+        //console.log("params assigned: " + this.typeParams)
         // load questions
         this.questionList()
     },
     computed:{
-        questionA: function() {
-            return this.question.filter(function(item) {
-                return item.section === "A"
-            })
+        questionA() {
+            return this.question.filter(item => item.section === 'A')
         },
-        questionB: function() {
-            const B = this.question.filter(function(item) {
-                return item.section === "B"
-            });
-            var Bindex = []
-            B.forEach(function(item, index){
-                Bindex += (item, index)
+        questionB() {
+            const B = this.question.filter(item => item.section === "B" )
+            B.forEach((item, index) => {
+                this.formB[index] = {}
                 this.formB[index].kyc_question_id = item.id
-            });
-            return Bindex;
+                //console.log(this.formB[index])
+            })
+            return B
         },
-        questionC: function() {
-            const C = this.question.filter(function(item) {
-                return item.section === "C"
-            });
-            var Cindex = []
-            C.forEach(function(item, index){
-                Cindex += (item, index)
+        questionC() {
+            const C = this.question.filter(item => item.section === "C")
+            C.forEach((item, index) => {
+                this.formC[index] = {}
                 this.formC[index].kyc_question_id = item.id
-            });
-            return Cindex;
-        },
+            })
+            return C
+        }
     },
     methods: {
         // get all question
 		async questionList() {
-		    const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
-            });
-            this.question = this.cleanQuestion(await getQuestionAll().data.data)
-            loading.close();
+            this.cleanQuestion((await getQuestionAll()).data.data)
+            //console.log(this.question)
         },
         // clean question based on hidden and type
-        cleanQuestion: function (list) {
-            return list.filter(function(item){
-                return (item.hidden != true) && (item.type.slug == this.type)
-            })
+        cleanQuestion(data) {
+            this.question = data.filter(item => (item.hidden != true) && ((item.type.slug === this.typeParams) || (item.type.slug === 'profile')))
         },
         // submit answers
         submit() {
-            console.log(formB)
-            console.log(formC)
-            //formB.forEach(sendAnswer(item))
-            //formC.forEach(sendAnswer(item))
+            console.log(this.formB)
+            console.log(this.formC)
+            this.formB.forEach((item) => sendAnswer(item))
+            this.formC.forEach((item) => sendAnswer(item))
         }
     }
 }

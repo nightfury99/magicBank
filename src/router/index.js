@@ -199,6 +199,7 @@ export const asyncRoutes = [
         path: 'answer/:type',
         component: () => import('@/views/customer/answer'),
         name: 'answer',
+        hidden: true,
         meta: {
           title: 'KYC Question',
           icon: 'peoples',

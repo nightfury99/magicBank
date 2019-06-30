@@ -8,7 +8,7 @@ export function getQuestionIndex(query) {
   })
 }
 
-export function getQuestionAll(query) {
+export function getQuestionAll() {
   return request({
     url: `/kyc/question/no-paginate`,
     method: 'get'
