@@ -11,6 +11,12 @@
               style="float:left"
             >Back</el-button>
             <el-button
+              icon="el-icon-delete"
+              v-if="viewMode==true"
+              v-on:click="deleteConfirmation()"
+              style="float:right"
+            >Delete</el-button>
+            <el-button
               icon="el-icon-edit"
               v-if="viewMode==true"
               v-on:click="makeEditable()"
@@ -196,11 +202,21 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-dialog
+      :visible.sync="dialogDelete"
+      title="Delete Confirmation"
+      width="30%">
+      <span>Delete this Question?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogDelete = false">Cancel</el-button>
+        <el-button type="primary" @click="deleteQuestion">Delete</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getQuestionShow, putQuestion } from "@/api/kyc/question";
+import { getQuestionShow, putQuestion , deleteQuestion } from "@/api/kyc/question";
 import { getCategory } from "@/api/kyc/category";
 import { getType } from "@/api/kyc/type";
 import Pagination from "@/components/Pagination";
@@ -211,6 +227,7 @@ export default {
   },
   data() {
     return {
+      dialogDelete:false,
       viewMode: true,
       categoryOption: [],
       typeOption: [],
@@ -335,6 +352,20 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    async deleteQuestion() {
+      console.log()
+      try {
+        await deleteQuestion(this.$store.state.route.params.questionId)
+      } catch (err) {
+        console.log(err)
+        alert(err)
+      }
+      this.dialogDelete = false
+      this.navigateBack()
+    },
+    async deleteConfirmation() {
+      this.dialogDelete = true
     },
     makeEditable() {
       this.viewMode = false;
