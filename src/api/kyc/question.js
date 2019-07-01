@@ -28,14 +28,11 @@ export function createQuestion(data) {
     data
   })
 }
-export function putQuestion(question) {
+export function putQuestion(data) {
   return request({
-    url: `/kyc/question/${question.id}`,
+    url: `/kyc/question/${data.id}`,
     method: 'put',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    data: qs.stringify(question)
+    data
   })
 }
 export function deleteQuestion(id) {
