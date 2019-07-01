@@ -287,7 +287,7 @@ export const asyncRoutes = [
         path: 'questionCreate',
         component: () => import('@/views/question/questionCreate'),
         name: 'questionCreate',
-
+        hidden: true,
         meta: {
           title: 'Create Question',
           icon: 'edit',

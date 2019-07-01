@@ -1,8 +1,9 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col >
+      
         <div style="margin: 0px 80px 40px 80px">
+        <h1>Question List</h1>
         <el-button
           style="float: right"
           type="primary"
@@ -10,7 +11,7 @@
           icon="el-icon-plus"
         >Create Question</el-button>
         </div>
-      </el-col>
+      
     </el-row>
     <el-row style="margin: 10px 80px"  >
       <el-table

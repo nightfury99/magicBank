@@ -2,7 +2,7 @@
     <div class="app-container">
         
         <router-link :to="{ name: 'answer', params: { type: 'sales' }}">
-            <el-button>Create KYC Question</el-button>
+            <el-button type="primary">Create KYC Question</el-button>
         </router-link>
 
         <el-row :gutter="20">
