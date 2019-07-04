@@ -87,7 +87,16 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/one/:id',
+        path: 'favourite',
+        component: () => import('@/views/newsboard/favourite'),
+        name: 'FavouriteNews',
+        meta: { 
+          title: 'Favourite News', 
+          icon: 'news',
+        }
+      },
+      {
+        path: 'one/:id',
         component: () => import('@/views/newsboard/one'),
         name: 'SingleNews',
         hidden: true,
