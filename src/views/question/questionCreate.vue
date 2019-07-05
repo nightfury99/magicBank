@@ -251,7 +251,7 @@ export default {
           ],
           row: 0
         },
-        is_hidden: true,
+        is_hidden: false,
         is_mandatory: true
       },
       rules: {
