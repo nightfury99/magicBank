@@ -17,7 +17,7 @@ export function getNews(id) {
 
 export function getNewsboardFavourite(query) {
   return request({
-    url: `/newsboards/${query.newsboardId}/favourite?page=${query.page}`,
+    url: `/newsboards/favourites/me?page=${query.page}`,
     method: 'get'
   })
 }

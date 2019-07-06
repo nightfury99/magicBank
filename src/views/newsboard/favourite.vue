@@ -12,12 +12,12 @@
                   
                   <el-col :span="23">
                     <router-link :to="{ name: 'SingleNews', params: { id: news.id }}">
-                      <span class="crm-heading-medium-title">{{ news.created_by.name }}</span>
+                      <span class="crm-heading-medium-title">{{ news.newsboard.created_by }}</span>
                     </router-link>
                       <span class="crm-timestamp clearfix" justify="end">{{ news.created_at | moment("from", "now") }}</span>
                   </el-col>
                   <el-col :span="1">
-                    <el-button @click="changeDeleteId(news.id)" type="text" size="mini" icon="el-icon-delete" v-if="news.created_by.name == name"></el-button>
+                    <el-button @click="changeDeleteId(news.id)" type="text" size="mini" icon="el-icon-delete" v-if="news.newsboard.created_by == name"></el-button>
                   </el-col>
                   
                 </el-row>
@@ -55,18 +55,7 @@
 
     </el-row>
 
-    <!-- Dialog for Specific News Post-->
-    <el-dialog
-      :visible.sync="dialogVisible"
-      width="30%">
-      <span>This is a message</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- Dialog for News Delete -->
+     <!-- Dialog for News Delete -->
     <el-dialog
       :visible.sync="dialogDelete"
       title="Delete Confirmation"
@@ -94,7 +83,6 @@ export default {
       avatar: 'https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg',
       newsfeedFavourite: [],
       newPost: '',
-      fileList: [],
       dialogVisible: false,
       dialogDelete: false,
       dialogMap: false,
@@ -120,19 +108,6 @@ export default {
   },
 
   methods: {
-
-    // get newsboard list
-    async newsList(val) {
-      if (val) {
-        this.newsfeedQuery.page = val.page
-      }
-
-      const meta = (await getNewsboardIndex(this.newsfeedQuery)).data.meta.pagination
-      this.newsfeed = (await getNewsboardIndex(this.newsfeedQuery)).data.data
-
-      this.totalNewsPage = meta.total
-      this.newsfeedQuery.page_count = meta.total_pages
-    },
 
     // get favourite newsboard list
     async newsFavouriteList(val) {
@@ -176,43 +151,7 @@ export default {
       this.dialogDelete = false
       this.newsList()
     },
-
-    geolocate: function() {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.center.lat = position.coords.latitude
-        this.center.lng = position.coords.longitude
-      });
-    },
-
-    setCenter: function(place) {
-      this.center.latLng.lat = place.geometry.location.lat()
-      this.center.latLng.lng = place.geometry.location.lng()
-      this.center.zoom = 15 
-    },
-
-    setLocation: function() {
-      this.post.location = this.center.latLng.lat + ',' + this.center.latLng.lng
-      console.log(this.post.location)
-      console.log("hi")
-      this.dialogMap = false
-    },
-
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-
-    handlePreview(file) {
-      console.log(file);
-    },
-
-    handleExceed(files, fileList) {
-      this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`);
-    },
-
-    beforeRemove(file, fileList) {
-      return this.$confirm(`Cancel the transfert of ${ file.name } ?`);
-    },
-
+   
   }
 }
 </script>
