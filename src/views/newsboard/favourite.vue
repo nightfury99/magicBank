@@ -6,7 +6,7 @@
 
         <div class="crm-box-container">
 
-          <el-row class="news crm-box-content" v-for="(news, index) in newsfeed" :key="index">
+          <el-row class="news crm-box-content" v-for="(news, index) in newsfeedFavourite" :key="index">
             <div>
                 <el-row>
                   
@@ -43,8 +43,8 @@
               <pagination
                 background
                 layout="prev, pager, next"
-                :page-count="newsfeedQuery.page_count"
-                @pagination="newsList" 
+                :page-count="newsFavouriteQuery.page_count"
+                @pagination="newsFavouriteList" 
                 :total="0"/>
             </el-col>
           </el-row>
@@ -78,54 +78,12 @@
       </span>
     </el-dialog>
 
-    <!-- Dialog for Location -->
-    <el-dialog
-      custom-class="dialog-map"
-      :visible.sync="dialogMap"
-      width="35%"
-      @open="geolocate"
-      top="5vh">
-
-      <el-card
-        :body-style="{padding: '10px'}"
-        style="margin-bottom:10px;">
-        <gmap-autocomplete
-          @place_changed="setCenter"
-          class="places-search"
-          style="width:100%">
-        </gmap-autocomplete>
-      </el-card>
-
-      <GmapMap
-        :center="center.latLng"
-        :zoom="center.zoom"
-        :options="{
-            zoomControl: true,
-            mapTypeControl: false,
-            scaleControl: false,
-            streetViewControl: false,
-            rotateControl: false,
-            fullscreenControl: false,
-            disableDefaultUi: false
-        }"
-        style="width: 100%; height: 350px;"
-        >
-        <gmap-marker
-          :position="center.latLng">
-        </gmap-marker>
-      </GmapMap>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="setLocation">Set Location</el-button>
-        <el-button @click="dialogMap = false">Cancel</el-button>
-      </span>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getNewsboardIndex, getNewsboardFavourite, postNewsboardStore, deleteNewsboard } from '@/api/newsboard'
+import { getNewsboardFavourite, deleteNewsboard } from '@/api/newsboard'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -134,33 +92,12 @@ export default {
   data() {
     return {
       avatar: 'https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg',
-      newsfeed: [],
       newsfeedFavourite: [],
       newPost: '',
       fileList: [],
       dialogVisible: false,
       dialogDelete: false,
       dialogMap: false,
-      center: {
-        latLng: {lat:10, lng:10},
-        zoom: 7,
-        marker: {},
-        params: '',
-      },
-      post: {
-        description: '',
-        location: '',
-        media: '',
-        user: '',
-        customer: '',
-      },
-
-      totalNewsPage: 0,
-      newsfeedQuery: {
-        page: 1,
-        limit: 50,
-        page_count: 1
-      },
 
       totalNewsFavouritePage: 0,
       newsFavouriteQuery: {
@@ -179,7 +116,7 @@ export default {
   },
 
   created() {
-    this.newsList()
+    this.newsFavouriteList()
   },
 
   methods: {
