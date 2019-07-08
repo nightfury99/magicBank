@@ -9,6 +9,7 @@
             
         </el-row>
 
+        <!-- Call Log list -->
         <el-row>
             <div class="app-container">
                 <el-table
@@ -21,13 +22,15 @@
                     </el-table-column>
 
                     <el-table-column
-                    label="Datetime"
-                    prop="datetime">
+                    label="Datetime">
+                        <template slot-scope="scope">
+                            {{ scope.row.call_datetime | moment("dddd, Do MMMM YYYY, h:mm:ss a") }}
+                        </template>
                     </el-table-column>
 
                     <el-table-column
                     label="PIC Name"
-                    prop="pic">
+                    prop="pic.name">
                     </el-table-column>
                     
                     <el-table-column
@@ -46,8 +49,10 @@
                     </el-table-column>
                     
                     <el-table-column
-                    label="Duration"
-                    prop="duration">
+                    label="Duration">
+                        <template slot-scope="scope">
+                            {{ [+scope.row.duration, 'seconds'] | duration('humanize') }}
+                        </template>
                     </el-table-column>
 
                 </el-table> 
@@ -154,6 +159,7 @@ export default {
     data() {
         return {
             callLog: [],
+            newCallLog: {},
             modalCallLog: false
 
         }
