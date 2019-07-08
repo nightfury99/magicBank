@@ -168,10 +168,7 @@ export default {
     created() {
         const customerId = this.$store.state.route.params.customerId // get customer id from params
 
-        console.log(customerId)
         this.getCallLog(customerId)
-        // this callLog = 
-        // this.getCallLog
     },
 
     methods: {

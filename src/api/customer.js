@@ -21,3 +21,12 @@ export function getCallLog(customerId) {
     method: 'get'
   })
 }
+
+export function getPicContact(customerId) {
+  return request({
+    url:`/customers/${customerId}/pic-contacts`,
+    method: 'get'
+  })
+}
+
+

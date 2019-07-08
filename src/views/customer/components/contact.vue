@@ -29,7 +29,7 @@
                     
                     <el-table-column
                     label="Mobile"
-                    prop="mobileNo">
+                    prop="mobile_no">
                     </el-table-column>
                     
                     <el-table-column
@@ -44,56 +44,31 @@
 
 
 <script>
+import { getPicContact } from '@/api/customer'
+
 export default {
     name: 'Contact',
 
     data() {
         return {
             picContact: [],
-            picContactApi: [
-                {
-                    name: 'Saiful',
-                    position: 'Finance',
-                    title: 'Director',
-                    email: 'epul@example.com',
-                    mobileNo: '601129328307',
-                    primary: 'Billing'
-                },
-                {
-                    name: 'Saifulullah',
-                    position: 'Warehouse',
-                    title: 'Director',
-                    email: 'epul4@example.com',
-                    mobileNo: '601127828307',
-                    primary: 'Purchasing'
-                },
-                {
-                    name: 'Ahmad Saiful',
-                    position: 'Finance',
-                    title: 'Director',
-                    email: 'epul2@example.com',
-                    mobileNo: '601143528307',
-                    primary: 'Shipping'
-                },
-                {
-                    name: 'Epul',
-                    position: 'Buyer',
-                    title: 'Director',
-                    email: 'epul5@example.com',
-                    mobileNo: '6011293435427',
-                    primary: 'None'
-                }
-            ]
         }
     },
 
     created() {
-		this.getPicContact()
+        const customerId = this.$store.state.route.params.customerId // get customer id from params
+
+		this.getPicContact(customerId)
 	},
 
     methods: {
-        getPicContact () {
-            this.picContact = this.picContactApi
+        getPicContact (customerId) {
+            getPicContact(customerId)
+                .then(resp => {
+                    console.log(resp)
+                    this.picContact = resp.data.data
+                })
+            console.log(this.picContact)
         }
     }
 
