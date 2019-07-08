@@ -15,6 +15,14 @@ export function createAssignment(param) {
   })
 }
 
+export function getAssignmentFilterByMonth(param) {
+  return request({
+    url: '/assignments/filter',
+    method: 'post',
+    data: param,
+  })
+}
+
 export function getUsers() {
   return request({
     url: '/users',

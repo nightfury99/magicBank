@@ -112,14 +112,29 @@ export const asyncRoutes = [
   {
     path: '/assignment',
     component: Layout,
-    redirect: '/assignment/index',
+    name: 'Assignment',
+    meta: { 
+      title: 'Assignment', 
+      icon: 'example',
+      roles: ['management']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/assignment/index'),
-        name: 'Assignment',
+        name: 'AssignmentList',
         meta: { 
-          title: 'Assignment', 
+          title: 'List', 
+          icon: 'example',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'calendar',
+        component: () => import('@/views/assignment/calendar'),
+        name: 'AssignmentCalendar',
+        meta: { 
+          title: 'Calendar', 
           icon: 'example',
           roles: ['management']
         }
