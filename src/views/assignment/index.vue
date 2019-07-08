@@ -5,7 +5,7 @@
         <!-- First column -->
         <el-col :span="12">
             <div class="scroll crm-box-container" style="height: 90vh; overflow: scroll; padding-bottom: 30px;">
-                
+
                 <div class="crm-box-header">
                     <span>Assignment List</span>
                     <el-button style="float: right" size="mini" type="warning" @click="modalAssignment=true" icon="el-icon-plus" circle></el-button>
@@ -17,7 +17,7 @@
                         <div 
                             class="list crm-box-content data" 
                             :class="assignment.status == 'open' ? 'crm-color-primary-light' : ''">
-                            
+
                             <span class="crm-heading-medium-title">
                                 {{ assignment.assigned_by.name }} 
                                 <el-tag type="success" size="mini"> 
@@ -39,7 +39,7 @@
                     <!-- New assignment modal pop-up -->
                     <el-dialog title="New Assignment" :visible.sync="modalAssignment">
                         <el-form>                    
-                            
+
                             <!-- Title -->
                             <el-form-item label="Title" :label-width="formLabelWidth">
                                 <el-input v-model="newAssignment.title"></el-input>
@@ -142,7 +142,7 @@
         <!-- Second column -->
         <el-col :span="12">
             <div class="crm-box-container" style="overflow: scroll; height: 90vh;">
-                
+
                 <el-row>
 
                     <div class="crm-box-header crm-border-bottom clearfix">
@@ -155,14 +155,16 @@
 
                         <!-- Complete assignment button -->
                         <el-col :offset="19" :span="3">
-                            <el-button 
-                                @click="showAlert"
-                                type="success" 
-                                icon="el-icon-sucess" 
-                                size="small" 
-                                style="float: right;">
-                                    Complete
-                            </el-button>
+                            <div>
+                                <el-button 
+                                    @click="showAlert"
+                                    type="success" 
+                                    icon="el-icon-success" 
+                                    size="small" 
+                                    style="float: right;">
+                                        Complete
+                                </el-button>
+                            </div>
                         </el-col>
 
                     </div>
@@ -172,27 +174,32 @@
                 <div class="crm-box-content">
 
                     <div style="margin-bottom:10px;" v-if="selectAssignment">
-                        
+
                         <el-row>
                             <!-- Assignor to Assignee -->
                             <el-col :span="20">
                                 <span class="crm-heading-small-title">
-                                    <span class="assignee-name">{{ selectAssignment.assigned_by.name }}</span> to <span class="assignee-name">{{ selectAssignment.assigned_to.name }}</span>
+                                    <span class="assignee-name">{{ selectAssignment.assigned_by.name }}</span>
+                                    to 
+                                    <div class="assignee-name"
+                                        v-for="(assigned_to, index) in selectAssignment.assigned_to" :key="index">
+                                        {{ assigned_to.name }}
+                                    </div>
                                 </span>
                             </el-col>
                             
                             <!-- Created at -->
                             <el-col :span="4">
-                                <div class="crm-timestamp crm-row-bg" v-if="selectAssignment">
+                                <div style="float: right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
                                     {{ moment(selectAssignment.start_at).format('DD MMM YYYY') }}
                                 </div>
                             </el-col>
                         </el-row>
-                        
+
                         <el-row>
 
                             <!-- Due date -->
-                            <el-col :span="4">
+                            <el-col>
                                 <div style="float: right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
                                     Due by: {{ moment(selectAssignment.end_at).format('DD MMM YYYY') }}
                                 </div>
@@ -202,15 +209,53 @@
                         
                     </div>
                     
-                    <!-- Container header -->
-                    <div class="crm-heading-title" v-if="selectAssignment">
-                        {{ selectAssignment.title }}
-                    </div>
+                    <el-row>
+                        <!-- Container header -->
+                        <div class="crm-heading-title" v-if="selectAssignment">
+                            {{ selectAssignment.title }}
+                        </div>
 
-                    <!-- Container content -->
-                    <div class="crm-heading-content" v-if="selectAssignment">
-                        {{selectAssignment.description}}
-                    </div>
+                        <!-- Container content -->
+                        <div class="crm-heading-content" v-if="selectAssignment">
+                            {{selectAssignment.description}}
+                        </div>
+                    </el-row>
+
+                    <!-- Comment box -->
+                    <el-row>
+                        <div class="crm-box-container" v-if="selectAssignment">
+                            
+                            <!-- Add comment -->
+                            <div class="crm-box-content form">
+                                <text-area-emoji-picker 
+                                    v-model="data.body"
+                                    placeholder="Insert a comment"
+                                    @handleEnter="postMessage"
+                                    :disable="isSubmitted"
+                                    />
+                            </div>
+                            
+                            <!-- Comment list -->
+                            <el-row class="crm-box-content" v-for="(comment, index) in selectAssignment.comments" :key="index">
+                                <div>
+                                    <el-row>
+                                    
+                                    <el-col>
+                                        <span class="crm-heading-medium-title">{{ comment.commentor_name }}</span>
+                                        <span class="crm-timestamp clearfix" justify="end">{{ comment.created_at | moment("from", "now") }}</span>
+                                    </el-col>
+
+                                    </el-row>
+
+                                    <el-row>
+                                        <span class="crm-heading-content">{{ comment.body }}</span>
+                                    </el-row>
+
+                                </div>
+                            </el-row>
+                            <div class="divider"/>
+                        </div>
+                    </el-row>
 
                 </div>
 
@@ -227,16 +272,19 @@
 <script>
 import Vue from 'vue'
 import VueSweetalert2 from 'vue-sweetalert2'
-import { getAssignments, createAssignment, getUsers } from '@/api/assignment'
+import { getAssignments, createAssignment, getUsers, addComment } from '@/api/assignment'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
+import { mapGetters } from 'vuex'
+import TextAreaEmojiPicker from '@/components/TextAreaEmojiPicker'
 
 Vue.use(VueSweetalert2)
 
   export default {
 
     components: {
-        Pagination
+        Pagination,
+        TextAreaEmojiPicker
     },
       
     data() {
@@ -251,6 +299,19 @@ Vue.use(VueSweetalert2)
         value: '',
         selectAssignment: {},
         users: [],
+        isSubmitted: false,
+        data: {
+                // id: this.selectAssignment.id,
+                body: '',
+        },
+        comment: {
+            id: '',
+            body: '',
+            commentor_id: '',
+            commentor_name: '',
+            created_at: '',
+            updated_at: ''
+        },
         type: [{
           value: 'Sales',
           label: 'Sales'
@@ -269,7 +330,7 @@ Vue.use(VueSweetalert2)
      }
     },
 
-    mounted() {
+    created() {
         this.getAssignments()
         this.getUsers()
     },
@@ -289,6 +350,7 @@ Vue.use(VueSweetalert2)
             getAssignments(this.query)
                 .then(resp => {
                     this.assignments = resp.data.data
+                    this.comments = this.assignments.comments
                     this.query.page_count = resp.data.meta.pagination.total_pages
                     this.query.total = resp.data.meta.pagination.total
 
@@ -305,6 +367,19 @@ Vue.use(VueSweetalert2)
 
         descriptionMethod: function(assignment) {
             this.selectAssignment = assignment
+        },
+
+        postMessage: function() {
+
+            this.isSubmitted = true
+            addComment(this.selectAssignment.id, this.data)
+                .then(resp => {
+                    
+                    this.data.body = ''
+                    this.getAssignments();
+
+                    this.isSubmitted = false
+                })
         },
 
         add: function(e) {
@@ -326,6 +401,7 @@ Vue.use(VueSweetalert2)
         },
 
         showAlert(){
+
             // Use sweetalert2
             this.$swal({
                 title: 'Are you sure?',
@@ -338,6 +414,7 @@ Vue.use(VueSweetalert2)
             }).then((result) => {
 
                 if (result.value) {
+                    
                     this.$swal(
                     'Completed!',
                     'The assignment has been completed',
@@ -351,6 +428,10 @@ Vue.use(VueSweetalert2)
 </script>
 
 <style scoped>
+    .el-row {
+        margin-bottom: 20px;
+    }
+
     .assignor-name {
         font-size: 14px;
         font-weight: 500;

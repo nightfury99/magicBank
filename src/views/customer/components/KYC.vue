@@ -38,7 +38,7 @@
               size="mini"
               type="success"
               @click="handleExcel(scope.$index, scope.row)">Excel</el-button>
-            
+
             <!-- Download PDF button -->
             <el-button
               size="mini"
@@ -47,55 +47,58 @@
           </template>
         </el-table-column>
 
-      </el-table> 
+      </el-table>
     </div>
   </div>
 </template>
 
 <script>
-  import jspdf from 'jspdf'
+import JSpdf from 'jspdf'
 
-  export default {
+export default {
 
-    name: 'KYC',
+  name: 'KYC',
 
-    data() {
-      return {
-        pdfname: '',
-        tableData: [{
+  data() {
+    return {
+      pdfName: '',
+      tableData: [
+        {
           title: 'KYC 2019.05',
           date: '03/05/2019',
           user: 'Nicholas'
-        }, {
+        },
+        {
           title: 'KYC 2019.03',
           date: '01/03/2019',
           user: 'Nicholas'
-        }, {
+        },
+        {
           title: 'KYC 2018.10',
           date: '10/10/2018',
           user: 'Kent'
-        }, {
+        },
+        {
           title: 'KYC 2018.08',
           date: '07/08/2018',
           user: 'Kent'
         }],
-        search: '',
-      }
+      search: ''
+    }
+  },
+
+  methods: {
+
+    handleExcel(index, row) {
+      console.log(index, row)
     },
 
-    methods: {
-
-      handleExcel(index, row) {
-        console.log(index, row);
-      },
-
-      handlePDF() {
-        let pdfName = 'test'; 
-        var doc = new jspdf();
-        doc.text(this.pdfname, 10, 10);
-        doc.save(pdfName + '.pdf');
-      }
-    },
-
+    handlePDF() {
+      let pdfName = 'test'
+      var doc = new JSpdf()
+      doc.text(this.pdfName, 10, 10)
+      doc.save(pdfName + '.pdf')
+    }
   }
+}
 </script>

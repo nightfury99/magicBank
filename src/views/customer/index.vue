@@ -8,12 +8,11 @@
 
                     <!-- Card header         -->
                     <div class="crm-box-header">
-                        <span>Customer List</span>
-                        <!-- <el-button style="float: right" size="mini" type="warning" @click="modalAssignment=true" icon="el-icon-plus" circle></el-button> -->
+                        <el-input v-model="search" placeholder="Search" class="filter-item" />
                     </div>
 
                     <!-- Customer cards list -->
-                    <div v-for="(customer, i) in customers" :key="i">
+                    <div v-for="(customer, i) in filteredList" :key="i">
                         <div type="flex assignment" @click="descriptionMethod(customer)">
                             <div 
                                 class="list crm-box-content data crm-color-primary-light">
@@ -60,22 +59,22 @@
 
                         <el-row :gutter="20" type="flex" justify="center">
 
-                            <el-col :span="10">
+                            <el-col>
 
                                 <div class="crm-profile-name" text-align="center" v-if="selectCustomer">
-                                    {{ ' ' + selectCustomer.name }}
+                                    {{ selectCustomer.name }}
                                 </div>
 
                                 <div class="crm-profile-content" v-if="selectCustomer">
-                                    {{ 'Branch Name' }}
+                                    {{ selectCustomer.branch.name }}
                                 </div>
 
                                 <div class="crm-profile-content" v-if="selectCustomer">
-                                    {{ 'Customer Type' }}
+                                    {{ selectCustomer.type }}
                                 </div>
 
                                 <div class="crm-profile-content" v-if="selectCustomer">
-                                    {{ 'Sales Rep   : John Wick' }}
+                                    {{ 'Sales Rep : ' + selectCustomer.salesperson.name }}
                                 </div>
 
                             </el-col>
@@ -84,45 +83,39 @@
 
                         <!-- Customer details -->
                         <el-card shadow="hover">
+
                         <el-row :gutter="20" type="flex" justify="center">
-                            <el-col>
-                            <div class="crm-profile-company" v-if="selectCustomer">
-                                {{ 'ABCD Sdn. Bhd. (ABD-DAS)' }}
+                            <el-col :span="8">
+                            <div class="crm-profile-content" v-if="selectCustomer">
+                                <svg-icon icon-class="international"/> {{ ' : ' + selectCustomer.website }}
                             </div>
                             </el-col>
+
+                            <el-col :span="8">
+                            <div class="crm-profile-content" v-if="selectCustomer" style="float: right;">
+                                <i class="el-icon-location" /> {{ ' : ' + selectCustomer.address }}
+                            </div>
+                            </el-col>
+
                         </el-row>
 
                         <el-row :gutter="20" type="flex" justify="center">
-                            <el-col :span="6">
-                            <div class="crm-profile-content" v-if="selectCustomer">
-                                <svg-icon icon-class="international"/> {{ ' :' + selectCustomer.website }}
-                            </div>
-                            </el-col>
-                        </el-row>
 
-                        <el-row :gutter="20" type="flex" justify="center">
-
-                            <el-col :span="6">
+                            <el-col :span="8">
                             <div class="crm-profile-content" v-if="selectCustomer">
-                                <i class="el-icon-location" /> {{ ':' + selectCustomer.address }}
+                                <svg-icon icon-class="email"/> {{ ' : ' + selectCustomer.email }}
                             </div>
                             </el-col>
 
-                            <el-col :span="6">
+                            <el-col :span="8">
                             <div class="crm-profile-content" v-if="selectCustomer">
-                                <svg-icon icon-class="email"/> {{ ' :' + selectCustomer.email }}
+                                <i class="el-icon-phone"/> {{ ' : ' + selectCustomer.phone }}
                             </div>
                             </el-col>
 
-                            <el-col :span="6">
+                            <el-col :span="8">
                             <div class="crm-profile-content" v-if="selectCustomer">
-                                <i class="el-icon-phone"/> {{ ' :' + selectCustomer.phone }}
-                            </div>
-                            </el-col>
-
-                            <el-col :span="6">
-                            <div class="crm-profile-content" v-if="selectCustomer">
-                                {{ 'Fax :' + selectCustomer.fax }}
+                                {{ 'Fax : ' + selectCustomer.fax }}
                             </div>
                             </el-col>
 
@@ -162,17 +155,28 @@ export default {
 
     data() {
       return {
+          search: '',
+          filterType: [],
           customers: [],
           selectCustomer: {},
-            query: {
-                page: 1,
-                page_count: 1,
-                total: 0,
-            },
+          query: {
+            page: 1,
+            page_count: 1,
+            total: 0,
+          },
      }
     },
 
-    mounted() {
+    computed: {
+        filteredList: function() {
+        return this.customers.filter(customer => {
+            return customer.name.toLowerCase().includes(this.search.toLowerCase())
+        })
+        return this.customers;
+        }
+    },
+
+    created() {
         this.getCustomers()
     },
 
