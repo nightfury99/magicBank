@@ -34,7 +34,7 @@
                     
                     <el-table-column
                     label="Primary"
-                    prop="primary">
+                    prop="type">
                     </el-table-column>
 
                 </el-table> 
