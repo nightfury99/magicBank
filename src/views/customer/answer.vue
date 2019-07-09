@@ -30,8 +30,8 @@
                     :label="item.display_text"
                     :rules="[{required: item.is_mandatory, message: 'field is required'}]">
 
-                        <el-radio-group 
-                        v-if="item.input_type === 'radio'"
+                        <el-radio-group
+                        v-if="item.input_type === 'radio' || item.input_type === 'switch'"
                         v-model="formB[index].value">
                             <el-radio
                             v-for="option in item.fields.choice"
@@ -62,17 +62,6 @@
                             :value="option.data">
                             </el-option>
                         </el-select>
-
-                        <el-radio-group 
-                        v-else-if="item.input_type === 'switch'"
-                        v-model="formB[index].value">
-                            <el-radio
-                            v-for="option in item.fields.choice"
-                            :key="option.data"
-                            :label="option.data">
-                            {{option.data}}
-                            </el-radio>
-                        </el-radio-group>
 
                         <el-input 
                         v-else
