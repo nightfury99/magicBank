@@ -62,6 +62,27 @@
                   <p>{{ news.description }}</p>
                 </el-row>
 
+                <el-row class="" v-if="news.location">
+                  <GmapMap
+                    :center="{lat: parseFloat(news.location.latitude), lng: parseFloat(news.location.longitude) }"
+                    :zoom="14"
+                    :options="{
+                        zoomControl: true,
+                        mapTypeControl: false,
+                        scaleControl: false,
+                        streetViewControl: false,
+                        rotateControl: false,
+                        fullscreenControl: false,
+                        disableDefaultUi: false
+                    }"
+                    style="width: 100%; height: 200px;"
+                    >
+                    <gmap-marker
+                      :position="{lat: parseFloat(news.location.latitude), lng: parseFloat(news.location.longitude) }">
+                    </gmap-marker>
+                  </GmapMap>
+                </el-row>
+
                 <div class="interaction crm-timestamp">
                   
                   <el-row>
