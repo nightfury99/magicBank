@@ -23,12 +23,12 @@ export function getAssignmentFilterByMonth(param) {
   })
 }
 
-export function getUsers() {
-  return request({
-    url: '/users',
-    method: 'get'
-  })
-}
+// export function getUsers() {
+//   return request({
+//     url: '/users',
+//     method: 'get'
+//   })
+// }
 
 export function addComment(id, query) {
   return request({

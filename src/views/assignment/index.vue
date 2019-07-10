@@ -275,7 +275,8 @@
 <script>
 import Vue from 'vue'
 import VueSweetalert2 from 'vue-sweetalert2'
-import { getAssignments, createAssignment, getUsers, addComment, toggleStatus } from '@/api/assignment'
+import { getAssignments, createAssignment, addComment, toggleStatus } from '@/api/assignment'
+import { getUsers } from '@/api/user'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
 import { mapGetters } from 'vuex'
