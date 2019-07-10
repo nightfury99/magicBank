@@ -55,8 +55,8 @@ export default {
                     this.events.push({
                         title: data.title,
                         content: data.title,
-                        start: moment(data.start_at).format('DD-MM-YYYY hh:mm'),
-                        end: moment(data.end_at).format('DD-MM-YYYY hh:mm'),
+                        start: data.start_at,
+                        end: data.end_at,
                         class: 'sport'
                     })
                 })
