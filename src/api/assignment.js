@@ -29,3 +29,23 @@ export function getUsers() {
     method: 'get'
   })
 }
+
+export function addComment(id, query) {
+  return request({
+    url: `/assignments/${id}/comment`,
+    method: 'post',
+    data: {
+      body: query.body
+    }
+  })
+}
+
+export function toggleStatus() {
+  return request({
+    url: `/assignments/${id}/status`,
+    method: 'post',
+    data: {
+      body: query.body
+    }
+  })
+}

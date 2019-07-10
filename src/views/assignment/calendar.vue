@@ -1,61 +1,77 @@
 <template>
     <div class="app-container">
-        <full-calendar 
-            defaultView="dayGridMonth" 
-            :events="assignments" 
-            :plugins="calendarPlugins"
-            />
+        <calendar-view
+            :show-date="showDate"
+            class="theme-default"
+            :events="events">
+            <calendar-view-header
+                slot="header"
+                slot-scope="t"
+                :header-props="t.headerProps"
+                @input="handleShowDate" />
+        </calendar-view>
     </div>
 </template>
 
 <script>
-import FullCalendar from '@fullcalendar/vue'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
 import moment from 'moment'
-
 import { getAssignmentFilterByMonth } from '@/api/assignment'
+import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
+require("vue-simple-calendar/static/css/default.css")
 
 export default {
     data() {
         return {
-            calendarPlugins: [ 
-                dayGridPlugin,
-                interactionPlugin
-            ],
             assignments: [],
+            showDate: new Date(),
+            events: [],
         }
     },
 
-    components: {
-        FullCalendar // make the <FullCalendar> tag available
+    created() {
+        let m = moment()
+        this.getMonthlyAssignment(m.month() + 1, m.weekYear())
     },
 
-    created() {
-
+    components: {
+        CalendarView,
+        CalendarViewHeader,
     },
 
     methods: {
+        handleShowDate(date) {
+            this.showDate = date
+
+            let m = moment(date)
+            this.getMonthlyAssignment(m.month() + 1, m.weekYear())
+        },
+
         getMonthlyAssignment: function(month, year) {
             getAssignmentFilterByMonth({
                 month: month,
                 year: year,
             })
-            .then()
+            .then(resp => {
+                resp.data.data.forEach(data => {
+                    this.events.push({
+                        id: data.id,
+                        title: data.title,
+                        startDate: data.start_at,
+                        endDate: data.end_at
+                    })
+                })
+            })
         },
-
-        test: function (e) {
-            console.log(e);
-        }
     }
 }
 </script>
 
-<style lang="scss">
-    @import '@fullcalendar/core/main.css';
-    @import '@fullcalendar/daygrid/main.css';
-</style>
-
 <style>
+.app-container {
+        height: 97vh;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+}
 </style>
 
