@@ -1,77 +1,90 @@
 <template>
     <div class="app-container">
-        <calendar-view
-            :show-date="showDate"
-            class="theme-default"
-            :events="events">
-            <calendar-view-header
-                slot="header"
-                slot-scope="t"
-                :header-props="t.headerProps"
-                @input="handleShowDate" />
-        </calendar-view>
+        <div class="crm-box-container">
+            <div class="crm-box-content">
+                <vue-cal style="height: 100%"
+                    default-view="month"
+                    today-button
+                    :disable-views="['years', 'year']"
+                    :events="events"
+                    :no-event-overlaps="true"
+                    events-on-month-view="short"
+                    @view-change="handleChangeView"/>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import moment from 'moment'
 import { getAssignmentFilterByMonth } from '@/api/assignment'
-import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
-require("vue-simple-calendar/static/css/default.css")
+
+import VueCal from 'vue-cal'
+import 'vue-cal/dist/vuecal.css'
 
 export default {
     data() {
         return {
-            assignments: [],
-            showDate: new Date(),
             events: [],
         }
     },
 
     created() {
         let m = moment()
-        this.getMonthlyAssignment(m.month() + 1, m.weekYear())
+        this.getMonthlyAssignment(
+            m.startOf('month').format('YYYY-MM-DD'), 
+            m.endOf('month').format('YYYY-MM-DD'));
     },
 
     components: {
-        CalendarView,
-        CalendarViewHeader,
+        VueCal,
     },
 
     methods: {
-        handleShowDate(date) {
-            this.showDate = date
 
-            let m = moment(date)
-            this.getMonthlyAssignment(m.month() + 1, m.weekYear())
-        },
+        getMonthlyAssignment: function(start, end) {
+            
+            this.events = []
 
-        getMonthlyAssignment: function(month, year) {
             getAssignmentFilterByMonth({
-                month: month,
-                year: year,
+                from_date: start,
+                to_date: end,
             })
             .then(resp => {
                 resp.data.data.forEach(data => {
                     this.events.push({
-                        id: data.id,
                         title: data.title,
-                        startDate: data.start_at,
-                        endDate: data.end_at
+                        content: data.title,
+                        start: moment(data.start_at).format('DD-MM-YYYY hh:mm'),
+                        end: moment(data.end_at).format('DD-MM-YYYY hh:mm'),
+                        class: 'sport'
                     })
                 })
             })
         },
+
+        handleChangeView: function(event) {
+            this.getMonthlyAssignment(
+                event.startDate,
+                event.endDate,
+            )
+        }
     }
 }
 </script>
 
 <style>
-.app-container {
-        height: 97vh;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+.vuecal--month-view .vuecal__cell {height: 80px;}
+
+.vuecal--month-view .vuecal__cell-content {
+  justify-content: flex-start;
+  height: 100%;
+  align-items: flex-end;
 }
+
+.vuecal--month-view .vuecal__cell-date {padding: 4px;}
+.vuecal--month-view .vuecal__no-event {display: none;}
+
+.vuecal__event.sport {background-color: rgba(255, 102, 102, 0.9);border: 1px solid rgb(235, 82, 82);color: #fff;}
 </style>
 
