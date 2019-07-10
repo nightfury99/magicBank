@@ -40,12 +40,12 @@ export function addComment(id, query) {
   })
 }
 
-export function toggleStatus() {
+export function toggleStatus(id, query) {
   return request({
     url: `/assignments/${id}/status`,
     method: 'post',
     data: {
-      body: query.body
+      status: query.status
     }
   })
 }
