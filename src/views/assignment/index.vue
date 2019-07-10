@@ -3,7 +3,7 @@
         <el-row :gutter="20">
         
         <!-- First column -->
-        <el-col :span="12">
+        <el-col :span="8">
             <div class="scroll crm-box-container" style="height: 90vh; overflow: scroll; padding-bottom: 30px;">
 
                 <div class="crm-box-header">
@@ -16,13 +16,14 @@
                     <div type="flex assignment" @click="descriptionMethod(assignment)">
                         <div 
                             class="list crm-box-content data" 
-                            :class="assignment.status == 'open' ? 'crm-color-primary-light' : ''">
+                            :class="assignment.status == 'open' ? 'crm-color-primary-light' : 'crm-color-disabled'">
 
                             <span class="crm-heading-medium-title">
-                                {{ assignment.assigned_by.name }} 
-                                <el-tag type="success" size="mini"> 
+                                <el-tag 
+                                    :type="assignment.status == 'open' ? 'success' : 'info'" size="mini">
                                     {{ assignment.status.toUpperCase() }}
-                                </el-tag>  
+                                </el-tag>
+                                {{ assignment.assigned_by.name }} 
                             </span>
 
                             <span class="crm-timestamp" style="float: right">
@@ -140,7 +141,7 @@
         </el-col>
 
         <!-- Second column -->
-        <el-col :span="12">
+        <el-col :span="16">
             <div class="crm-box-container" style="overflow: scroll; height: 90vh;">
 
                 <el-row>
@@ -148,7 +149,8 @@
                     <div class="crm-box-header crm-border-bottom clearfix">
                         <el-col :span="2">
                             <!-- Status -->
-                            <el-tag type="success"> 
+                            <el-tag 
+                                :type="selectAssignment.status == 'open' ? 'success' : 'info'"> 
                                 {{ selectAssignment.status.toUpperCase() }}
                             </el-tag>  
                         </el-col>
@@ -158,7 +160,8 @@
                             <div>
                                 <el-button 
                                     @click="showAlert"
-                                    type="success" 
+                                    :type="selectAssignment.status == 'open' ? 'success' : 'info'"
+                                    :disabled="selectAssignment.status !== 'open'"
                                     icon="el-icon-success" 
                                     size="small" 
                                     style="float: right;">
@@ -176,33 +179,37 @@
                     <div style="margin-bottom:10px;" v-if="selectAssignment">
 
                         <el-row>
-                            <!-- Assignor to Assignee -->
-                            <el-col :span="20">
-                                <span class="crm-heading-small-title">
-                                    <span class="assignee-name">{{ selectAssignment.assigned_by.name }}</span>
-                                    to 
-                                    <div class="assignee-name"
-                                        v-for="(assigned_to, index) in selectAssignment.assigned_to" :key="index">
-                                        {{ assigned_to.name }}
-                                    </div>
-                                </span>
-                            </el-col>
-                            
+                            <!-- Container header -->
+                            <div class="crm-heading-title" v-if="selectAssignment">
+                                {{ selectAssignment.title }}
+                            </div>
+
                             <!-- Created at -->
-                            <el-col :span="4">
-                                <div style="float: right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
-                                    {{ moment(selectAssignment.start_at).format('DD MMM YYYY') }}
+                            <el-col :span="12">
+                                <div class="crm-timestamp crm-row-bg" v-if="selectAssignment">
+                                    {{ moment(selectAssignment.start_at).format('dddd, DD MMM YYYY') }}
+                                </div>
+                            </el-col>
+
+                            <!-- Due date -->
+                            <el-col :span="12">
+                                <div style="float:right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
+                                    Due by: {{ moment(selectAssignment.end_at).format('dddd, DD MMM YYYY') }}
                                 </div>
                             </el-col>
                         </el-row>
 
+                        <!-- Assignor to Assignee -->
                         <el-row>
-
-                            <!-- Due date -->
                             <el-col>
-                                <div style="float: right" class="crm-timestamp crm-row-bg" v-if="selectAssignment">
-                                    Due by: {{ moment(selectAssignment.end_at).format('DD MMM YYYY') }}
-                                </div>
+                                <span class="crm-heading-small-title">
+                                    <span class="assignor-name">{{ selectAssignment.assigned_by.name + " to" }}</span>
+
+                                    <span class="assignee-name"
+                                        v-for="(assigned_to, index) in selectAssignment.assigned_to" :key="index">
+                                        {{ assigned_to.name + ", " }}
+                                    </span>
+                                </span>
                             </el-col>
                             
                         </el-row>
@@ -210,10 +217,6 @@
                     </div>
                     
                     <el-row>
-                        <!-- Container header -->
-                        <div class="crm-heading-title" v-if="selectAssignment">
-                            {{ selectAssignment.title }}
-                        </div>
 
                         <!-- Container content -->
                         <div class="crm-heading-content" v-if="selectAssignment">
@@ -223,10 +226,10 @@
 
                     <!-- Comment box -->
                     <el-row>
-                        <div class="crm-box-container" v-if="selectAssignment">
+                        <div class="list crm-box-comment form" v-if="selectAssignment">
                             
                             <!-- Add comment -->
-                            <div class="crm-box-content form">
+                            <div class="list crm-box-comment form">
                                 <text-area-emoji-picker 
                                     v-model="data.body"
                                     placeholder="Insert a comment"
@@ -236,7 +239,7 @@
                             </div>
                             
                             <!-- Comment list -->
-                            <el-row class="crm-box-content" v-for="(comment, index) in selectAssignment.comments" :key="index">
+                            <el-row class="list crm-box-comment form" v-for="(comment, index) in selectAssignment.comments" :key="index">
                                 <div>
                                     <el-row>
                                     
@@ -272,7 +275,7 @@
 <script>
 import Vue from 'vue'
 import VueSweetalert2 from 'vue-sweetalert2'
-import { getAssignments, createAssignment, getUsers, addComment } from '@/api/assignment'
+import { getAssignments, createAssignment, getUsers, addComment, toggleStatus } from '@/api/assignment'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
 import { mapGetters } from 'vuex'
@@ -301,8 +304,8 @@ Vue.use(VueSweetalert2)
         users: [],
         isSubmitted: false,
         data: {
-                // id: this.selectAssignment.id,
                 body: '',
+                status: 'closed'
         },
         comment: {
             id: '',
@@ -382,6 +385,15 @@ Vue.use(VueSweetalert2)
                 })
         },
 
+        toggleStatus: function() {
+            
+            toggleStatus(this.selectAssignment.id, this.data)
+                .then(resp => {
+                    this.data.status = ''
+                    this.getAssignments();
+                })
+        },
+
         add: function(e) {
 
             // format date
@@ -414,7 +426,8 @@ Vue.use(VueSweetalert2)
             }).then((result) => {
 
                 if (result.value) {
-                    
+                    this.toggleStatus(),
+
                     this.$swal(
                     'Completed!',
                     'The assignment has been completed',
@@ -438,9 +451,14 @@ Vue.use(VueSweetalert2)
         padding-bottom: 4px;
     }
 
-    .assignee-name {
+    .assignor-name {
         font-size: 14px;
         color: #60a3bc;
+        padding-bottom: 6px;
+    }
+
+    .assignee-name {
+        font-size: 14px;
         padding-bottom: 6px;
     }
 
@@ -505,10 +523,20 @@ Vue.use(VueSweetalert2)
         border-color: #FFF8BC;
         cursor: pointer;
     }
+
+    .list.crm-box-comment {
+        border-bottom: 1px solid;
+        border-color: #FFF8BC;
+        cursor: pointer;
+    }
     
     .data:hover, .crm-box-content.selected {
         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     }
     
+    .form {
+        position:relative;
+        background-color: #FFFFE0;
+    }
 
 </style>
