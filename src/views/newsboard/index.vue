@@ -62,13 +62,15 @@
               <el-row>
                 
                 <!-- Media upload button -->
-                <el-button size="mini" type="info" plain icon="el-icon-picture">Media</el-button>
+                <el-button v-if="post.media.length == 0" size="mini" type="info" plain icon="el-icon-picture" @click="dialogMedia = true">Media</el-button>
+                <el-button v-else size="mini" type="success" plain icon="el-icon-picture" @click="dialogMedia = true">Media</el-button>
 
                 <!-- File upload button -->
-                <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
+                <!-- <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button> -->
 
                 <!-- File upload button -->
-                <el-button size="mini" type="info" plain icon="el-icon-document" @click="flag.isTagShow = !flag.isTagShow">Tag</el-button>
+                <el-button v-if="!flag.isTagShow" size="mini" type="info" plain icon="el-icon-document" @click="flag.isTagShow = !flag.isTagShow">Tag</el-button>
+                <el-button v-else size="mini" type="success" plain icon="el-icon-document" @click="flag.isTagShow = !flag.isTagShow">Tag</el-button>
 
                 <!-- Location button -->
                 <el-button v-if="!post.location" @click="dialogMap = true" size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
@@ -125,6 +127,15 @@
                       :position="{lat: parseFloat(news.location.latitude), lng: parseFloat(news.location.longitude) }">
                     </gmap-marker>
                   </GmapMap>
+                </el-row>
+
+                <el-row v-if="news.media" style="margin-top: 20px;">
+                  <el-image
+                    style="width: 100px; height: 100px; margin-right: 5px"
+                    v-for="(image, index) in news.media"
+                    :key="index"
+                    :src="`${path.image}/${image}`"
+                    fit="fit"></el-image>
                 </el-row>
 
                 <div style="margin-top: 20px;" />
@@ -189,6 +200,29 @@
       </span>
     </el-dialog>
 
+    <el-dialog
+      :visible.sync="dialogMedia"
+      title="Add Media"
+      width="80%"
+      height="50vh"
+      @open="getMediasList">
+      <el-tabs tab-position="left" style="height: 200px;">
+        <el-tab-pane label="Upload">Upload</el-tab-pane>
+        <el-tab-pane label="Media">
+          <vue-select-image
+            :dataImages="medias"
+            :is-multiple="true"
+            @onselectmultipleimage="handleImageSelected"
+            h="150px"
+            w="150px"/>
+        </el-tab-pane>
+        <el-tab-pane label="File">File</el-tab-pane>
+      </el-tabs>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogMedia = false">Close</el-button>
+      </span>
+    </el-dialog>
+
     <!-- Dialog for Location -->
     <el-dialog
       custom-class="dialog-map"
@@ -239,14 +273,17 @@ import { mapGetters } from 'vuex'
 import { getNewsboardIndex, getNewsboardFavourite, postNewsboardStore, deleteNewsboard } from '@/api/newsboard'
 import { getUsers } from '@/api/user'
 import { searchCustomer } from '@/api/customer'
+import { getMedias, uploadFile } from '@/api/file'
 import Pagination from '@/components/Pagination'
+import VueSelectImage from 'vue-select-image'
+// add stylesheet
+require('vue-select-image/dist/vue-select-image.css')
 
 export default {
-  components: { Pagination },
+  components: { Pagination, VueSelectImage },
 
   data() {
     return {
-      avatar: 'https://1ofdmq2n8tc36m6i46scovo2e-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/Steven_Hallam-slide.jpg',
       newsfeed: [],
       newsfeedFavourite: [],
       newPost: '',
@@ -259,6 +296,7 @@ export default {
       dialogVisible: false,
       dialogDelete: false,
       dialogMap: false,
+      dialogMedia: false,
       center: {
         latLng: {lat:10, lng:10},
         zoom: 7,
@@ -268,7 +306,7 @@ export default {
       post: {
         description: '',
         location: '',
-        media: '',
+        media: [],
         user: '',
         customer: '',
       },
@@ -285,6 +323,13 @@ export default {
         page: 1,
         limit: 50,
         page_count: 1
+      },
+
+      medias: [],
+
+      path: {
+          image: process.env.MEDIA_PATH + '/' + process.env.STORAGE_FOLDER,
+          upload: process.env.FILE_PATH,
       }
     }
   },
@@ -374,8 +419,6 @@ export default {
 
     setLocation: function() {
       this.post.location = this.center.latLng.lat + ',' + this.center.latLng.lng
-      console.log(this.post.location)
-      console.log("hi")
       this.dialogMap = false
     },
 
@@ -411,7 +454,28 @@ export default {
             this.customers = resp.data.data
           });
       }
-    }
+    },
+
+    getMediasList: function() {
+        this.medias = []
+        getMedias()
+            .then(resp => {
+                resp.data.forEach(media => {
+                  this.medias.push({
+                    id: media.name,
+                    src: `${this.path.image}/${media.name}`,
+                    alt: media.name
+                  })    
+                })
+            })
+    },
+
+    handleImageSelected: function(images) {
+      this.post.media = []
+      images.forEach(image => {
+        this.post.media.push(image.id)
+      })
+    },
     
   }
 }
