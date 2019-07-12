@@ -12,6 +12,10 @@
     padding: 20px;
 }
 
+.crm-box-comment {
+    padding: 10px;
+}
+
 .crm-timestamp {
     color: grey;
     font-weight: normal;
@@ -27,7 +31,8 @@
 // Typograph
 .crm-heading-title {
     font-size: 26px;
-    font-weight: 300;
+    font-weight: 400;
+    margin-bottom: 5px;
 }
 
 .crm-heading-medium-title {
@@ -89,12 +94,16 @@
 }
 
 // COLOR
-.crm-color-primary {
-
-}
 
 .crm-color-primary-light {
     background-color: #FFFFE0;
+}
+
+.crm-color-disabled {
+    background-color: #f1f2f6;
+    color: #7f8c8d;
+    border-bottom: 1px solid;
+    border-color: #7f8c8d;
 }
 
 .crm-color-status-open {

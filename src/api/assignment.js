@@ -15,12 +15,20 @@ export function createAssignment(param) {
   })
 }
 
-export function getUsers() {
+export function getAssignmentFilterByMonth(param) {
   return request({
-    url: '/users',
-    method: 'get'
+    url: '/assignments/filter',
+    method: 'post',
+    data: param,
   })
 }
+
+// export function getUsers() {
+//   return request({
+//     url: '/users',
+//     method: 'get'
+//   })
+// }
 
 export function addComment(id, query) {
   return request({
@@ -32,12 +40,12 @@ export function addComment(id, query) {
   })
 }
 
-export function toggleStatus() {
+export function toggleStatus(id, query) {
   return request({
     url: `/assignments/${id}/status`,
     method: 'post',
     data: {
-      body: query.body
+      status: query.status
     }
   })
 }

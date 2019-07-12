@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
 export function getCustomers(query) {
   return request({
@@ -12,6 +13,16 @@ export function createCustomer(param) {
     url: '/customers',
     method: 'post',
     data: param,
+  })
+}
+
+export function searchCustomer(q) {
+  return request({
+    url: '/customers/search',
+    method: 'post',
+    data: {
+      query: q,
+    },
   })
 }
 

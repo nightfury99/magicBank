@@ -7,12 +7,56 @@
         <div class="crm-box-container">
           
           <div class="crm-box-header">
-            <el-input
+
+            <el-row>
+              <el-input
                   type="textarea"
                   :autosize="{ minRows: 2}"
                   placeholder="Write something"
                   v-model="post.description">
-            </el-input>
+              </el-input>
+            </el-row>
+
+            <el-row
+              v-if="flag.isTagShow">
+              <el-select 
+                v-model="post.user" 
+                filterable 
+                multiple
+                placeholder="Tag Users" 
+                style="width:100%">
+                
+                <el-option 
+                    v-for="item in users" 
+                    :key="item.id" 
+                    :label="item.name" 
+                    :value="item.id"> </el-option>
+
+              </el-select>
+
+            </el-row>
+
+            <el-row
+              v-if="flag.isTagShow">
+              <el-select 
+                v-model="post.customer" 
+                filterable 
+                multiple
+                remote
+                :remote-method="remoteCustomerSearch"
+                placeholder="Tag Customers" 
+                style="width:100%">
+                
+                <el-option 
+                    v-for="item in customers" 
+                    :key="item.uuid" 
+                    :label="item.name" 
+                    :value="item.uuid"> </el-option>
+
+              </el-select>
+
+            </el-row>
+            
             <div class="menu">
 
               <el-row>
@@ -23,9 +67,9 @@
                 <!-- File upload button -->
                 <el-button size="mini" type="info" plain icon="el-icon-document">File</el-button>
 
-                <!-- Tag button -->
-                <el-button size="mini" type="info" plain icon="el-icon-user-solid">Tag</el-button>
-                
+                <!-- File upload button -->
+                <el-button size="mini" type="info" plain icon="el-icon-document" @click="flag.isTagShow = !flag.isTagShow">Tag</el-button>
+
                 <!-- Location button -->
                 <el-button v-if="!post.location" @click="dialogMap = true" size="mini" type="info" plain icon="el-icon-location-outline">Location</el-button>
                 <el-button v-else @click="dialogMap = true" size="mini" type="success" plain icon="el-icon-location-outline">Location</el-button>
@@ -62,6 +106,37 @@
                   <p>{{ news.description }}</p>
                 </el-row>
 
+                <el-row class="" v-if="news.location">
+                  <GmapMap
+                    :center="{lat: parseFloat(news.location.latitude), lng: parseFloat(news.location.longitude) }"
+                    :zoom="14"
+                    :options="{
+                        zoomControl: true,
+                        mapTypeControl: false,
+                        scaleControl: false,
+                        streetViewControl: false,
+                        rotateControl: false,
+                        fullscreenControl: false,
+                        disableDefaultUi: false
+                    }"
+                    style="width: 100%; height: 200px;"
+                    >
+                    <gmap-marker
+                      :position="{lat: parseFloat(news.location.latitude), lng: parseFloat(news.location.longitude) }">
+                    </gmap-marker>
+                  </GmapMap>
+                </el-row>
+
+                <div style="margin-top: 20px;" />
+
+                <el-row v-if="news.users">
+                  <el-tag size="mini" type="warning" v-for="(user, index) in news.users" :key="index">{{ user.name }}</el-tag>
+                </el-row>
+
+                <el-row v-if="news.customers">
+                  <el-tag size="mini" type="success" v-for="(customer, index) in news.customers" :key="index">{{ customer.name }}</el-tag>
+                </el-row>
+                
                 <div class="interaction crm-timestamp">
                   
                   <el-row>
@@ -162,6 +237,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getNewsboardIndex, getNewsboardFavourite, postNewsboardStore, deleteNewsboard } from '@/api/newsboard'
+import { getUsers } from '@/api/user'
+import { searchCustomer } from '@/api/customer'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -173,6 +250,11 @@ export default {
       newsfeed: [],
       newsfeedFavourite: [],
       newPost: '',
+      users: [],
+      customers: [],
+      flag: {
+        isTagShow: false
+      },
       fileList: [],
       dialogVisible: false,
       dialogDelete: false,
@@ -216,6 +298,7 @@ export default {
 
   created() {
     this.newsList()
+    this.getUsers()
   },
 
   methods: {
@@ -312,6 +395,24 @@ export default {
       return this.$confirm(`Cancel the transfert of ${ file.name } ?`);
     },
 
+    getUsers() {
+        getUsers()
+            .then(resp => {
+                this.users = resp.data.data
+            })
+    },
+
+    remoteCustomerSearch(query) {
+      if(query !== '') {
+        this.customers = []
+
+        searchCustomer(query)
+          .then(resp => {
+            this.customers = resp.data.data
+          });
+      }
+    }
+    
   }
 }
 </script>
@@ -329,6 +430,10 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+.el-tag {
+  margin-right: 5px;
 }
 
 .line{
