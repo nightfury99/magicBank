@@ -100,6 +100,7 @@ export default {
 
     created() {
         this.geolocation()
+        this.getBranches()
     },
         
     methods: {
@@ -109,7 +110,6 @@ export default {
 
         buildUrl: function(position) {
             this.currentCoordinate = {lat: position.coords.latitude, lng: position.coords.longitude}
-            this.getBranches()
         },
 
         geoError(error) {
