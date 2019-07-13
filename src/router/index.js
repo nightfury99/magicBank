@@ -54,7 +54,24 @@ export const constantRouterMap = [
         name: 'Customer Map',
       }
     ]
-    
+  },
+
+  {
+    path: '/myprofile',
+    component: Layout,
+    redirect: '/profile/:userId',
+    // name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: ':userId',
+      component: () => import('@/views/user/userProfile'),
+      name: 'userProfile',
+      hidden: true,
+      meta: { 
+        title:'My Profile', 
+        icon: 'user',
+      }
+    }]
   },
 
   {
@@ -190,10 +207,21 @@ export const asyncRoutes = [
           icon: 'form',
         }
       },
+      // {
+      //   path: 'profile/:userId',
+      //   component: () => import('@/views/user/userProfile'),
+      //   name: 'userProfile',
+      //   hidden: true,
+      //   meta: { 
+      //     title:'Profile', 
+      //     icon: 'example',
+      //     roles: ['management']
+      //   }
+      // },
       {
         path: 'profile/:userId',
-        component: () => import('@/views/user/userProfile'),
-        name: 'userProfile',
+        component: () => import('@/views/user/userProfileManagement'),
+        name: 'userProfileManagement',
         hidden: true,
         meta: { 
           title:'Profile', 
