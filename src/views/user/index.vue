@@ -29,7 +29,7 @@
 
 			<el-table-column align="center" label="Role" width="130">
 				<template align="center" slot-scope="scope">
-					<el-tag type="warning" size="mini">{{ scope.row.roles[0].name }}</el-tag>
+					<el-tag type="warning" size="mini">{{ scope.row.roles[0].name | capitalize }}</el-tag>
 				</template>
 			</el-table-column>
 			
@@ -127,6 +127,14 @@ export default {
 		'roles'
 		])
 	},
+
+	filters: {
+		capitalize: function (value) {
+			if (!value) return ''
+			value = value.toString()
+			return value.charAt(0).toUpperCase() + value.slice(1)
+		}
+	},
 	
   	created() {
 		this.userList()
@@ -165,7 +173,7 @@ export default {
 
 		},
 
-		// get desired user id to delete
+	// get desired user id to delete
     async changeDeleteId(id) {
       console.log(id)
       this.idDelete = id
