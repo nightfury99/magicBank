@@ -13,7 +13,7 @@ export function login(username, password) {
 
 export function getInfo() {
   return request({
-    url: 'users/me',
+    url: 'users/profile/me',
     method: 'get'
   })
 }

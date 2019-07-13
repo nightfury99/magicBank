@@ -28,7 +28,7 @@ import VeeValidate from 'vee-validate'
  * it will intercept your request, so you won't see the request in the network.
  * If you remove `../mock` it will automatically request easy-mock data.
  */
-import '../mock' // simulation data
+// import '../mock' // simulation data
 
 Vue.use(ElementUI, { locale })
 Vue.use(VeeValidate)
@@ -45,7 +45,8 @@ Vue.use(require('vue-pusher'), {
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4'
+    key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4',
+    libraries: "places"
   }
 })
 

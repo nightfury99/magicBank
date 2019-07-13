@@ -70,7 +70,12 @@ export const asyncRoutes = [
   {
     path: '/newsboard',
     component: Layout,
-    redirect: 'noredirect',
+    redirect: '/newsboard/index',
+    meta: { 
+      title: 'News', 
+      icon: 'example',
+      roles: ['outlet']
+    },
     children: [
       {
         path: 'index',
@@ -78,6 +83,25 @@ export const asyncRoutes = [
         name: 'Newsboard',
         meta: { 
           title: 'News', 
+          icon: 'news',
+        }
+      },
+      {
+        path: 'favourite',
+        component: () => import('@/views/newsboard/favourite'),
+        name: 'FavouriteNews',
+        meta: { 
+          title: 'Favourite News', 
+          icon: 'news',
+        }
+      },
+      {
+        path: '/one/:id',
+        component: () => import('@/views/newsboard/one'),
+        name: 'SingleNews',
+        hidden: true,
+        meta: { 
+          title: 'Single News', 
           icon: 'news',
         }
       }
@@ -88,14 +112,29 @@ export const asyncRoutes = [
   {
     path: '/assignment',
     component: Layout,
-    redirect: '/assignment/index',
+    name: 'Assignment',
+    meta: { 
+      title: 'Assignment', 
+      icon: 'example',
+      roles: ['management']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/assignment/index'),
-        name: 'Assignment',
+        name: 'AssignmentList',
         meta: { 
-          title: 'Assignment', 
+          title: 'List', 
+          icon: 'example',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'calendar',
+        component: () => import('@/views/assignment/calendar'),
+        name: 'AssignmentCalendar',
+        meta: { 
+          title: 'Calendar', 
           icon: 'example',
           roles: ['management']
         }
@@ -171,6 +210,53 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/customer',
+    component: Layout,
+    redirect: '/customer/index',
+    name: 'Customer',
+    meta: { 
+      title: 'Customer', 
+      icon: 'peoples',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/customer/index'),
+        name: 'Customer',
+        meta: { 
+          title: 'Customer List', 
+          icon: 'peoples',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'sales/:customerId',
+        component: () => import('@/views/customer/sales'),
+        name: 'customerSales',
+        hidden: true,
+        meta: { 
+          title: 'Customer Sales', 
+          icon: 'example',
+          roles: ['management'],
+        }
+      },
+      {
+        path: 'credit/:customerId',
+        component: () => import('@/views/customer/credit'),
+        name: 'customerCredit',
+        hidden: true,
+        meta: { 
+          title: 'Customer Credit', 
+          icon: 'example',
+          roles: ['management'],
+        }
+      }
+    ]
+    
+  },
+
+  {
     path: '/branch',
     component: Layout,
     redirect: '/branch/index',
@@ -188,6 +274,7 @@ export const asyncRoutes = [
     ]
     
   },
+
 
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -147,7 +147,7 @@ export default {
         await putUser(this.user)
         console.log(this.user)
         
-        this.$message( this.user.name + ' profile ' +'is updated ' )
+        this.$message( {message: this.user.name + ' profile ' +'is updated', type: 'success'} )
 
         this.$router.push({
           name: 'userList'
