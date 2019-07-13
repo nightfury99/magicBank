@@ -55,7 +55,7 @@
 			<el-table-column align="center" label="Action">
 				<template align="center" slot-scope="scope">
 					<el-tooltip :open-delay="tooltipDelay" content="Profile" placement="top">
-						<el-button size="mini" icon="el-icon-search" @click="navigateTo ({name: 'userProfile', params:{userId: scope.row.id}})" circle></el-button>
+						<el-button size="mini" icon="el-icon-search" @click="navigateTo ({name: 'userProfileManagement', params:{userId: scope.row.id}})" circle></el-button>
 					</el-tooltip>
 					<el-tooltip :open-delay="tooltipDelay" content="Update" placement="top">
 						<el-button size="mini" type="primary" icon="el-icon-edit" @click="navigateTo ({name: 'userUpdate', params:{userId: scope.row.id}})" circle></el-button>
