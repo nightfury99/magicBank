@@ -3,7 +3,7 @@
 
         <GmapMap
             :center="this.currentCoordinate"
-            :zoom="7"
+            :zoom="10"
             :options="{
                 zoomControl: true,
                 mapTypeControl: false,
@@ -14,14 +14,24 @@
                 disableDefaultUi: false
             }"
             style="width: 100%; height: 92vh"
-            />
+            >
+
+            <GmapMarker
+                v-for="(marker, index) in markers"
+                :key="index"
+                :position="marker.position"
+                :clickable="true"
+                :draggable="false"
+                :icon="marker.icon"
+                @click="handleMarkerClick(marker)" />
+        </GmapMap>
 
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span>Filter</span>
             </div>
             <div class="item" placeholder="Customer Type">
-                <el-select v-model="filter.type">
+                <el-select v-model="filter.type" @change="getCustomers">
                     <el-option
                         v-for="(type, i) in customerTypes"
                         :key="i"
@@ -31,17 +41,17 @@
                 </el-select>
             </div>
             <div class="item" placeholder="Radius">
-                <el-select v-model="filter.radius">
+                <el-select v-model="filter.radius" @change="getCustomers">
                     <el-option
                         v-for="(boundary, i) in boundaries"
                         :key="i"
-                        :label="boudary"
+                        :label="`${boundary}km`"
                         :value="boundary"
                     />
                 </el-select>
             </div>
             <div class="item" placeholder="Branch">
-                <el-select v-model="filter.branch">
+                <el-select v-model="filter.branch_id" @change="getCustomers">
                     <el-option
                         v-for="(branch, i) in branches"
                         :key="i"
@@ -56,20 +66,28 @@
 
 <script>
 import { getBranch } from '@/api/branch'
+import { getCustomerMapSearch } from '@/api/customer'
 import { mapGetters } from 'vuex'
 
 export default {
     data() {
         return {
-            currentCoordinate: {},
+            currentCoordinate: {lat: 2.909004, lng: 101.654508},
             selectedBoundary: '',
-            boundaries: ['10km', '30km', '50km', 'All'],
-            customerTypes: ['All', 'Suspect', 'Prospect'],
+            boundaries: [10, 30, 50, 100],
+            customerTypes: ['All', 'Suspect', 'Prospect', 'Customer'],
             branches: [],
             filter: {
-                radius: '10km',
+                radius: 10,
                 type: 'All',
-                branch: '',
+                branch_id: '',
+                lat: 3.536137,
+                lng: 102.147557,
+            },
+
+            markers: [],
+            path: {
+                marker: process.env.MEDIA_PATH + '/' + process.env.MARKER_FOLDER
             }
         }
     },
@@ -82,7 +100,6 @@ export default {
 
     created() {
         this.geolocation()
-        this.getBranches()
     },
         
     methods: {
@@ -92,6 +109,7 @@ export default {
 
         buildUrl: function(position) {
             this.currentCoordinate = {lat: position.coords.latitude, lng: position.coords.longitude}
+            this.getBranches()
         },
 
         geoError(error) {
@@ -106,8 +124,44 @@ export default {
             getBranch()
                 .then(resp => {
                     this.branches = resp.data.data
+                    this.filter.branch_id = this.branches[0].id
+
+                    this.getCustomers()
                 })
         },
+
+        handleMarkerClick(marker) {
+            this.$router.push({ name: 'CustomerOne', params: { id: marker.id } })
+        },
+
+        getCustomers() {
+            
+            this.markers = []
+
+            getCustomerMapSearch(this.filter)
+                .then(resp => {
+
+                    let ms = resp.data.data
+
+                    ms.forEach(m => {
+
+                        let marker = {
+                            id: m.id,
+                            label: m.name,
+                            position: {lat: m.location.lat, lng: m.location.lng},
+                        }
+
+                        if(m.branch.code === 'TOLLING' || m.branch.code === 'LGEP') {
+                            marker.icon = `${this.path.marker}/ic_${m.type}_${m.branch.code}.png`
+                        } else {
+                            marker.icon = `${this.path.marker}/ic_${m.type}.png`
+                        }
+
+                        this.markers.push(marker);
+
+                    })
+                })
+        }
     }
 }
 </script>
