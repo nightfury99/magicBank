@@ -74,6 +74,24 @@ export const constantRouterMap = [
     }]
   },
 
+  {
+    path: '/medias',
+    component: Layout,
+    redirect: '/media/index',
+    meta: { 
+      title: 'Media Library', 
+      icon: 'list',
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/media/index'),
+        name: 'Media Library',
+      }
+    ]
+    
+  },
+
 ]
 
 export default new Router({
@@ -240,7 +258,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/customer/index'),
-        name: 'Customer',
+        name: 'CustomerList',
         meta: { 
           title: 'Customer List', 
           icon: 'peoples',
@@ -248,9 +266,19 @@ export const asyncRoutes = [
         }
       },
       {
+        path: 'one/:id',
+        component: () => import('@/views/customer/one'),
+        name: 'CustomerOne',
+        hidden: true,
+        meta: { 
+          title: 'CustomerOne', 
+          icon: 'peoples'
+        }
+      },
+      {
         path: 'sales/:customerId',
         component: () => import('@/views/customer/sales'),
-        name: 'customerSales',
+        name: 'CustomerSales',
         hidden: true,
         meta: { 
           title: 'Customer Sales', 
@@ -261,7 +289,7 @@ export const asyncRoutes = [
       {
         path: 'credit/:customerId',
         component: () => import('@/views/customer/credit'),
-        name: 'customerCredit',
+        name: 'CustomerCredit',
         hidden: true,
         meta: { 
           title: 'Customer Credit', 
