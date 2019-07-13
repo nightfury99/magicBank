@@ -33,14 +33,14 @@ export function getCallLog(customerId) {
   })
 }
 
-export function getPicContact(customerId) {
+export function getCreditLog(customerId) {
   return request({
-    url:`/customers/${customerId}/pic-contacts`,
+    url:`/customers/${customerId}/credit-logs`,
     method: 'get'
   })
 }
 
-export function history(customerId) {
+export function getPicContact(customerId) {
   return request({
     url:`/customers/${customerId}/pic-contacts`,
     method: 'get'

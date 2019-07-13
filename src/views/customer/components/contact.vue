@@ -33,8 +33,10 @@
                     </el-table-column>
                     
                     <el-table-column
-                    label="Primary"
-                    prop="type">
+                    label="Primary">
+                    <template align="center" slot-scope="scope">
+                        <el-tag type="warning" size="mini">{{ scope.row.type }}</el-tag>
+                    </template>
                     </el-table-column>
 
                 </el-table> 
