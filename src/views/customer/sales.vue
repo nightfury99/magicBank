@@ -1,9 +1,5 @@
 <template>
     <div class="app-container">
-        
-        <router-link :to="{ name: 'answer', params: { type: 'sales' }}">
-            <el-button type="primary">Create KYC Question</el-button>
-        </router-link>
 
         <el-row :gutter="20">
 
@@ -22,7 +18,7 @@
             </el-tab-pane>
 
             <el-tab-pane label="Sales KYC">
-                <KYC/>
+                <KYC type="sales"></KYC>
             </el-tab-pane>
 
             <el-tab-pane label="Call Log">

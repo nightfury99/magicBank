@@ -1,10 +1,6 @@
 <template>
     <div class="app-container">
 
-        <router-link :to="{ name: 'answer', params: { type: 'credit' }}">
-            <el-button type="primary">Create KYC Question</el-button>
-        </router-link>
-
         <el-row :gutter="20">
 
         <el-tabs type="border-card" style="height: 910px;">
@@ -22,7 +18,7 @@
             </el-tab-pane>
 
             <el-tab-pane label="Credit KYC">
-                <KYC/>
+                <KYC type="credit"></KYC>
             </el-tab-pane>
 
             <el-tab-pane label="Credit Application Tracker">
