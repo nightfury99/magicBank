@@ -140,9 +140,9 @@
 
                 <div style="margin-top: 20px;" />
 
-                <el-row v-if="news.users">
+                <div v-if="news.users">
                   <el-tag size="mini" type="warning" v-for="(user, index) in news.users" :key="index">{{ user.name }}</el-tag>
-                </el-row>
+                </div>
 
                 <el-row v-if="news.customers">
                   <el-tag size="mini" type="success" v-for="(customer, index) in news.customers" :key="index">{{ customer.name }}</el-tag>
@@ -203,21 +203,15 @@
     <el-dialog
       :visible.sync="dialogMedia"
       title="Add Media"
-      width="80%"
-      height="50vh"
+      fullscreen="true"
+      lock-scroll="false"
       @open="getMediasList">
-      <el-tabs tab-position="left" style="height: 200px;">
-        <el-tab-pane label="Upload">Upload</el-tab-pane>
-        <el-tab-pane label="Media">
-          <vue-select-image
-            :dataImages="medias"
-            :is-multiple="true"
-            @onselectmultipleimage="handleImageSelected"
-            h="150px"
-            w="150px"/>
-        </el-tab-pane>
-        <el-tab-pane label="File">File</el-tab-pane>
-      </el-tabs>
+      <vue-select-image
+              :dataImages="medias"
+              :is-multiple="true"
+              @onselectmultipleimage="handleImageSelected"
+              h="150px"
+              w="150px"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogMedia = false">Close</el-button>
       </span>

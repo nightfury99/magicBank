@@ -20,18 +20,22 @@
         <el-dialog
             title="Add New Media"
             :visible.sync="flag.isDialogVisible"
-            width="40%"
-            center>
+            width="33%"
+            center
+            @close="getMediasList">
 
                 <el-upload
                     class="upload-demo"
                     drag
-                    :action="path.upload"
+                    center
+                    action="http://52.221.193.133:4000/upload"
+                    :data="{bucket: 'gallery'}"
                     :on-preview="handlePreview"
-                    multiple>
+                    multiple
+                    list-type="picture">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-                    <div class="el-upload__tip" slot="tip">Any files with a size less than 500kb</div>
+                    <div class="el-upload__tip center" slot="tip">Any files with a size less than 500kb</div>
                 </el-upload>
 
             <span slot="footer" class="dialog-footer">
@@ -53,7 +57,7 @@ export default {
             medias: [],
             path: {
                 image: process.env.MEDIA_PATH + '/' + process.env.STORAGE_FOLDER,
-                upload: process.env.FILE_PATH,
+                upload: process.env.FILE_PATH + "/upload",
             }
         }
     },
@@ -65,6 +69,7 @@ export default {
     methods: {
         
         getMediasList: function() {
+            this.medias = []
             getMedias()
                 .then(resp => {
                     this.medias = resp.data
@@ -73,6 +78,10 @@ export default {
 
         handlePreview: function(file) {
             console.log(file)
+        },
+
+        handleDialogClose: function() {
+            
         }
     }
 }
@@ -86,6 +95,14 @@ export default {
     .crm-box-header {
         background-color: #FFF8BC;
         border-radius: 10px 10px 0px 0px;
+    }
+
+    .center {
+        text-align:center;
+    }
+
+    .el-upload__text {
+        width: 100%;
     }
 </style>
 
