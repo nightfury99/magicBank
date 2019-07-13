@@ -57,6 +57,24 @@ export const constantRouterMap = [
     
   },
 
+  {
+    path: '/medias',
+    component: Layout,
+    redirect: '/media/index',
+    meta: { 
+      title: 'Media Library', 
+      icon: 'list',
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/media/index'),
+        name: 'Media Library',
+      }
+    ]
+    
+  },
+
 ]
 
 export default new Router({
