@@ -15,6 +15,13 @@ export function getUserShow(userId) {
   })
 }
 
+export function getUsers() {
+  return request({
+    url: '/users',
+    method: 'get'
+  })
+}
+
 export function getRoleIndex() {
   return request({
     url: '/role',
