@@ -54,7 +54,24 @@ export const constantRouterMap = [
         name: 'Customer Map',
       }
     ]
-    
+  },
+
+  {
+    path: '/myprofile',
+    component: Layout,
+    redirect: '/profile/:userId',
+    // name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: ':userId',
+      component: () => import('@/views/user/userProfile'),
+      name: 'userProfile',
+      hidden: true,
+      meta: { 
+        title:'My Profile', 
+        icon: 'user',
+      }
+    }]
   },
 
 ]

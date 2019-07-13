@@ -13,7 +13,7 @@
             Home
           </el-dropdown-item>
         </router-link>
-        <router-link class="inlineBlock" to="/user/index">
+        <router-link class="inlineBlock" :to="{name: 'userProfile', params: {userId: user_id}}">
           <el-dropdown-item>
             Profile
           </el-dropdown-item>
@@ -40,7 +40,8 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'name'
+      'name',
+      'user_id'
     ])
   },
   methods: {
