@@ -29,7 +29,7 @@
 
 			<el-table-column align="center" label="Role" width="130">
 				<template align="center" slot-scope="scope">
-					<el-tag type="warning" size="mini">{{ scope.row.roles[0].name }}</el-tag>
+					<el-tag type="warning" size="mini">{{ scope.row.roles[0].name | capitalize }}</el-tag>
 				</template>
 			</el-table-column>
 			
@@ -55,7 +55,7 @@
 			<el-table-column align="center" label="Action">
 				<template align="center" slot-scope="scope">
 					<el-tooltip :open-delay="tooltipDelay" content="Profile" placement="top">
-						<el-button size="mini" icon="el-icon-search" @click="navigateTo ({name: 'userProfile', params:{userId: scope.row.id}})" circle></el-button>
+						<el-button size="mini" icon="el-icon-search" @click="navigateTo ({name: 'userProfileManagement', params:{userId: scope.row.id}})" circle></el-button>
 					</el-tooltip>
 					<el-tooltip :open-delay="tooltipDelay" content="Update" placement="top">
 						<el-button size="mini" type="primary" icon="el-icon-edit" @click="navigateTo ({name: 'userUpdate', params:{userId: scope.row.id}})" circle></el-button>
@@ -127,6 +127,14 @@ export default {
 		'roles'
 		])
 	},
+
+	filters: {
+		capitalize: function (value) {
+			if (!value) return ''
+			value = value.toString()
+			return value.charAt(0).toUpperCase() + value.slice(1)
+		}
+	},
 	
   	created() {
 		this.userList()
@@ -165,7 +173,7 @@ export default {
 
 		},
 
-		// get desired user id to delete
+	// get desired user id to delete
     async changeDeleteId(id) {
       console.log(id)
       this.idDelete = id
