@@ -38,23 +38,23 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-  
+
   {
     path: '/map',
     component: Layout,
     redirect: '/map/index',
-    meta: { 
-      title: 'Sales Map', 
-      icon: 'list',
+    meta: {
+      title: 'Sales Map',
+      icon: 'list'
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/map/index'),
-        name: 'Customer Map',
+        name: 'Customer Map'
       }
     ]
-    
+
   },
 
   {
@@ -89,8 +89,8 @@ export const asyncRoutes = [
     path: '/newsboard',
     component: Layout,
     redirect: '/newsboard/index',
-    meta: { 
-      title: 'News', 
+    meta: {
+      title: 'News',
       icon: 'example',
       roles: ['outlet']
     },
@@ -99,18 +99,18 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/newsboard/index'),
         name: 'Newsboard',
-        meta: { 
-          title: 'News', 
-          icon: 'news',
+        meta: {
+          title: 'News',
+          icon: 'news'
         }
       },
       {
         path: 'favourite',
         component: () => import('@/views/newsboard/favourite'),
         name: 'FavouriteNews',
-        meta: { 
-          title: 'Favourite News', 
-          icon: 'news',
+        meta: {
+          title: 'Favourite News',
+          icon: 'news'
         }
       },
       {
@@ -118,13 +118,13 @@ export const asyncRoutes = [
         component: () => import('@/views/newsboard/one'),
         name: 'SingleNews',
         hidden: true,
-        meta: { 
-          title: 'Single News', 
-          icon: 'news',
+        meta: {
+          title: 'Single News',
+          icon: 'news'
         }
       }
     ]
-    
+
   },
 
   {
@@ -158,16 +158,16 @@ export const asyncRoutes = [
         }
       }
     ]
-    
+
   },
-  
+
   {
     path: '/user',
     component: Layout,
     redirect: '/user/index',
     name: 'User',
-    meta: { 
-      title: 'User', 
+    meta: {
+      title: 'User',
       icon: 'user',
       roles: ['management']
     },
@@ -176,18 +176,18 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/user/index'),
         name: 'userList',
-        meta: { 
-          title: 'List', 
-          icon: 'peoples',
+        meta: {
+          title: 'List',
+          icon: 'peoples'
         }
       },
       {
         path: 'register',
         component: () => import('@/views/user/userRegister'),
         name: 'userRegister',
-        meta: { 
-          title: 'Register', 
-          icon: 'form',
+        meta: {
+          title: 'Register',
+          icon: 'form'
         }
       },
       {
@@ -195,8 +195,8 @@ export const asyncRoutes = [
         component: () => import('@/views/user/userProfile'),
         name: 'userProfile',
         hidden: true,
-        meta: { 
-          title:'Profile', 
+        meta: {
+          title: 'Profile',
           icon: 'example',
           roles: ['management']
         }
@@ -206,14 +206,40 @@ export const asyncRoutes = [
         component: () => import('@/views/user/userUpdate'),
         name: 'userUpdate',
         hidden: true,
-        meta: { 
-          title: 'Update', 
+        meta: {
+          title: 'Update',
           icon: 'example',
           roles: ['management']
         }
       }
     ]
-    
+
+  },
+
+  {
+    path: '/chat',
+    component: Layout,
+    redirect: '/chat/index',
+    meta: {
+      title: 'Chat',
+      icon: 'chat',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/chat/index'),
+        name: 'chat',
+        meta: { title: 'Chat' }
+      },
+      {
+        hidden: true,
+        path: 'group',
+        component: () => import('@/views/chat/group'),
+        name: 'group',
+        meta: { title: 'Group' }
+      }
+    ]
   },
 
   {
@@ -221,8 +247,8 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/customer/index',
     name: 'Customer',
-    meta: { 
-      title: 'Customer', 
+    meta: {
+      title: 'Customer',
       icon: 'peoples',
       roles: ['management']
     },
@@ -252,10 +278,10 @@ export const asyncRoutes = [
         component: () => import('@/views/customer/sales'),
         name: 'CustomerSales',
         hidden: true,
-        meta: { 
-          title: 'Customer Sales', 
+        meta: {
+          title: 'Customer Sales',
           icon: 'example',
-          roles: ['management'],
+          roles: ['management']
         }
       },
       {
@@ -263,22 +289,22 @@ export const asyncRoutes = [
         component: () => import('@/views/customer/credit'),
         name: 'CustomerCredit',
         hidden: true,
-        meta: { 
-          title: 'Customer Credit', 
+        meta: {
+          title: 'Customer Credit',
           icon: 'example',
-          roles: ['management'],
+          roles: ['management']
         }
       }
     ]
-    
+
   },
 
   {
     path: '/branch',
     component: Layout,
     redirect: '/branch/index',
-    meta: { 
-      title: 'Branch', 
+    meta: {
+      title: 'Branch',
       icon: 'list',
       roles: ['management']
     },
@@ -286,12 +312,11 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/branch/index'),
-        name: 'Branch',
+        name: 'Branch'
       }
     ]
-    
-  },
 
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
