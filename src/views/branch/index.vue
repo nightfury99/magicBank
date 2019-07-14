@@ -85,13 +85,28 @@
 </template>
 
 <script>
-import {createBranch, getBranch, fetchBranch, updateBranch } from '@/api/branch'
+import { createBranch, getBranch, updateBranch } from '@/api/branch'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import moment from 'moment'
 
 export default {
   name: 'ComplexTable',
   components: { Pagination },
+
+  filters: {
+    statusFilter(is_active) {
+      const statusMap = {
+        active: 'success',
+        inactive: 'info',
+        deleted: 'danger'
+      }
+      return statusMap[is_active]
+    },
+
+    moment: function(date) {
+      return moment(date).format('MMMM Do YYYY')
+    }
+  },
   data() {
     return {
       tableKey: 0,
@@ -102,7 +117,7 @@ export default {
         page: 1,
         limit: 20,
         name: undefined,
-        code: undefined,
+        code: undefined
       },
       statusOptions: ['Active', 'Inactive', 'Deleted'],
       newBranch: {
@@ -121,7 +136,7 @@ export default {
       rules: {
         created_at: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         name: [{ required: true, message: 'name is required', trigger: 'blur' }]
-      },
+      }
     }
   },
   created() {
@@ -130,19 +145,19 @@ export default {
 
   methods: {
 
-    moment: function (date) {
-      return moment(date);
+    moment: function(date) {
+      return moment(date)
     },
 
-    date: function (date) {
-      return moment(date).format('MMMM Do YYYY');
+    date: function(date) {
+      return moment(date).format('MMMM Do YYYY')
     },
 
     getBranch() {
-        getBranch()
-             .then(resp => {
-                this.branch = resp.data.data
-            })
+      getBranch()
+        .then(resp => {
+          this.branch = resp.data.data
+        })
     },
 
     resetTemp() {
@@ -167,15 +182,15 @@ export default {
         if (valid) {
           createBranch(this.newBranch)
             .then(resp => {
-                this.branch.unshift(this.newBranch)
-                this.dialogFormVisible = false
-                this.$notify({
-                    title: 'Success',
-                    message: 'Created Successfully',
-                    type: 'success',
-                })
-                this.getBranch()
-          })
+              this.branch.unshift(this.newBranch)
+              this.dialogFormVisible = false
+              this.$notify({
+                title: 'Success',
+                message: 'Created Successfully',
+                type: 'success'
+              })
+              this.getBranch()
+            })
         }
       })
     },
@@ -192,24 +207,24 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.newBranch)
-          // tempData.updated_at = +new Date(tempData.updated_at) 
+          // tempData.updated_at = +new Date(tempData.updated_at)
           updateBranch(tempData)
             .then(resp => {
-                for (const v of this.branch) {
+              for (const v of this.branch) {
                 if (v.id === this.newBranch.id) {
-                    const index = this.branch.indexOf(v)
-                    this.branch.splice(index, 1, this.newBranch)
-                    break
+                  const index = this.branch.indexOf(v)
+                  this.branch.splice(index, 1, this.newBranch)
+                  break
                 }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
+              }
+              this.dialogFormVisible = false
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
+                type: 'success'
+              })
+              this.getBranch()
             })
-            this.getBranch()
-          })
         }
       })
     },
@@ -217,25 +232,10 @@ export default {
       this.$notify({
         title: 'Success',
         message: 'Delete Successfully',
-        type: 'success',
+        type: 'success'
       })
       const index = this.branch.indexOf(row)
       this.branch.splice(index, 1)
-    },
-  },
-  
-  filters: {
-    statusFilter(is_active) {
-      const statusMap = {
-        active: 'success',
-        inactive: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[is_active]
-    },
-
-    moment: function (date) {
-    return moment(date).format('MMMM Do YYYY');
     }
   }
 

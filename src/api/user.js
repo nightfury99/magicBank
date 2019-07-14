@@ -76,6 +76,16 @@ export function deleteUser(id) {
   })
 }
 
+export function searchUser(term) {
+  return request({
+    url: `/users/search`,
+    method: 'post',
+    data: {
+      query: term
+    }
+  })
+}
+
 // export function getUsers() {
 //     return request({
 //         url: '/user?_limit=3000',
@@ -114,7 +124,7 @@ export function deleteUser(id) {
 // }
 
 // export function removeUserOutlet(userOutletId) {
-    
+
 //     return request({
 //         url: `/useroutlet/${userOutletId}`,
 //         method: 'delete'
