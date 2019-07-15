@@ -18,7 +18,7 @@
             </el-tab-pane>
 
             <el-tab-pane label="Sales KYC">
-                <KYC/>
+                <KYC type="sales"></KYC>
             </el-tab-pane>
 
             <el-tab-pane label="Call Log">

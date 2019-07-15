@@ -89,8 +89,8 @@ export const constantRouterMap = [
         name: 'Media Library',
       }
     ]
-    
-  },
+
+  }
 
 ]
 
@@ -284,9 +284,20 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/customer/index'),
-        name: 'CustomerList',
-        meta: { 
-          title: 'Customer List', 
+        name: 'Customer',
+        meta: {
+          title: 'Customer List',
+          icon: 'peoples',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'answer/:type',
+        component: () => import('@/views/customer/answer'),
+        name: 'answer',
+        hidden: true,
+        meta: {
+          title: 'KYC Question',
           icon: 'peoples',
           roles: ['management']
         }
@@ -324,7 +335,6 @@ export const asyncRoutes = [
         }
       }
     ]
-
   },
 
   {
@@ -344,6 +354,53 @@ export const asyncRoutes = [
       }
     ]
 
+
+  },
+
+  {
+    path: '/question',
+    component: Layout,
+    redirect: '/question/index',
+    name: 'Question',
+    meta: {
+      title: 'Question',
+      icon: 'form',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/question/index'),
+        name: 'Question',
+        meta: {
+          title: 'Question List',
+          icon: 'list',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'questionView/:questionId',
+        component: () => import('@/views/question/questionView'),
+        name: 'questionView',
+        hidden: true,
+        meta: {
+          title: 'View Question',
+          icon: 'example',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'questionCreate',
+        component: () => import('@/views/question/questionCreate'),
+        name: 'questionCreate',
+        hidden: true,
+        meta: {
+          title: 'Create Question',
+          icon: 'edit',
+          roles: ['management']
+        }
+      }
+    ]
   },
 
   { path: '*', redirect: '/404', hidden: true }

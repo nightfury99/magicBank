@@ -18,7 +18,7 @@
             </el-tab-pane>
 
             <el-tab-pane label="Credit KYC">
-                <KYC/>
+                <KYC type="credit"></KYC>
             </el-tab-pane>
 
             <el-tab-pane label="Credit Application Tracker">
