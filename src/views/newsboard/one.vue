@@ -8,7 +8,7 @@
         <div v-if="news" class="crm-box-container">
             
             <el-row class="crm-box-header">
-                <span v-if="news.created_by" style="font-weight: 500">{{ news.created_by.name }}</span>
+                <span v-if="news.created_by" style="display:block; font-weight: 500">{{ news.created_by.name }}</span>
 
                 <el-col class="crm-timestamp" :span="5">
                     <span>{{ news.created_at | moment("from", "now") }}</span>
@@ -18,6 +18,47 @@
             <el-row class="crm-box-content description">
                 {{ news.description }}
             </el-row>
+
+            <el-row v-if="news.location">
+                <GmapMap
+                :center="{lat: parseFloat(news.location.latitude), lng: parseFloat(news.location.longitude) }"
+                :zoom="14"
+                :options="{
+                    zoomControl: true,
+                    mapTypeControl: false,
+                    scaleControl: false,
+                    streetViewControl: false,
+                    rotateControl: false,
+                    fullscreenControl: false,
+                    disableDefaultUi: false
+                }"
+                style="width: 100%; height: 300px;"
+                >
+                <gmap-marker
+                    :position="{lat: parseFloat(news.location.latitude), lng: parseFloat(news.location.longitude) }">
+                </gmap-marker>
+                </GmapMap>
+            </el-row>
+
+            <el-row v-if="news.media" class="crm-box-content" style="margin-top: 5px;">
+                <el-image
+                style="width: 100px; height: 100px; margin-right: 5px"
+                v-for="(image, index) in news.media"
+                :key="index"
+                :src="`${path.image}/${image}`"
+                fit="fit"></el-image>
+
+                <div style="margin-top: 20px;" />
+
+                <el-row v-if="news.users">
+                    <el-tag size="mini" type="warning" v-for="(user, index) in news.users" :key="index">{{ user.name }}</el-tag>
+                </el-row>
+
+                <el-row v-if="news.customers">
+                    <el-tag size="mini" type="success" v-for="(customer, index) in news.customers" :key="index">{{ customer.name }}</el-tag>
+                </el-row>
+            </el-row>
+
             
             <div class="crm-box-content interaction">
                 <el-row>
@@ -97,6 +138,9 @@ export default {
             isLike: false,
             isFavourite: false,
             dialogVisible: false,
+            path: {
+                image: process.env.MEDIA_PATH + '/' + process.env.STORAGE_FOLDER,
+            }
         }
     },
 
@@ -170,9 +214,6 @@ export default {
 </script>
 
 <style scoped>
-    span {
-        display: block;
-    }
 
     .form {
         position:relative;

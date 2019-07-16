@@ -1,10 +1,25 @@
 import request from '@/utils/request'
 import qs from 'qs'
 
+export function getCustomer(id) {
+  return request({
+    url: `/customers/${id}`,
+    method: 'get'
+  })
+}
+
 export function getCustomers(query) {
   return request({
     url: `/customers?page=${query.page}`,
     method: 'get'
+  })
+}
+
+export function getCustomerMapSearch(query) {
+  return request({
+    url: `/customers/map`,
+    method: 'post',
+    data: query,
   })
 }
 
@@ -33,11 +48,16 @@ export function getCallLog(customerId) {
   })
 }
 
+export function getCreditLog(customerId) {
+  return request({
+    url:`/customers/${customerId}/credit-logs`,
+    method: 'get'
+  })
+}
+
 export function getPicContact(customerId) {
   return request({
     url:`/customers/${customerId}/pic-contacts`,
     method: 'get'
   })
 }
-
-

@@ -54,6 +54,41 @@ export const constantRouterMap = [
         name: 'Customer Map'
       }
     ]
+  },
+
+  {
+    path: '/myprofile',
+    component: Layout,
+    redirect: '/profile/:userId',
+    // name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: ':userId',
+      component: () => import('@/views/user/userProfile'),
+      name: 'userProfile',
+      hidden: true,
+      meta: { 
+        title:'My Profile', 
+        icon: 'user',
+      }
+    }]
+  },
+
+  {
+    path: '/medias',
+    component: Layout,
+    redirect: '/media/index',
+    meta: { 
+      title: 'Media Library', 
+      icon: 'list',
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/media/index'),
+        name: 'Media Library',
+      }
+    ]
 
   }
 
@@ -172,10 +207,21 @@ export const asyncRoutes = [
           icon: 'form'
         }
       },
+      // {
+      //   path: 'profile/:userId',
+      //   component: () => import('@/views/user/userProfile'),
+      //   name: 'userProfile',
+      //   hidden: true,
+      //   meta: { 
+      //     title:'Profile', 
+      //     icon: 'example',
+      //     roles: ['management']
+      //   }
+      // },
       {
         path: 'profile/:userId',
-        component: () => import('@/views/user/userProfile'),
-        name: 'userProfile',
+        component: () => import('@/views/user/userProfileManagement'),
+        name: 'userProfileManagement',
         hidden: true,
         meta: {
           title: 'Profile',
@@ -196,6 +242,32 @@ export const asyncRoutes = [
       }
     ]
 
+  },
+
+  {
+    path: '/chat',
+    component: Layout,
+    redirect: '/chat/index',
+    meta: {
+      title: 'Chat',
+      icon: 'chat',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/chat/index'),
+        name: 'chat',
+        meta: { title: 'Chat' }
+      },
+      {
+        hidden: true,
+        path: 'group',
+        component: () => import('@/views/chat/group'),
+        name: 'group',
+        meta: { title: 'Group' }
+      }
+    ]
   },
 
   {
@@ -231,9 +303,19 @@ export const asyncRoutes = [
         }
       },
       {
+        path: 'one/:id',
+        component: () => import('@/views/customer/one'),
+        name: 'CustomerOne',
+        hidden: true,
+        meta: { 
+          title: 'CustomerOne', 
+          icon: 'peoples'
+        }
+      },
+      {
         path: 'sales/:customerId',
         component: () => import('@/views/customer/sales'),
-        name: 'customerSales',
+        name: 'CustomerSales',
         hidden: true,
         meta: {
           title: 'Customer Sales',
@@ -244,7 +326,7 @@ export const asyncRoutes = [
       {
         path: 'credit/:customerId',
         component: () => import('@/views/customer/credit'),
-        name: 'customerCredit',
+        name: 'CustomerCredit',
         hidden: true,
         meta: {
           title: 'Customer Credit',
@@ -253,7 +335,6 @@ export const asyncRoutes = [
         }
       }
     ]
-
   },
 
   {
@@ -272,6 +353,7 @@ export const asyncRoutes = [
         name: 'Branch'
       }
     ]
+
 
   },
 
