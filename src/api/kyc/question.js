@@ -8,9 +8,9 @@ export function getQuestionIndex(query) {
   })
 }
 
-export function getQuestionAll() {
+export function getQuestionSet(type, section) {
   return request({
-    url: `/kyc/question/no-paginate`,
+    url: `/kyc/question-set/${type}/${section}`,
     method: 'get'
   })
 }
