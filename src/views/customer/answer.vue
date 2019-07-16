@@ -23,17 +23,18 @@
                 <template slot="title">
                     <el-row class="section" type="flex" justify="center">Section B</el-row>
                 </template>
-                <el-form ref="formB" label-position="top" label-width="200px">
+                <el-form ref="formB" :model="questionB" label-position="top" label-width="200px">
                     <el-form-item
                     v-for="item in questionB"
                     :key="item.question_id"
                     :label="item.display_text"
                     :required="item.is_mandatory"
-                    :rules="[{required: true, message: 'field is required'}]">
+                    :prop="item.default_data"
+                    :rules="{required: true, message: 'field is required', trigger: 'change'}">
 
                         <el-radio-group
-                        v-if="item.input_type === 'radio' || item.input_type === 'switch'"
-                        v-model="form.answers[item.question_id]">
+                        v-if="(item.input_type === 'radio' || item.input_type === 'switch') && item.fields !== null"
+                        v-model="item.default_data">
                             <el-radio
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -43,8 +44,8 @@
                         </el-radio-group>
 
                         <el-checkbox-group
-                        v-else-if="item.input_type === 'checkbox'"
-                        v-model="form.answers[item.question_id]">
+                        v-else-if="item.input_type === 'checkbox' && item.fields !== null"
+                        v-model="item.default_data">
                             <el-checkbox 
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -54,8 +55,8 @@
                         </el-checkbox-group>
 
                         <el-select
-                        v-else-if="item.input_type === 'select'"
-                        v-model="form.answers[item.question_id]">
+                        v-else-if="item.input_type === 'select' && item.fields !== null"
+                        v-model="item.default_data">
                             <el-option
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -65,11 +66,15 @@
                         </el-select>
 
                         <el-input 
+                        v-else-if="item.input_type === 'text' || item.input_type === 'textarea'"
+                        v-model="item.default_data"
+                        :type="item.input_type">
+                        </el-input>
+
+                        <el-input
                         v-else
-                        v-model="form.answers[item.question_id]" 
-                        :type="item.input_type"
-                        :value="item.default_data"
-                        >
+                        v-model="item.default_data"
+                        disabled>
                         </el-input>
 
                     </el-form-item>
@@ -86,11 +91,34 @@
                     :key="item.question_id" 
                     :label="item.display_text"
                     :required="item.is_mandatory"
-                    :rules="[{required: true, message: 'field is required'}]">
+                    :prop="item.default_data"
+                    :rules="{required: true, message: 'field is required', trigger: 'blur'}">
+
+                        <el-radio-group
+                        v-if="(item.input_type === 'radio' || item.input_type === 'switch') && item.fields !== null"
+                        v-model="item.default_data">
+                            <el-radio
+                            v-for="option in item.fields.choice"
+                            :key="option.data"
+                            :label="option.data">
+                            {{option.data}}
+                            </el-radio>
+                        </el-radio-group>
+
+                        <el-checkbox-group
+                        v-else-if="item.input_type === 'checkbox' && item.fields !== null"
+                        v-model="item.default_data">
+                            <el-checkbox 
+                            v-for="option in item.fields.choice"
+                            :key="option.data"
+                            :label="option.data">
+                            {{option.data}}
+                            </el-checkbox>
+                        </el-checkbox-group>
 
                         <el-select
-                        v-if="item.input_type === 'select'"
-                        v-model="form.answers[item.question_id]">
+                        v-if="item.input_type === 'select' && item.fields !== null"
+                        v-model="item.default_data">
                             <el-option
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -100,9 +128,15 @@
                         </el-select>
 
                         <el-input 
-                        v-else
-                        v-model="form.answers[item.question_id]" 
+                        v-else-if="item.input_type === 'text' || item.input_type === 'textarea'"
+                        v-model="item.default_data"
                         :type="item.input_type">
+                        </el-input>
+
+                        <el-input
+                        v-else
+                        v-model="item.default_data"
+                        disabled>
                         </el-input>
 
                     </el-form-item>
@@ -143,7 +177,7 @@ export default {
     created() {
         // get params from parent
         this.typeParams = this.$route.params.type
-        this.form.customer_id = this.$route.params.customerId
+        this.form.customer_id = this.$route.params.customerId // assign customer id
         // load questions
         this.questionList()
     },
@@ -156,33 +190,39 @@ export default {
         // get all question
 		async questionList() {
             await getQuestionSet(this.typeParams, 'a').then(result => {
-                this.form.kyc_question_set_id = result.data.data.id
+                this.form.kyc_question_set_id = result.data.data.id // assign question set id
                 this.questionA = result.data.data.questions
                 })
             //console.log(this.setId)
             this.questionB = ((await getQuestionSet(this.typeParams, 'b')).data.data.questions)
             //console.log(this.sectionB)
             this.questionB.forEach(item => {
-                this.form.answers[item.question_id] = ""
-                if (item.input_type === "checkbox") {
-                    this.form.answers[item.question_id] = []
+                if (item.input_type === "checkbox" && item.default_data === "") {
+                    this.questionB.default_data = []
                 }
             })
             //console.log(this.sectionB.map(item => {if (item.fields !== null) item.fields = JSON.parse(item.fields)}))
             this.questionC = (await getQuestionSet(this.typeParams, 'c')).data.data.questions
             //console.log(this.sectionC)
             this.questionC.forEach(item => {
-                this.form.answers[item.question_id] = ""
-                if (item.input_type === "checkbox") {
-                    this.form.answers[item.question_id] = []
+                if (item.input_type === "checkbox" && item.default_data === "") {
+                    this.questionC.default_data = []
                 }
             })
             //console.log(this.sectionC.map(item => {if (item.fields !== null) item.fields = JSON.parse(item.fields)}))
         },
-        // submit answers   
+        // submit form
         submit() {
+            // assign answers
+            this.questionB.forEach(item => {
+                this.form.answers[item.question_id] = item.default_data
+            })
+            this.questionC.forEach(item => {
+                this.form.answers[item.question_id] = item.default_data
+            })
             console.log(this.form.answers)
-            this.$refs['formB', 'formC'].validate(valid => {
+            // validation
+            this.$refs.formB.validate(valid => {
                 console.log('validated')
                 if (valid) {
                     try {
@@ -190,7 +230,7 @@ export default {
                         sendAnswer(form)
                         this.$notify({
                             title: 'Success',
-                            message: 'Answer submitted'
+                            message: 'Form submitted'
                         })
                         this.$router.push("index")
                     } catch (err) {
@@ -200,10 +240,10 @@ export default {
                         })
                     }
                 } else {
-                    this.$message.error('error')
+                    this.$message.error('validation error')
                     return false;
                 }
-            });
+            })
         }
     }
 }
