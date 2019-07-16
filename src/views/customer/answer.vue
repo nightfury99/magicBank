@@ -12,7 +12,7 @@
                 <el-form label-position="top" label-width="200px" disabled>
                     <el-form-item
                     v-for="item in questionA"
-                    :key="item.id"
+                    :key="item.question_id"
                     :label="item.display_text">
                         <el-input :type="item.input_type" :value="item.default_data"></el-input>
                     </el-form-item>
@@ -25,14 +25,15 @@
                 </template>
                 <el-form ref="formB" label-position="top" label-width="200px">
                     <el-form-item
-                    v-for="(item, index) in questionB"
-                    :key="item.id"
+                    v-for="item in questionB"
+                    :key="item.question_id"
                     :label="item.display_text"
-                    :rules="[{required: item.is_mandatory, message: 'field is required'}]">
+                    :required="item.is_mandatory"
+                    :rules="[{required: true, message: 'field is required'}]">
 
                         <el-radio-group
                         v-if="item.input_type === 'radio' || item.input_type === 'switch'"
-                        v-model="formB[index].value">
+                        v-model="form.answers[item.question_id]">
                             <el-radio
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -43,7 +44,7 @@
 
                         <el-checkbox-group
                         v-else-if="item.input_type === 'checkbox'"
-                        v-model="formB[index].value">
+                        v-model="form.answers[item.question_id]">
                             <el-checkbox 
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -54,7 +55,7 @@
 
                         <el-select
                         v-else-if="item.input_type === 'select'"
-                        v-model="formB[index].value">
+                        v-model="form.answers[item.question_id]">
                             <el-option
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -65,9 +66,10 @@
 
                         <el-input 
                         v-else
-                        v-model="formB[index].value" 
-                        :type="item.input_type" 
-                        :value="item.default_data">
+                        v-model="form.answers[item.question_id]" 
+                        :type="item.input_type"
+                        :value="item.default_data"
+                        >
                         </el-input>
 
                     </el-form-item>
@@ -80,14 +82,15 @@
                 </template>
                 <el-form ref="formC" label-position="top" label-width="200px">
                     <el-form-item 
-                    v-for="(item, index) in questionC" 
-                    :key="item.id" 
+                    v-for="item in questionC" 
+                    :key="item.question_id" 
                     :label="item.display_text"
-                    :rules="[{required: item.is_mandatory, message: 'field is required'}]">
+                    :required="item.is_mandatory"
+                    :rules="[{required: true, message: 'field is required'}]">
 
                         <el-select
                         v-if="item.input_type === 'select'"
-                        v-model="formC[index].value">
+                        v-model="form.answers[item.question_id]">
                             <el-option
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -98,7 +101,7 @@
 
                         <el-input 
                         v-else
-                        v-model="formC[index].value" 
+                        v-model="form.answers[item.question_id]" 
                         :type="item.input_type">
                         </el-input>
 
@@ -116,7 +119,7 @@
 </template>
 
 <script>
-import { getQuestionAll } from "@/api/kyc/question";
+import { getQuestionSet } from "@/api/kyc/question";
 import { sendAnswer } from "@/api/kyc/answer";
 
 export default {
@@ -125,96 +128,75 @@ export default {
         activeName: 'A',
         typeParams: '',
         customerId: '',
-        question: [],
-        formB: [],
-        formC: []
+        questionA: [],
+        questionB: [],
+        questionC: [],
+        form: {
+            kyc_question_set_id: "",
+            origin_type: "entry",
+            origin_id: "null",
+            customer_id: "",
+            answers: {}
+        }
       };
     },
     created() {
-        // get type params from parent
+        // get params from parent
         this.typeParams = this.$route.params.type
-        this.customerId = this.$route.params.customerId
-        //console.log("params assigned: " + this.typeParams)
+        this.form.customer_id = this.$route.params.customerId
         // load questions
         this.questionList()
     },
     computed:{
         typeTitle() {
             return this.typeParams.charAt(0).toUpperCase() + this.typeParams.slice(1)
-        },
-        questionA() {
-            return this.question.filter(item => item.section === "A")
-        },
-        questionB() {
-            const B = this.question.filter(item => item.section === "B" )
-            B.map(item => item.fields = JSON.parse(item.fields))
-            B.forEach((item, i) => {
-                this.formB[i] = {}
-                this.formB[i].kyc_question_id = item.id
-                this.formB[i].assignment_id = ''
-                this.formB[i].customer_id = ''
-                this.formB[i].value = ''
-                this.formB[i].index = i
-                if (item.input_type === "checkbox") {
-                    this.formB[i].value = []
-                }
-                //console.log(this.formB[index])
-            })
-            return B
-        },
-        questionC() {
-            const C = this.question.filter(item => item.section === "C")
-            C.map(item => item.fields = JSON.parse(item.fields))
-            C.forEach((item, index) => {
-                this.formC[index] = {}
-                this.formC[index].kyc_question_id = item.id
-                this.formC[index].assignment_id = ''
-                this.formC[index].customer_id = ''
-                this.formB[index].value = ''
-                this.formC[index].index = index
-                if (item.input_type === "checkbox") {
-                    this.formC[index].value = []
-                }
-            })
-            return C
         }
     },
     methods: {
         // get all question
 		async questionList() {
-            this.cleanQuestion((await getQuestionAll()).data.data)
-            //console.log(this.question)
-        },
-        // clean question based on hidden and type
-        cleanQuestion(data) {
-            this.question = data.filter(item => 
-            item.is_hidden === false  && ((item.type.slug === this.typeParams) || (item.type.slug === 'profile'))
-            )
+            await getQuestionSet(this.typeParams, 'a').then(result => {
+                this.form.kyc_question_set_id = result.data.data.id
+                this.questionA = result.data.data.questions
+                })
+            //console.log(this.setId)
+            this.questionB = ((await getQuestionSet(this.typeParams, 'b')).data.data.questions)
+            //console.log(this.sectionB)
+            this.questionB.forEach(item => {
+                this.form.answers[item.question_id] = ""
+                if (item.input_type === "checkbox") {
+                    this.form.answers[item.question_id] = []
+                }
+            })
+            //console.log(this.sectionB.map(item => {if (item.fields !== null) item.fields = JSON.parse(item.fields)}))
+            this.questionC = (await getQuestionSet(this.typeParams, 'c')).data.data.questions
+            //console.log(this.sectionC)
+            this.questionC.forEach(item => {
+                this.form.answers[item.question_id] = ""
+                if (item.input_type === "checkbox") {
+                    this.form.answers[item.question_id] = []
+                }
+            })
+            //console.log(this.sectionC.map(item => {if (item.fields !== null) item.fields = JSON.parse(item.fields)}))
         },
         // submit answers   
         submit() {
-            console.log('validate')
-            console.log(this.formB)
-            this.$refs['formB', 'formC'].validate((valid) => {
+            console.log(this.form.answers)
+            this.$refs['formB', 'formC'].validate(valid => {
                 console.log('validated')
                 if (valid) {
                     try {
                         console.log('hi')
-                        this.formB.forEach((item) => {
-                            if (item.value) sendAnswer(item)
-                        })
-                        this.formC.forEach((item) => {
-                            if (item.value) sendAnswer(item)
-                        })
+                        sendAnswer(form)
                         this.$notify({
                             title: 'Success',
                             message: 'Answer submitted'
                         })
                         this.$router.push("index")
-                    } catch (error) {
+                    } catch (err) {
                         this.$notify.error({
                             title: 'Error',
-                            message: error.message
+                            message: err.message
                         })
                     }
                 } else {
@@ -229,12 +211,12 @@ export default {
 
 <style scoped>
 .section {
-    margin: 0px 60px;
+    margin: 0px 80px;
     font-size: 20px;
     color: slategray;
 }
 
 .el-form {
-    margin: 10px 60px;
+    margin: 10px 80px;
 }
 </style>
