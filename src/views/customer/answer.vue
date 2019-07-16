@@ -124,6 +124,7 @@ export default {
       return {
         activeName: 'A',
         typeParams: '',
+        customerId: '',
         question: [],
         formB: [],
         formC: []
@@ -131,7 +132,8 @@ export default {
     },
     created() {
         // get type params from parent
-        this.typeParams = this.$route.params.type; 
+        this.typeParams = this.$route.params.type
+        this.customerId = this.$route.params.customerId
         //console.log("params assigned: " + this.typeParams)
         // load questions
         this.questionList()

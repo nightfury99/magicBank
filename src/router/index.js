@@ -90,9 +90,9 @@ export const asyncRoutes = [
         path: 'favourite',
         component: () => import('@/views/newsboard/favourite'),
         name: 'FavouriteNews',
-        meta: { 
-          title: 'Favourite News', 
-          icon: 'news',
+        meta: {
+          title: 'Favourite News',
+          icon: 'news'
         }
       },
       {
@@ -113,8 +113,8 @@ export const asyncRoutes = [
     path: '/assignment',
     component: Layout,
     name: 'Assignment',
-    meta: { 
-      title: 'Assignment', 
+    meta: {
+      title: 'Assignment',
       icon: 'example',
       roles: ['management']
     },
@@ -123,8 +123,8 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/assignment/index'),
         name: 'AssignmentList',
-        meta: { 
-          title: 'List', 
+        meta: {
+          title: 'List',
           icon: 'example',
           roles: ['management']
         }
@@ -133,8 +133,8 @@ export const asyncRoutes = [
         path: 'calendar',
         component: () => import('@/views/assignment/calendar'),
         name: 'AssignmentCalendar',
-        meta: { 
-          title: 'Calendar', 
+        meta: {
+          title: 'Calendar',
           icon: 'example',
           roles: ['management']
         }
@@ -220,7 +220,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'answer/:type',
+        path: 'answer/:type/:customerId',
         component: () => import('@/views/customer/answer'),
         name: 'answer',
         hidden: true,

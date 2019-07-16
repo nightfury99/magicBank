@@ -6,7 +6,7 @@
       </el-col>
 
       <el-col>
-        <router-link :to="{ name: 'answer', params: { type: type }}">
+        <router-link :to="{ name: 'answer', params: { type: type, customerId: customerId }}">
           <el-button type="primary" style="float: right">Submit KYC</el-button>
         </router-link>
       </el-col>
@@ -45,7 +45,7 @@ import JSpdf from "jspdf";
 
 export default {
   name: "KYC",
-  props: ["type"],
+  props: ["type", "customerId"],
 
   data() {
     return {
