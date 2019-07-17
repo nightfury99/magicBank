@@ -13,7 +13,7 @@
         </div>
       
     </el-row>
-    <el-row style="margin: 10px 80px"  >
+    <el-row style="margin: 10px 80px">
       <el-table
         
         v-loading="listLoading"
@@ -22,25 +22,19 @@
         fit
         highlight-current-row
       >
-        <el-table-column label="Question Name" width="auto" >
+        <el-table-column label="Question Name" width="auto">
           <template
             slot-scope="scope"
             @click="navigateTo ('questionCreate')"
           >{{ scope.row.display_text }}</template>
         </el-table-column>
-        <el-table-column label="Section" width="80" >
-          <template slot-scope="scope">{{ scope.row.section }}</template>
-        </el-table-column>
-        <el-table-column label="Origin" width="80" >
+        <el-table-column label="Origin" width="80">
           <template slot-scope="scope">{{ scope.row.origin }}</template>
         </el-table-column>
-        <el-table-column label="Question Category" width="150" >
-          <template slot-scope="scope">{{ scope.row.category.name }}</template>
+        <el-table-column label="Section" width="150">
+          <template slot-scope="scope">{{ scope.row.section }}</template>
         </el-table-column>
-        <el-table-column label="Question Type" width="150" >
-          <template slot-scope="scope">{{ scope.row.type.name }}</template>
-        </el-table-column>
-        <el-table-column align="center" label="Action" width="150" >
+        <el-table-column align="center" label="Action" width="150">
           <template align="center" slot-scope="scope" v-if="scope.row.origin!='epicor'">
             <el-tooltip :open-delay="tooltipDelay" content="View Question" placement="top">
               <el-button
@@ -56,7 +50,7 @@
     </el-row>
 
     <el-row style="margin: 10px 80px">
-      <el-col :span="24" align="center" >
+      <el-col :span="24" align="center">
         <pagination
           background
           layout="prev, pager, next"
