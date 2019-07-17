@@ -58,38 +58,6 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col style="width:33%">
-                <el-form-item label="Category" prop="category_id">
-                  <el-select
-                    v-model="question.category_id"
-                    value-key="question.category_id"
-                    placeholder="Select Category"
-                  >
-                    <el-option
-                      v-for="(category,index) in categoryOption"
-                      :key="index"
-                      :label="category.name"
-                      :value="category.id"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col style="width:33%">
-                <el-form-item label="Type" prop="type_id">
-                  <el-select
-                    v-model="question.type_id"
-                    value-key="question.type_id"
-                    placeholder="Select Type"
-                  >
-                    <el-option
-                      v-for="(type,index) in typeOption"
-                      :key="index"
-                      :label="type.name"
-                      :value="type.id"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
             </el-row>
 
             <el-form-item label="Question Description" prop="description">
@@ -119,17 +87,12 @@
                 </el-form-item>
               </el-col>
               <el-col style="width:33%">
-                <el-form-item label="Hidden Question">
-                  <el-switch v-model="question.is_hidden" active-text="Hidden" ></el-switch>
-                </el-form-item>
-              </el-col>
-              <el-col style="width:33%">
                 <el-form-item label="Mandatory Question">
                   <el-switch v-model="question.is_mandatory" active-text="Mandatory"></el-switch>
                 </el-form-item>
               </el-col>
             </el-row>
-            <div 
+            <div
               v-if="question.input_type=='radio'||question.input_type=='checkbox'||question.input_type=='select'||question.input_type=='switch'"
             >
               <el-form-item
@@ -141,7 +104,7 @@
       required: true, message: 'Question Choice cannot be empty', trigger: 'blur'
     }"
               >
-                <el-input v-model="field.data" placeholder="Enter Question Choice" >
+                <el-input v-model="field.data" placeholder="Enter Question Choice">
                   <el-button
                     slot="append"
                     icon="el-icon-minus"
@@ -223,8 +186,7 @@ import {
   putQuestion,
   deleteQuestion
 } from "@/api/kyc/question";
-import { getCategory } from "@/api/kyc/category";
-import { getType } from "@/api/kyc/type";
+
 import Pagination from "@/components/Pagination";
 export default {
   name: "index",
@@ -236,8 +198,6 @@ export default {
       jsonstring: "",
       dialogDelete: false,
       viewMode: true,
-      categoryOption: [],
-      typeOption: [],
       sectionOption: [
         {
           value: "B",
@@ -284,9 +244,7 @@ export default {
         display_text: "",
         section: "",
         description: "",
-        origin: "entry",
-        category_id: "",
-        type_id: "",
+
         default_data: "",
         only_default: true,
         input_type: "",
@@ -300,7 +258,6 @@ export default {
           column: 0,
           row: 0
         },
-        is_hidden: false,
         is_mandatory: true
       },
       rules: {
@@ -309,27 +266,6 @@ export default {
             required: true,
             message: "Please Enter Question Name",
             trigger: "blur"
-          }
-        ],
-        section: [
-          {
-            required: true,
-            message: "Please Enter a Section",
-            trigger: "change"
-          }
-        ],
-        category_id: [
-          {
-            required: true,
-            message: "Please Select Question Category",
-            trigger: "change"
-          }
-        ],
-        type_id: [
-          {
-            required: true,
-            message: "Please Select Question Type",
-            trigger: "change"
           }
         ],
         description: [
@@ -351,8 +287,6 @@ export default {
   },
   mounted() {
     this.getQuestion();
-    this.getCategory();
-    this.getType();
   },
   methods: {
     navigateBack() {
@@ -361,12 +295,7 @@ export default {
     navigateTo(route) {
       this.$router.push(route);
     },
-    async getCategory() {
-      this.categoryOption = (await getCategory()).data.data;
-    },
-    async getType() {
-      this.typeOption = (await getType()).data.data;
-    },
+
     async getQuestion() {
       this.question.id = this.$store.state.route.params.questionId;
 
@@ -377,14 +306,10 @@ export default {
             (this.question.display_text = data.display_text),
             (this.question.section = data.section),
             (this.question.description = data.description),
-            (this.question.origin = data.origin),
-            (this.question.category_id = data.category.id),
-            (this.question.type_id = data.type.id),
             (this.question.default_data = data.default_data),
             (this.question.only_default = data.only_default),
-            (this.question.input_type = data.input_type),
+            (this.question.input_type = data.input_type.toLowerCase()),
             (this.question.fields = JSON.parse(data.fields)),
-            (this.question.is_hidden = data.is_hidden),
             (this.question.is_mandatory = data.is_mandatory);
         })
         .catch(error => {
