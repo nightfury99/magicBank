@@ -33,30 +33,6 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col style="width:33%">
-                <el-form-item label="Category" prop="category_id">
-                  <el-select v-model="newQuestion.category_id" placeholder="Select Category">
-                    <el-option
-                      v-for="(category,index) in categoryOption"
-                      :key="index"
-                      :label="category.name"
-                      :value="category.id"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col style="width:33%">
-                <el-form-item label="Type" prop="type_id">
-                  <el-select v-model="newQuestion.type_id" placeholder="Select Type">
-                    <el-option
-                      v-for="(type,index) in typeOption"
-                      :key="index"
-                      :label="type.name"
-                      :value="type.id"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
             </el-row>
 
             <el-form-item label="Question Description" prop="description">
@@ -83,11 +59,6 @@
                       :value="questionType.value"
                     ></el-option>
                   </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col style="width:33%">
-                <el-form-item label="Hidden Question">
-                  <el-switch v-model="newQuestion.is_hidden" active-text="Hidden"></el-switch>
                 </el-form-item>
               </el-col>
               <el-col style="width:33%">
@@ -178,16 +149,12 @@
 </template>
 
 <script>
-import { getCategory } from "@/api/kyc/category";
-import { getType } from "@/api/kyc/type";
 import { createQuestion } from "@/api/kyc/question";
 export default {
   data() {
     return {
       rowCount: 0,
       rows: [],
-      categoryOption: [],
-      typeOption: [],
       branches: [],
       sectionOption: [
         {
@@ -236,9 +203,7 @@ export default {
         display_text: "",
         section: "",
         description: "",
-        origin: "entry",
-        category_id: "",
-        type_id: "",
+        
         default_data: "",
         only_default: true,
         input_type: "text",
@@ -251,7 +216,7 @@ export default {
           ],
           row: 0
         },
-        is_hidden: false,
+        
         is_mandatory: true
       },
       rules: {
@@ -260,27 +225,6 @@ export default {
             required: true,
             message: "Please Enter Question Name",
             trigger: "blur"
-          }
-        ],
-        section: [
-          {
-            required: true,
-            message: "Please Enter a Section",
-            trigger: "change"
-          }
-        ],
-        category_id: [
-          {
-            required: true,
-            message: "Please Select Question Category",
-            trigger: "change"
-          }
-        ],
-        type_id: [
-          {
-            required: true,
-            message: "Please Select Question Type",
-            trigger: "change"
           }
         ],
         description: [
@@ -301,8 +245,6 @@ export default {
     };
   },
   mounted() {
-    this.getCategory();
-    this.getType();
   },
   methods: {
     navigateTo(route) {
@@ -311,16 +253,10 @@ export default {
     navigateBack() {
       this.$router.go(-1);
     },
-    async getCategory() {
-      this.categoryOption = (await getCategory()).data.data;
-    },
-    async getType() {
-      this.typeOption = (await getType()).data.data;
-    },
     async createNewQuestion() {
       try {
         await createQuestion(this.newQuestion);
-        this.$message(this.newQuestion.display_text + " field " + "is saved");
+        this.$message(this.newQuestion.display_text + "is saved");
 
         this.$router.push("index");
         console.log(this.newQuestion);
@@ -379,8 +315,7 @@ export default {
           this.newQuestion.fields = JSON.stringify(this.newQuestion.fields);
           this.createNewQuestion();
         } else {
-          console.log("error submit!!");
-          alert("The Form is not complete!");
+          console.log("error:INCOMPLETE FORM");
           return false;
         }
       });
@@ -391,7 +326,7 @@ export default {
 
 <style scoped>
 .qChoice {
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   &:last-child {
     margin-bottom: 0;
   }
