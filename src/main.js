@@ -55,7 +55,7 @@ Vue.use(VueGoogleMaps, {
 Vue.use(VueSocketCluster, {
   connections: [{
     name: 'chat',
-    hostname: '127.0.0.1',
+    hostname: '18.136.199.71',
     secure: false,
     port: 8000,
     rejectUnauthorized: false
