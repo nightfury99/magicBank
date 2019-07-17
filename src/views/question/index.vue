@@ -28,9 +28,7 @@
             @click="navigateTo ('questionCreate')"
           >{{ scope.row.display_text }}</template>
         </el-table-column>
-        <el-table-column label="Origin" width="80">
-          <template slot-scope="scope">{{ scope.row.origin }}</template>
-        </el-table-column>
+        
         <el-table-column label="Section" width="150">
           <template slot-scope="scope">{{ scope.row.section }}</template>
         </el-table-column>
