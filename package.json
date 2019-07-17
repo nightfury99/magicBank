@@ -18,7 +18,7 @@
     "element-ui": "^2.10.0",
     "emoji-mart-vue": "^2.6.6",
     "js-cookie": "2.2.0",
-    "jspdf": "^1.5.2",
+    "jspdf": "1.5.2",
     "mockjs": "1.0.1-beta3",
     "moment": "^2.24.0",
     "normalize.css": "7.0.0",
