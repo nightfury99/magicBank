@@ -307,8 +307,8 @@ export const asyncRoutes = [
         component: () => import('@/views/customer/one'),
         name: 'CustomerOne',
         hidden: true,
-        meta: { 
-          title: 'CustomerOne', 
+        meta: {
+          title: 'CustomerOne',
           icon: 'peoples'
         }
       },
@@ -353,8 +353,6 @@ export const asyncRoutes = [
         name: 'Branch'
       }
     ]
-
-
   },
 
   {
