@@ -16,7 +16,7 @@
                     v-for="item in questionA"
                     :key="item.question_id"
                     :label="item.display_text">
-                        <el-input :type="item.input_type" :value="item.default_data"></el-input>
+                        <el-input :type="item.input_type" :value="item.temporary_value"></el-input>
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
@@ -32,12 +32,12 @@
                     v-for="(item, index) in sectionB.questionB"
                     :key="item.question_id"
                     :label="item.display_text"
-                    :prop="'questionB.'+ index + '.default_data'"
+                    :prop="'questionB.'+ index + '.temporary_value'"
                     :rules="{required: item.is_mandatory, message: 'this field is required', trigger: 'change'}">
 
                         <el-radio-group
                         v-if="(item.input_type === 'radio' || item.input_type === 'switch') && item.fields !== null"
-                        v-model="item.default_data">
+                        v-model="item.temporary_value">
                             <el-radio
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -48,7 +48,7 @@
 
                         <el-checkbox-group
                         v-else-if="item.input_type === 'checkbox' && item.fields !== null"
-                        v-model="item.default_data">
+                        v-model="item.temporary_value">
                             <el-checkbox 
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -59,7 +59,7 @@
 
                         <el-select
                         v-else-if="item.input_type === 'select' && item.fields !== null"
-                        v-model="item.default_data">
+                        v-model="item.temporary_value">
                             <el-option
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -70,13 +70,13 @@
 
                         <el-input 
                         v-else-if="item.input_type === 'text' || item.input_type === 'textarea'"
-                        v-model="item.default_data"
+                        v-model="item.temporary_value"
                         :type="item.input_type">
                         </el-input>
 
                         <el-input
                         v-else
-                        v-model="item.default_data"
+                        v-model="item.temporary_value"
                         disabled>
                         </el-input>
 
@@ -95,12 +95,12 @@
                     v-for="(item, index) in sectionC.questionC"
                     :key="item.question_id"
                     :label="item.display_text"
-                    :prop="'questionC.'+ index + '.default_data'"
+                    :prop="'questionC.'+ index + '.temporary_value'"
                     :rules="{required: item.is_mandatory, message: 'this field is required', trigger: 'change'}">
 
                         <el-radio-group
                         v-if="(item.input_type === 'radio' || item.input_type === 'switch') && item.fields !== null"
-                        v-model="item.default_data">
+                        v-model="item.temporary_value">
                             <el-radio
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -111,7 +111,7 @@
 
                         <el-checkbox-group
                         v-else-if="item.input_type === 'checkbox' && item.fields !== null"
-                        v-model="item.default_data">
+                        v-model="item.temporary_value">
                             <el-checkbox 
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -122,7 +122,7 @@
 
                         <el-select
                         v-if="item.input_type === 'select' && item.fields !== null"
-                        v-model="item.default_data">
+                        v-model="item.temporary_value">
                             <el-option
                             v-for="option in item.fields.choice"
                             :key="option.data"
@@ -133,13 +133,13 @@
 
                         <el-input 
                         v-else-if="item.input_type === 'text' || item.input_type === 'textarea'"
-                        v-model="item.default_data"
+                        v-model="item.temporary_value"
                         :type="item.input_type">
                         </el-input>
 
                         <el-input
                         v-else
-                        v-model="item.default_data"
+                        v-model="item.temporary_value"
                         disabled>
                         </el-input>
 
@@ -211,8 +211,8 @@ export default {
 
             // check for checkbox input type
             this.sectionB.questionB = this.sectionB.questionB.map(item => {
-                if (item.input_type === "checkbox" && item.default_data === "") {
-                    item.default_data = [] // need array for checkbox value
+                if (item.input_type === "checkbox" && item.temporary_value === "") {
+                    item.temporary_value = [] // need array for checkbox value
                 }
                 return item
             })
@@ -225,8 +225,8 @@ export default {
 
             // check for checkbox input type
             this.sectionC.questionC = this.sectionC.questionC.map(item => {
-                if (item.input_type === "checkbox" && item.default_data === "") {
-                    item.default_data = [] // need array for checkbox value
+                if (item.input_type === "checkbox" && item.temporary_value === "") {
+                    item.temporary_value = [] // need array for checkbox value
                 }
                 return item
             })
@@ -235,10 +235,10 @@ export default {
         submit() {
             // assign answers to form object
             this.sectionB.questionB.forEach(item => {
-                this.form.answers[item.question_id] = item.default_data
+                this.form.answers[item.question_id] = item.temporary_value
             })
             this.sectionC.questionC.forEach(item => {
-                this.form.answers[item.question_id] = item.default_data
+                this.form.answers[item.question_id] = item.temporary_value
             })
             console.log(this.form.answers)
 
