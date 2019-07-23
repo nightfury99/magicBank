@@ -18,7 +18,7 @@
             </el-tab-pane>
 
             <el-tab-pane label="Credit KYC">
-                <KYC/>
+                <KYC type="credit" :customerId="id"></KYC>
             </el-tab-pane>
 
             <el-tab-pane label="Credit Application Tracker">
@@ -55,6 +55,14 @@ export default {
         AppTracker,
         History
     },
+    data() {
+        return {
+            id: ""
+        }
+    },
+    created() {
+        this.id = this.$route.params.customerId
+    }
 }
 
 </script>

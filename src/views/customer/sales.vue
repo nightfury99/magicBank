@@ -18,7 +18,7 @@
             </el-tab-pane>
 
             <el-tab-pane label="Sales KYC">
-                <KYC/>
+                <KYC type="sales" :customerId="id"></KYC>
             </el-tab-pane>
 
             <el-tab-pane label="Call Log">
@@ -55,6 +55,13 @@ export default {
         CallLog,
         NewsTracker
     },
-
+    data() {
+        return {
+            id: ""
+        }
+    },
+    created() {
+        this.id = this.$route.params.customerId
+    }
 }
 </script>

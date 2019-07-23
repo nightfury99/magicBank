@@ -123,10 +123,10 @@
 
                         <el-row :gutter="20" type="flex" justify="center">
                             <el-col :span="12">
-                                <el-button type="primary" size="small" style="float: right" plain @click="navigateTo ({name: 'customerCredit', params:{customerId: selectCustomer.id}})"> CREDIT </el-button>
+                                <el-button type="primary" size="small" style="float: right" plain @click="navigateTo ({name: 'CustomerCredit', params:{customerId: selectCustomer.id}})"> CREDIT </el-button>
                             </el-col>
                             <el-col :span="12">
-                                <el-button type="primary" size="small" style="float: left" plain @click="navigateTo ({name: 'customerSales', params:{customerId: selectCustomer.id}})"> SALES </el-button>
+                                <el-button type="primary" size="small" style="float: left" plain @click="navigateTo ({name: 'CustomerSales', params:{customerId: selectCustomer.id}})"> SALES </el-button>
                             </el-col>
                         </el-row>
                         </el-card>

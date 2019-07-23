@@ -89,8 +89,8 @@ export const constantRouterMap = [
         name: 'Media Library',
       }
     ]
-    
-  },
+
+  }
 
 ]
 
@@ -148,8 +148,8 @@ export const asyncRoutes = [
     path: '/assignment',
     component: Layout,
     name: 'Assignment',
-    meta: { 
-      title: 'Assignment', 
+    meta: {
+      title: 'Assignment',
       icon: 'example',
       roles: ['management']
     },
@@ -158,8 +158,8 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/assignment/index'),
         name: 'AssignmentList',
-        meta: { 
-          title: 'List', 
+        meta: {
+          title: 'List',
           icon: 'example',
           roles: ['management']
         }
@@ -168,8 +168,8 @@ export const asyncRoutes = [
         path: 'calendar',
         component: () => import('@/views/assignment/calendar'),
         name: 'AssignmentCalendar',
-        meta: { 
-          title: 'Calendar', 
+        meta: {
+          title: 'Calendar',
           icon: 'example',
           roles: ['management']
         }
@@ -284,9 +284,20 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/customer/index'),
-        name: 'CustomerList',
-        meta: { 
-          title: 'Customer List', 
+        name: 'Customer',
+        meta: {
+          title: 'Customer List',
+          icon: 'peoples',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'answer/:type/:customerId',
+        component: () => import('@/views/customer/answer'),
+        name: 'answer',
+        hidden: true,
+        meta: {
+          title: 'KYC Question',
           icon: 'peoples',
           roles: ['management']
         }
@@ -296,8 +307,8 @@ export const asyncRoutes = [
         component: () => import('@/views/customer/one'),
         name: 'CustomerOne',
         hidden: true,
-        meta: { 
-          title: 'CustomerOne', 
+        meta: {
+          title: 'CustomerOne',
           icon: 'peoples'
         }
       },
@@ -324,7 +335,6 @@ export const asyncRoutes = [
         }
       }
     ]
-
   },
 
   {
@@ -343,7 +353,52 @@ export const asyncRoutes = [
         name: 'Branch'
       }
     ]
+  },
 
+  {
+    path: '/question',
+    component: Layout,
+    redirect: '/question/index',
+    name: 'Question',
+    meta: {
+      title: 'Question',
+      icon: 'form',
+      roles: ['management']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/question/index'),
+        name: 'Question',
+        meta: {
+          title: 'Question List',
+          icon: 'list',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'questionView/:questionId',
+        component: () => import('@/views/question/questionView'),
+        name: 'questionView',
+        hidden: true,
+        meta: {
+          title: 'View Question',
+          icon: 'example',
+          roles: ['management']
+        }
+      },
+      {
+        path: 'questionCreate',
+        component: () => import('@/views/question/questionCreate'),
+        name: 'questionCreate',
+        hidden: true,
+        meta: {
+          title: 'Create Question',
+          icon: 'edit',
+          roles: ['management']
+        }
+      }
+    ]
   },
 
   { path: '*', redirect: '/404', hidden: true }
