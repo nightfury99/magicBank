@@ -327,5 +327,8 @@ export default {
 <style scoped>
 .qChoice {
   margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 </style>

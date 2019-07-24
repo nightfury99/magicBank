@@ -404,6 +404,9 @@ export default {
 
 <style>
 .qChoice {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 </style>

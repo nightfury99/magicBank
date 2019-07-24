@@ -3,8 +3,8 @@ stages:
   - deploy
 
 variables:
-  PROD_BUCKET: s3://lgea-crm
-  DEV_BUCKET: s3://lgea-crm-dev
+  PROD_BUCKET: s3://lgea-crm-admin
+  DEV_BUCKET: s3://lgea-crm-admin-dev
 
 #FOR DEV
 build:dev:
@@ -15,14 +15,14 @@ build:dev:
     - master
   script:
     # Install dependencies
-    - npm install
+    - npm ci
     # Build App
     - npm run build
   artifacts:
     paths:
       # Build folder
       - dist/
-    expire_in: 1 hour
+    expire_in: 7 days
 
 deploy:dev:
   image: python:3.6-slim
@@ -45,14 +45,14 @@ build:prod:
     - master
   script:
     # Install dependencies
-    - npm install
+    - npm ci
     # Build App
     - npm run build
   artifacts:
     paths:
       # Build folder
       - dist/
-    expire_in: 1 hour
+    expire_in: 7 days
 
 deploy:prod:
   image: python:3.6-slim
