@@ -12,21 +12,21 @@
       </el-form-item>
 
       <el-row> 
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item label="Nickname">
             <el-col :span="24">
               <el-input :disabled="true" v-model="user.nickname"/>
             </el-col>
           </el-form-item>
-        </el-col>
+        </el-col> -->
 
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item label="Phone No.">
             <el-col :span="24">
               <el-input :disabled="true" v-model="user.phone_no"/>
             </el-col>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         
         <el-col :span="12">
           <el-form-item label="Role">
@@ -40,7 +40,7 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <!-- <el-col :span="12">
             <el-form-item label="Branch">
               <el-row>
               <el-col :span="24">
@@ -50,7 +50,7 @@
               </el-col>
               </el-row>
             </el-form-item>
-        </el-col>
+        </el-col> -->
 
         <el-col :span="12">
           <el-form-item label="Status">

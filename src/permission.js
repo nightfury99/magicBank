@@ -8,7 +8,7 @@ import { getToken } from '@/utils/auth' // getToken from cookie
 NProgress.configure({ showSpinner: false })// NProgress configuration
 
 function hasPermission(roles, permissionRoles) {
-  if (roles.includes('management')) return true // admin permission passed directly
+  if (roles.includes('administrator')) return true // admin permission passed directly
   if (!permissionRoles) return true
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }

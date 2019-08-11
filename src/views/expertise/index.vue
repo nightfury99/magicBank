@@ -21,7 +21,7 @@
       style="width: 100%;"
     >
 
-      <el-table-column label="Name" min-width="150px">
+      <el-table-column label="Expertise Name" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
@@ -29,11 +29,6 @@
       <el-table-column label="Date Created" width="150px" align="center">
         <template slot-scope="scope">
           <span>{{ moment(scope.row.created_at).format('MMMM Do YYYY') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Code" width="150px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.code }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Status" class-name="status-col" width="100" align="center">
@@ -59,12 +54,6 @@
         <el-form-item label="Name" prop="name">
           <el-input v-model="newBranch.name" />
         </el-form-item>
-        <!-- <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="newBranch.created_at" type="datetime" placeholder="Please pick a date" />
-        </el-form-item> -->
-        <el-form-item label="Code" prop="code">
-          <el-input v-model="newBranch.code" />
-        </el-form-item>
         <el-form-item label="Status">
           <el-select v-model="newBranch.is_active" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
@@ -85,7 +74,7 @@
 </template>
 
 <script>
-// import { createBranch, getBranch, updateBranch } from '@/api/branch'
+import { createBranch, getBranch, updateBranch } from '@/api/branch'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import moment from 'moment'
 

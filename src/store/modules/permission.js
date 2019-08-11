@@ -54,7 +54,7 @@ const permission = {
         
         let accessedRoutes
 
-        if (roles.includes('management')) {
+        if (roles.includes('administrator')) {
           accessedRoutes = asyncRoutes
         } else {
           accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)

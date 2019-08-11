@@ -32,35 +32,22 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
-    hidden: true,
+  
     children: [{
       path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
-    }]
-  },
-
-  {
-    path: '/map',
-    component: Layout,
-    redirect: '/map/index',
-    meta: {
-      title: 'Sales Map',
-      icon: 'list'
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/map/index'),
-        name: 'Customer Map'
+      component: () => import('@/views/dashboard/index'),
+      name: 'dashboard',
+      meta: {
+        title: 'Dashboard',
+        icon: 'dashboard'
       }
-    ]
+    }]
   },
 
   {
     path: '/myprofile',
     component: Layout,
     redirect: '/profile/:userId',
-    // name: 'Dashboard',
     hidden: true,
     children: [{
       path: ':userId',
@@ -72,25 +59,25 @@ export const constantRouterMap = [
         icon: 'user',
       }
     }]
-  },
-
-  {
-    path: '/medias',
-    component: Layout,
-    redirect: '/media/index',
-    meta: { 
-      title: 'Media Library', 
-      icon: 'list',
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/media/index'),
-        name: 'Media Library',
-      }
-    ]
-
   }
+
+  // {
+  //   path: '/medias',
+  //   component: Layout,
+  //   redirect: '/media/index',
+  //   meta: { 
+  //     title: 'Media Library', 
+  //     icon: 'list',
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/media/index'),
+  //       name: 'Media Library',
+  //     }
+  //   ]
+
+  // }
 
 ]
 
@@ -102,81 +89,81 @@ export default new Router({
 
 export const asyncRoutes = [
 
-  {
-    path: '/newsboard',
-    component: Layout,
-    redirect: '/newsboard/index',
-    meta: {
-      title: 'News',
-      icon: 'example',
-      roles: ['outlet']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/newsboard/index'),
-        name: 'Newsboard',
-        meta: {
-          title: 'News',
-          icon: 'news'
-        }
-      },
-      {
-        path: 'favourite',
-        component: () => import('@/views/newsboard/favourite'),
-        name: 'FavouriteNews',
-        meta: {
-          title: 'Favourite News',
-          icon: 'news'
-        }
-      },
-      {
-        path: '/one/:id',
-        component: () => import('@/views/newsboard/one'),
-        name: 'SingleNews',
-        hidden: true,
-        meta: {
-          title: 'Single News',
-          icon: 'news'
-        }
-      }
-    ]
+  // {
+  //   path: '/newsboard',
+  //   component: Layout,
+  //   redirect: '/newsboard/index',
+  //   meta: {
+  //     title: 'News',
+  //     icon: 'example',
+  //     roles: ['outlet']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/newsboard/index'),
+  //       name: 'Newsboard',
+  //       meta: {
+  //         title: 'News',
+  //         icon: 'news'
+  //       }
+  //     },
+  //     {
+  //       path: 'favourite',
+  //       component: () => import('@/views/newsboard/favourite'),
+  //       name: 'FavouriteNews',
+  //       meta: {
+  //         title: 'Favourite News',
+  //         icon: 'news'
+  //       }
+  //     },
+  //     {
+  //       path: '/one/:id',
+  //       component: () => import('@/views/newsboard/one'),
+  //       name: 'SingleNews',
+  //       hidden: true,
+  //       meta: {
+  //         title: 'Single News',
+  //         icon: 'news'
+  //       }
+  //     }
+  //   ]
 
-  },
+  // },
 
-  {
-    path: '/assignment',
-    component: Layout,
-    name: 'Assignment',
-    meta: {
-      title: 'Assignment',
-      icon: 'example',
-      roles: ['management']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/assignment/index'),
-        name: 'AssignmentList',
-        meta: {
-          title: 'List',
-          icon: 'example',
-          roles: ['management']
-        }
-      },
-      {
-        path: 'calendar',
-        component: () => import('@/views/assignment/calendar'),
-        name: 'AssignmentCalendar',
-        meta: {
-          title: 'Calendar',
-          icon: 'example',
-          roles: ['management']
-        }
-      }
-    ]
+  // {
+  //   path: '/assignment',
+  //   component: Layout,
+  //   name: 'Assignment',
+  //   meta: {
+  //     title: 'Assignment',
+  //     icon: 'example',
+  //     roles: ['management']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/assignment/index'),
+  //       name: 'AssignmentList',
+  //       meta: {
+  //         title: 'List',
+  //         icon: 'example',
+  //         roles: ['management']
+  //       }
+  //     },
+  //     {
+  //       path: 'calendar',
+  //       component: () => import('@/views/assignment/calendar'),
+  //       name: 'AssignmentCalendar',
+  //       meta: {
+  //         title: 'Calendar',
+  //         icon: 'example',
+  //         roles: ['management']
+  //       }
+  //     }
+  //   ]
 
-  },
+  // },
 
   {
     path: '/user',
@@ -186,7 +173,7 @@ export const asyncRoutes = [
     meta: {
       title: 'User',
       icon: 'user',
-      roles: ['management']
+      roles: ['administrator']
     },
     children: [
       {
@@ -194,7 +181,7 @@ export const asyncRoutes = [
         component: () => import('@/views/user/index'),
         name: 'userList',
         meta: {
-          title: 'List',
+          title: 'User List',
           icon: 'peoples'
         }
       },
@@ -202,9 +189,11 @@ export const asyncRoutes = [
         path: 'register',
         component: () => import('@/views/user/userRegister'),
         name: 'userRegister',
+        hidden: true,
         meta: {
-          title: 'Register',
-          icon: 'form'
+          title: 'Register User',
+          icon: 'form',
+          roles: ['administrator']
         }
       },
       // {
@@ -226,7 +215,7 @@ export const asyncRoutes = [
         meta: {
           title: 'Profile',
           icon: 'example',
-          roles: ['management']
+          roles: ['administrator']
         }
       },
       {
@@ -245,161 +234,194 @@ export const asyncRoutes = [
   },
 
   {
-    path: '/chat',
+    path: '/booking',
     component: Layout,
-    redirect: '/chat/index',
+    redirect: '/booking/index',
     meta: {
-      title: 'Chat',
-      icon: 'chat',
-      roles: ['management']
+      title: 'Booking',
+      icon: 'form',
+      roles: ['administrator']
     },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/chat/index'),
-        name: 'chat',
-        meta: { title: 'Chat' }
+        component: () => import('@/views/booking/index'),
+        name: 'booking',
+        meta: { title: 'Booking List' }
       },
       {
-        hidden: true,
-        path: 'group',
-        component: () => import('@/views/chat/group'),
-        name: 'group',
-        meta: { title: 'Group' }
-      }
-    ]
-  },
-
-  {
-    path: '/customer',
-    component: Layout,
-    redirect: '/customer/index',
-    name: 'Customer',
-    meta: {
-      title: 'Customer',
-      icon: 'peoples',
-      roles: ['management']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/customer/index'),
-        name: 'Customer',
-        meta: {
-          title: 'Customer List',
-          icon: 'peoples',
-          roles: ['management']
-        }
-      },
-      {
-        path: 'answer/:type/:customerId',
-        component: () => import('@/views/customer/answer'),
-        name: 'answer',
+        path: 'update/:bookingId',
+        component: () => import('@/views/booking/bookingUpdate'),
+        name: 'bookingUpdate',
         hidden: true,
         meta: {
-          title: 'KYC Question',
-          icon: 'peoples',
-          roles: ['management']
-        }
-      },
-      {
-        path: 'one/:id',
-        component: () => import('@/views/customer/one'),
-        name: 'CustomerOne',
-        hidden: true,
-        meta: {
-          title: 'CustomerOne',
-          icon: 'peoples'
-        }
-      },
-      {
-        path: 'sales/:customerId',
-        component: () => import('@/views/customer/sales'),
-        name: 'CustomerSales',
-        hidden: true,
-        meta: {
-          title: 'Customer Sales',
+          title: 'Update Booking',
           icon: 'example',
           roles: ['management']
         }
       },
       {
-        path: 'credit/:customerId',
-        component: () => import('@/views/customer/credit'),
-        name: 'CustomerCredit',
+        path: 'register',
+        component: () => import('@/views/booking/bookingRegister'),
+        name: 'bookingRegister',
         hidden: true,
         meta: {
-          title: 'Customer Credit',
-          icon: 'example',
-          roles: ['management']
+          title: 'New Booking',
+          icon: 'form',
+          roles: ['administrator']
         }
       }
     ]
   },
 
   {
-    path: '/branch',
+    path: '/expertise',
     component: Layout,
-    redirect: '/branch/index',
+    redirect: '/expertise/index',
     meta: {
-      title: 'Branch',
+      title: 'Expertise List',
       icon: 'list',
-      roles: ['management']
+      roles: ['administrator']
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/branch/index'),
-        name: 'Branch'
+        name: 'Expertise'
       }
     ]
   },
 
-  {
-    path: '/question',
-    component: Layout,
-    redirect: '/question/index',
-    name: 'Question',
-    meta: {
-      title: 'Question',
-      icon: 'form',
-      roles: ['management']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/question/index'),
-        name: 'Question',
-        meta: {
-          title: 'Question List',
-          icon: 'list',
-          roles: ['management']
-        }
-      },
-      {
-        path: 'questionView/:questionId',
-        component: () => import('@/views/question/questionView'),
-        name: 'questionView',
-        hidden: true,
-        meta: {
-          title: 'View Question',
-          icon: 'example',
-          roles: ['management']
-        }
-      },
-      {
-        path: 'questionCreate',
-        component: () => import('@/views/question/questionCreate'),
-        name: 'questionCreate',
-        hidden: true,
-        meta: {
-          title: 'Create Question',
-          icon: 'edit',
-          roles: ['management']
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/customer',
+  //   component: Layout,
+  //   redirect: '/customer/index',
+  //   name: 'Customer',
+  //   meta: {
+  //     title: 'Customer',
+  //     icon: 'peoples',
+  //     roles: ['management']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/customer/index'),
+  //       name: 'Customer',
+  //       meta: {
+  //         title: 'Customer List',
+  //         icon: 'peoples',
+  //         roles: ['management']
+  //       }
+  //     },
+  //     {
+  //       path: 'answer/:type/:customerId',
+  //       component: () => import('@/views/customer/answer'),
+  //       name: 'answer',
+  //       hidden: true,
+  //       meta: {
+  //         title: 'KYC Question',
+  //         icon: 'peoples',
+  //         roles: ['management']
+  //       }
+  //     },
+  //     {
+  //       path: 'one/:id',
+  //       component: () => import('@/views/customer/one'),
+  //       name: 'CustomerOne',
+  //       hidden: true,
+  //       meta: {
+  //         title: 'CustomerOne',
+  //         icon: 'peoples'
+  //       }
+  //     },
+  //     {
+  //       path: 'sales/:customerId',
+  //       component: () => import('@/views/customer/sales'),
+  //       name: 'CustomerSales',
+  //       hidden: true,
+  //       meta: {
+  //         title: 'Customer Sales',
+  //         icon: 'example',
+  //         roles: ['management']
+  //       }
+  //     },
+  //     {
+  //       path: 'credit/:customerId',
+  //       component: () => import('@/views/customer/credit'),
+  //       name: 'CustomerCredit',
+  //       hidden: true,
+  //       meta: {
+  //         title: 'Customer Credit',
+  //         icon: 'example',
+  //         roles: ['management']
+  //       }
+  //     }
+  //   ]
+  // },
+
+  // {
+  //   path: '/branch',
+  //   component: Layout,
+  //   redirect: '/branch/index',
+  //   meta: {
+  //     title: 'Branch',
+  //     icon: 'list',
+  //     roles: ['management']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/branch/index'),
+  //       name: 'Branch'
+  //     }
+  //   ]
+  // },
+
+  // {
+  //   path: '/question',
+  //   component: Layout,
+  //   redirect: '/question/index',
+  //   name: 'Question',
+  //   meta: {
+  //     title: 'Question',
+  //     icon: 'form',
+  //     roles: ['management']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/question/index'),
+  //       name: 'Question',
+  //       meta: {
+  //         title: 'Question List',
+  //         icon: 'list',
+  //         roles: ['management']
+  //       }
+  //     },
+  //     {
+  //       path: 'questionView/:questionId',
+  //       component: () => import('@/views/question/questionView'),
+  //       name: 'questionView',
+  //       hidden: true,
+  //       meta: {
+  //         title: 'View Question',
+  //         icon: 'example',
+  //         roles: ['management']
+  //       }
+  //     },
+  //     {
+  //       path: 'questionCreate',
+  //       component: () => import('@/views/question/questionCreate'),
+  //       name: 'questionCreate',
+  //       hidden: true,
+  //       meta: {
+  //         title: 'Create Question',
+  //         icon: 'edit',
+  //         roles: ['management']
+  //       }
+  //     }
+  //   ]
+  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

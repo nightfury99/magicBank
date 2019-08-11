@@ -162,7 +162,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getNewsboardFavourite, deleteNewsboard } from '@/api/newsboard'
+// import { getNewsboardFavourite, deleteNewsboard } from '@/api/newsboard'
 import { getUserShow } from '@/api/user'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'

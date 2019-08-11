@@ -23,19 +23,7 @@
 		highlight-current-row>
 			<el-table-column label="Name" width="250">
 				<template slot-scope="scope">
-				{{ scope.row.nickname }} <br><el-tag type="info" size="mini">{{ scope.row.name}}</el-tag>
-				</template>
-			</el-table-column>
-
-			<el-table-column align="center" label="Role" width="130">
-				<template align="center" slot-scope="scope">
-					<el-tag type="warning" size="mini">{{ scope.row.roles[0].name | capitalize }}</el-tag>
-				</template>
-			</el-table-column>
-			
-			<el-table-column align="center" label="Branch" width="140">
-				<template align="center" slot-scope="scope">
-				{{ scope.row.branches[0].name }}
+			<el-tag type="info" size="mini">{{ scope.row.name}}</el-tag>
 				</template>
 			</el-table-column>
 
@@ -44,6 +32,20 @@
 				<el-tag type="info" size="mini">{{ scope.row.email }}</el-tag>
 				</template>
 			</el-table-column>
+
+			<el-table-column align="center" label="Role" width="130">
+				<template align="center" slot-scope="scope">
+					<!-- <el-tag type="warning" size="mini">{{ scope.row.roles[0].name | capitalize }}</el-tag> -->
+				</template>
+			</el-table-column>
+			
+			<el-table-column align="center" label="Expertise" width="140">
+				<template align="center" slot-scope="scope">
+				{{ scope.row.branches[0].name }}
+				</template>
+			</el-table-column>
+
+			
 
 			<el-table-column align="center" label="Status" width="100">
 				<template slot-scope="scope">

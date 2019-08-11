@@ -17,11 +17,11 @@
             <el-input v-validate="'required|email'" name="email" type="text" v-model="newUser.email" autocomplete="off"/>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item label="Retype Email" prop="checkEmail">
             <el-input v-model="newUser.checkEmail" autocomplete="off"/>
           </el-form-item>
-        </el-col>
+        </el-col> -->
 
         <el-col :span="12">
           <el-form-item label="Role">
@@ -35,7 +35,7 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
+        <!-- <el-col :span="12">
             <el-form-item label="Branch">
               <el-row>
               <el-col :span="24">
@@ -45,7 +45,7 @@
               </el-col>
               </el-row>
             </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
 
       <el-form-item>

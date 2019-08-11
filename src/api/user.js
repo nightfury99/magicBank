@@ -29,12 +29,12 @@ export function getRoleIndex() {
   })
 }
 
-export function getBranchIndex() {
-  return request({
-    url: '/branches',
-    method: 'get'
-  })
-}
+// export function getBranchIndex() {
+//   return request({
+//     url: '/branches',
+//     method: 'get'
+//   })
+// }
 
 export function putUser(user) {
   return request({
@@ -44,13 +44,7 @@ export function putUser(user) {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     data: qs.stringify({
-      name: user.name,
-      phone_no: user.phone_no,
-      nickname: user.nickname,
-      email: user.email,
-      role_id: user.role_id,
-      branch_id: user.branch_id,
-      is_active: user.status
+      password: user.password
 
     })
   })
@@ -61,10 +55,7 @@ export function postUserStore(new_user) {
     url: '/users',
     method: 'post',
     data: {
-      name: new_user.name,
-      email: new_user.email,
-      role_id: new_user.role_id,
-      branch_id: new_user.branch_id
+      email: new_user.email
     }
   })
 }
