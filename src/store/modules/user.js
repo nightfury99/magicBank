@@ -56,7 +56,7 @@ const user = {
           const resRolesArr = data.roles
 
           var x
-          for(x = 0; x < resRolesArr.length; x++) {
+          for (x = 0; x < resRolesArr.length; x++) {
             roles.push(resRolesArr[x].slug)
           }
 

@@ -32,7 +32,6 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
-  
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index'),
@@ -54,9 +53,7 @@ export const constantRouterMap = [
       component: () => import('@/views/user/userProfile'),
       name: 'userProfile',
       hidden: true,
-      meta: { 
-        title:'My Profile', 
-        icon: 'user',
+      meta: { title: 'My Profile', icon: 'user'
       }
     }]
   }
@@ -65,9 +62,7 @@ export const constantRouterMap = [
   //   path: '/medias',
   //   component: Layout,
   //   redirect: '/media/index',
-  //   meta: { 
-  //     title: 'Media Library', 
-  //     icon: 'list',
+  //   meta:{ title: 'Media Library', icon: 'list',
   //   },
   //   children: [
   //     {
@@ -88,82 +83,6 @@ export default new Router({
 })
 
 export const asyncRoutes = [
-
-  // {
-  //   path: '/newsboard',
-  //   component: Layout,
-  //   redirect: '/newsboard/index',
-  //   meta: {
-  //     title: 'News',
-  //     icon: 'example',
-  //     roles: ['outlet']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/newsboard/index'),
-  //       name: 'Newsboard',
-  //       meta: {
-  //         title: 'News',
-  //         icon: 'news'
-  //       }
-  //     },
-  //     {
-  //       path: 'favourite',
-  //       component: () => import('@/views/newsboard/favourite'),
-  //       name: 'FavouriteNews',
-  //       meta: {
-  //         title: 'Favourite News',
-  //         icon: 'news'
-  //       }
-  //     },
-  //     {
-  //       path: '/one/:id',
-  //       component: () => import('@/views/newsboard/one'),
-  //       name: 'SingleNews',
-  //       hidden: true,
-  //       meta: {
-  //         title: 'Single News',
-  //         icon: 'news'
-  //       }
-  //     }
-  //   ]
-
-  // },
-
-  // {
-  //   path: '/assignment',
-  //   component: Layout,
-  //   name: 'Assignment',
-  //   meta: {
-  //     title: 'Assignment',
-  //     icon: 'example',
-  //     roles: ['management']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/assignment/index'),
-  //       name: 'AssignmentList',
-  //       meta: {
-  //         title: 'List',
-  //         icon: 'example',
-  //         roles: ['management']
-  //       }
-  //     },
-  //     {
-  //       path: 'calendar',
-  //       component: () => import('@/views/assignment/calendar'),
-  //       name: 'AssignmentCalendar',
-  //       meta: {
-  //         title: 'Calendar',
-  //         icon: 'example',
-  //         roles: ['management']
-  //       }
-  //     }
-  //   ]
-
-  // },
 
   {
     path: '/user',
@@ -201,9 +120,7 @@ export const asyncRoutes = [
       //   component: () => import('@/views/user/userProfile'),
       //   name: 'userProfile',
       //   hidden: true,
-      //   meta: { 
-      //     title:'Profile', 
-      //     icon: 'example',
+      //   meta: {title:'Profile', icon: 'example',
       //     roles: ['management']
       //   }
       // },
@@ -291,137 +208,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
-  // {
-  //   path: '/customer',
-  //   component: Layout,
-  //   redirect: '/customer/index',
-  //   name: 'Customer',
-  //   meta: {
-  //     title: 'Customer',
-  //     icon: 'peoples',
-  //     roles: ['management']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/customer/index'),
-  //       name: 'Customer',
-  //       meta: {
-  //         title: 'Customer List',
-  //         icon: 'peoples',
-  //         roles: ['management']
-  //       }
-  //     },
-  //     {
-  //       path: 'answer/:type/:customerId',
-  //       component: () => import('@/views/customer/answer'),
-  //       name: 'answer',
-  //       hidden: true,
-  //       meta: {
-  //         title: 'KYC Question',
-  //         icon: 'peoples',
-  //         roles: ['management']
-  //       }
-  //     },
-  //     {
-  //       path: 'one/:id',
-  //       component: () => import('@/views/customer/one'),
-  //       name: 'CustomerOne',
-  //       hidden: true,
-  //       meta: {
-  //         title: 'CustomerOne',
-  //         icon: 'peoples'
-  //       }
-  //     },
-  //     {
-  //       path: 'sales/:customerId',
-  //       component: () => import('@/views/customer/sales'),
-  //       name: 'CustomerSales',
-  //       hidden: true,
-  //       meta: {
-  //         title: 'Customer Sales',
-  //         icon: 'example',
-  //         roles: ['management']
-  //       }
-  //     },
-  //     {
-  //       path: 'credit/:customerId',
-  //       component: () => import('@/views/customer/credit'),
-  //       name: 'CustomerCredit',
-  //       hidden: true,
-  //       meta: {
-  //         title: 'Customer Credit',
-  //         icon: 'example',
-  //         roles: ['management']
-  //       }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/branch',
-  //   component: Layout,
-  //   redirect: '/branch/index',
-  //   meta: {
-  //     title: 'Branch',
-  //     icon: 'list',
-  //     roles: ['management']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/branch/index'),
-  //       name: 'Branch'
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/question',
-  //   component: Layout,
-  //   redirect: '/question/index',
-  //   name: 'Question',
-  //   meta: {
-  //     title: 'Question',
-  //     icon: 'form',
-  //     roles: ['management']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/question/index'),
-  //       name: 'Question',
-  //       meta: {
-  //         title: 'Question List',
-  //         icon: 'list',
-  //         roles: ['management']
-  //       }
-  //     },
-  //     {
-  //       path: 'questionView/:questionId',
-  //       component: () => import('@/views/question/questionView'),
-  //       name: 'questionView',
-  //       hidden: true,
-  //       meta: {
-  //         title: 'View Question',
-  //         icon: 'example',
-  //         roles: ['management']
-  //       }
-  //     },
-  //     {
-  //       path: 'questionCreate',
-  //       component: () => import('@/views/question/questionCreate'),
-  //       name: 'questionCreate',
-  //       hidden: true,
-  //       meta: {
-  //         title: 'Create Question',
-  //         icon: 'edit',
-  //         roles: ['management']
-  //       }
-  //     }
-  //   ]
-  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -15,7 +15,6 @@ function hasPermission(roles, permissionRoles) {
 
 const whiteList = ['/login', '/auth-redirect'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
-
   NProgress.start()
   if (getToken()) {
     if (to.path === '/login') {
@@ -24,21 +23,18 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => {
-          const roles = []  // note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
+          const roles = []// note: roles must be a object array! such as: [{id: '1', name: 'editor'}, {id: '2', name: 'developer'}]
           const resRolesArr = res.data.data.roles
-
           var x
-          for(x = 0; x < resRolesArr.length; x++) {
+          for (x = 0; x < resRolesArr.length; x++) {
             roles.push(resRolesArr[x].slug)
           }
 
           // roles.push(res.data.groups.name)
           // var roles = res.data.data.roles
           store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
-
             router.addRoutes(accessRoutes)
             router.options.routes = router.options.routes.concat(accessRoutes)
-            
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           })
         }).catch((err) => {
