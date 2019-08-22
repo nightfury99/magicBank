@@ -85,12 +85,10 @@ export default {
         email: '',
         userstatus: '',
         translatorstatus: '',
-        branch_id: '',
         role_id: ''
       },
       value: '',
       roles: [],
-      branches: [],
     }
   },
 
@@ -98,7 +96,6 @@ export default {
   mounted() {
     this.getUser()
     this.getRoles()
-    this.getBranches()
   },
 
   methods: {
@@ -132,11 +129,6 @@ export default {
     // get all roles
     async getRoles() {
       this.roles = (await getRoleIndex()).data.data
-    },
-    
-    // get all branches
-    async getBranches() {
-      this.branches = (await getBranchIndex()).data.data
     },
 
     // update user info 
