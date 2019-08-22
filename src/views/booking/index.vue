@@ -48,13 +48,13 @@
 			
 			<el-table-column align="center" label="Expertise" width="100">
 				<template slot-scope="scope">
-				<el-tag type="info" size="mini">{{ scope.row.language}}</el-tag>
+				<el-tag type="info" size="mini">{{ scope.row.expertise[0].name}}</el-tag>
 				</template>
 			</el-table-column>
 
             <el-table-column align="center" label="Type" width="100">
 				<template slot-scope="scope">
-				<el-tag type="info" size="mini">{{ scope.row.language}}</el-tag>
+				<el-tag type="info" size="mini">{{ scope.row.type[0].category}}</el-tag>
 				</template>
 			</el-table-column>
 

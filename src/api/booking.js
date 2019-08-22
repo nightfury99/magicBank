@@ -22,7 +22,7 @@ export function getBooking() {
   })
 }
 
-export function updateBooking(data) {
+export function putBooking(data) {
   return request({
     url: '/bookings',
     method: 'put',

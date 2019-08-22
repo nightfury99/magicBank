@@ -8,15 +8,15 @@
       
       <el-row> 
 
-      <el-form-item label="User">
+      <el-form-item label="User Name">
         <el-col :span="24">
-          <el-input :disabled="true" v-model="user.name"/>
+          <el-input :disabled="true" v-model="booking.name"/>
         </el-col>
       </el-form-item>
       
       <el-form-item label="Translator" >
         <el-col :span="24"> 
-          <el-input :disabled="true" v-model="user.name"/>
+          <el-input :disabled="true" v-model="booking.name"/>
         </el-col>
       </el-form-item>
 
@@ -24,7 +24,7 @@
         <el-col :span="12">
           <el-form-item label="Language">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.nickname"/>
+              <el-input :disabled="true" v-model="booking.language"/>
             </el-col>
           </el-form-item>
         </el-col>
@@ -32,7 +32,7 @@
         <el-col :span="12">
           <el-form-item label="Expertise">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.phone_no"/>
+              <el-input :disabled="true" v-model="booking.bookingexpertise"/>
             </el-col>
           </el-form-item>
         </el-col>
@@ -40,7 +40,7 @@
         <el-col :span="12">
           <el-form-item label="Date">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.nickname"/>
+              <el-input :disabled="true" v-model="booking.booking_date"/>
             </el-col>
           </el-form-item>
         </el-col>
@@ -48,7 +48,7 @@
         <el-col :span="12">
           <el-form-item label="Time">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.nickname"/>
+              <el-input :disabled="true" v-model="booking.booking_time"/>
             </el-col>
           </el-form-item>
         </el-col>
@@ -56,7 +56,7 @@
         <el-col :span="12">
           <el-form-item label="Duration">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.nickname"/>
+              <el-input :disabled="true" v-model="booking.nickname"/>
             </el-col>
           </el-form-item>
         </el-col>
@@ -64,7 +64,7 @@
         <el-col :span="12">
           <el-form-item label="End Call">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.nickname"/>
+              <el-input :disabled="true" v-model="booking.end_call"/>
             </el-col>
           </el-form-item>
         </el-col>
@@ -72,14 +72,14 @@
         <el-col :span="12">
           <el-form-item label="Type">
             <el-col :span="24">
-              <el-input :disabled="true" v-model="user.nickname"/>
+              <el-input :disabled="true" v-model="booking.bookingtype"/>
             </el-col>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
           <el-form-item label="Status">
-            <el-radio-group v-model="user.status">
+            <el-radio-group v-model="booking.status">
               <el-radio-button label="1">Active</el-radio-button>
               <el-radio-button label="0">Deactivated</el-radio-button>
             </el-radio-group>
@@ -88,7 +88,7 @@
       </el-row>
 
       <el-form-item>
-        <el-button style="float: right" type="warning" @click="updateUser()">Update</el-button>
+        <el-button style="float: right" type="warning" @click="updateBooking()">Update</el-button>
       </el-form-item>
     </el-form>
 
@@ -99,83 +99,90 @@
 </template>
 
 <script>
-import { getUserShow, putUser, getRoleIndex, getBranchIndex } from '@/api/user'
+import { getBookingIndex, getBookingShow, putBooking   } from '@/api/booking'
+import { getUserIndex   } from '@/api/user'
+import { getExpertiseIndex   } from '@/api/expertise'
 
 export default {
   data() {
     return {
 			labelPosition: 'right',
-      user: {
+      booking: {
         id: '',
-        name: '',
-        nickname: '',
-        phone_no: '',
-        email: '',
-        status: '',
-        branch_id: '',
-        role_id: ''
+        originname: '',
+        username: '',
+        translatorname: '',
+        booking_date: '',
+        booking_time: '',
+        end_call: '',
+        notes: '',
+        bookingexpertise: '',
+        bookingtype: ''
       },
       value: '',
-      roles: [],
-      branches: [],
+      user: [],
+      expertise: [],
     }
   },
 
 
   mounted() {
+    this.getBooking()
     this.getUser()
-    this.getRoles()
-    this.getBranches()
+    this.getExpertise()
   },
 
   methods: {
 
-    // get user
-    async getUser() {
+    // get booking
+    async getBooking() {
 
-      const userId = this.$store.state.route.params.userId
+      const bookingId = this.$store.state.route.params.bookingId
 
-      getUserShow(userId)
+      getBookingShow(bookingId)
         .then(res => {
           const data = res.data.data
-          this.user.name = data.name,
-          this.user.id = data.id,
-          this.user.nickname = data.nickname,
-          this.user.phone_no = data.phone_no,
-          this.user.email = data.email
-          this.user.status = data.status,
-          this.user.branch_id = data.branches[0].id,
-          this.user.role_id = data.roles[0].id
+          this.booking.id = data.id,
+          this.booking.originname = data.origin[0].first_name,
+          this.booking.username = data.phone_no,
+          this.booking.translatorname = data.email
+          this.booking.booking_date = data.booking_date,
+          this.booking.booking_time = data.booking_time,
+          this.booking.end_call = data.end_call,
+          this.booking.notes = data.notes,
+          this.booking.bookingexpertise = data.expertise[0].name,
+          this.booking.bookingtype = data.type[0].category,
+          this.booking.language = data.language
         })
         .catch(error => {
             console.log(error.response)
         })
 
-      console.log(this.user)
+      console.log(this.booking)
     },
 
-    // get all roles
-    async getRoles() {
-      this.roles = (await getRoleIndex()).data.data
+    // get all user
+    async getUser() {
+      this.user = (await getUserIndex()).data.data
     },
     
-    // get all branches
-    async getBranches() {
-      this.branches = (await getBranchIndex()).data.data
+    // get all expertise
+    async getExpertise() {
+      this.expertise = (await getExpertiseIndex()).data.data
     },
 
-    // update user info 
-    async updateUser() {
-      console.log(this.user)
+    // update booking info 
+    async updateBooking() {
+      console.log(this.booking)
 
       try {
-        await putUser(this.user)
-        console.log(this.user)
+        await putBooking(this.booking)
+        console.log(this.booking)
         
-        this.$message( {message: this.user.name + ' profile ' +'is updated', type: 'success'} )
+        this.$message( {message: this.booking.name + ' booking ' +'is updated', type: 'success'} )
 
         this.$router.push({
-          name: 'userList'
+          name: 'bookingList'
         })
       } catch (err) {
         console.log(err)
