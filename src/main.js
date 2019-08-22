@@ -12,7 +12,7 @@ import App from './App'
 import store from './store'
 import router from './router'
 
-import * as VueGoogleMaps from 'vue2-google-maps'
+// import * as VueGoogleMaps from 'vue2-google-maps'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -20,7 +20,7 @@ import '@/permission' // permission control
 import { sync } from 'vuex-router-sync'
 import AsyncComputed from 'vue-async-computed'
 import VeeValidate from 'vee-validate'
-import VueSocketCluster from 'vue-socket-cluster'
+// import VueSocketCluster from 'vue-socket-cluster'
 
 /**
  * This project originally used easy-mock to simulate data,
@@ -45,22 +45,22 @@ Vue.use(require('vue-pusher'), {
   }
 })
 
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4',
-    libraries: 'places'
-  }
-})
+// Vue.use(VueGoogleMaps, {
+//   load: {
+//     key: 'AIzaSyDEhQMCSKxKL3ANoif0BjjePyTA7ekXXE4',
+//     libraries: 'places'
+//   }
+// })
 
-Vue.use(VueSocketCluster, {
-  connections: [{
-    name: 'chat',
-    hostname: '18.136.199.71',
-    secure: false,
-    port: 8000,
-    rejectUnauthorized: false
-  }]
-})
+// Vue.use(VueSocketCluster, {
+//   connections: [{
+//     name: 'chat',
+//     hostname: '18.136.199.71',
+//     secure: false,
+//     port: 8000,
+//     rejectUnauthorized: false
+//   }]
+// })
 
 sync(store, router)
 

@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
           store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
             router.addRoutes(accessRoutes)
             router.options.routes = router.options.routes.concat(accessRoutes)
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+            next({ ...to, replace: true }) // hack method, makesure addRoutes complete ,set the replace: true so the navigation will not leave a history record
           })
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
@@ -55,12 +55,12 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
+      next(`/login?redirect=${to.path}`) // Otherwise, redirect all to the login page
       NProgress.done()
     }
   }
 })
 
 router.afterEach(() => {
-  NProgress.done() // 结束Progress
+  NProgress.done() // End Progress
 })

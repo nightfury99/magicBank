@@ -57,23 +57,6 @@ export const constantRouterMap = [
       }
     }]
   }
-
-  // {
-  //   path: '/medias',
-  //   component: Layout,
-  //   redirect: '/media/index',
-  //   meta:{ title: 'Media Library', icon: 'list',
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/media/index'),
-  //       name: 'Media Library',
-  //     }
-  //   ]
-
-  // }
-
 ]
 
 export default new Router({
@@ -91,8 +74,8 @@ export const asyncRoutes = [
     name: 'User',
     meta: {
       title: 'User',
-      icon: 'user',
-      roles: ['administrator']
+      icon: 'user'
+      // roles: ['translator']
     },
     children: [
       {
@@ -111,19 +94,10 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: 'Register User',
-          icon: 'form',
-          roles: ['administrator']
+          icon: 'form'
+          // roles: ['']
         }
       },
-      // {
-      //   path: 'profile/:userId',
-      //   component: () => import('@/views/user/userProfile'),
-      //   name: 'userProfile',
-      //   hidden: true,
-      //   meta: {title:'Profile', icon: 'example',
-      //     roles: ['management']
-      //   }
-      // },
       {
         path: 'profile/:userId',
         component: () => import('@/views/user/userProfileManagement'),
@@ -131,8 +105,8 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: 'Profile',
-          icon: 'example',
-          roles: ['administrator']
+          icon: 'example'
+          // roles: ['']
         }
       },
       {
@@ -142,12 +116,11 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: 'Update',
-          icon: 'example',
-          roles: ['management']
+          icon: 'example'
+          // roles: ['']
         }
       }
     ]
-
   },
 
   {
@@ -156,8 +129,8 @@ export const asyncRoutes = [
     redirect: '/booking/index',
     meta: {
       title: 'Booking',
-      icon: 'form',
-      roles: ['administrator']
+      icon: 'form'
+      // roles: ['']
     },
     children: [
       {
@@ -173,8 +146,8 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: 'Update Booking',
-          icon: 'example',
-          roles: ['management']
+          icon: 'example'
+          // roles: ['']
         }
       },
       {
@@ -184,8 +157,8 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: 'New Booking',
-          icon: 'form',
-          roles: ['administrator']
+          icon: 'form'
+          // roles: ['']
         }
       }
     ]
@@ -197,14 +170,36 @@ export const asyncRoutes = [
     redirect: '/expertise/index',
     meta: {
       title: 'Expertise List',
-      icon: 'list',
-      roles: ['administrator']
+      icon: 'list'
+      // roles: ['']
     },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/branch/index'),
+        component: () => import('@/views/expertise/index'),
         name: 'Expertise'
+      },
+      {
+        path: 'update/:expertiseId',
+        component: () => import('@/views/expertise/expertiseUpdate'),
+        name: 'expertiseUpdate',
+        hidden: true,
+        meta: {
+          title: 'Update Expertise',
+          icon: 'example'
+          // roles: ['']
+        }
+      },
+      {
+        path: 'register',
+        component: () => import('@/views/expertise/expertiseRegister'),
+        name: 'expertiseRegister',
+        hidden: true,
+        meta: {
+          title: 'New Expertise',
+          icon: 'form'
+          // roles: ['']
+        }
       }
     ]
   },

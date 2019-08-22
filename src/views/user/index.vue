@@ -12,7 +12,6 @@
 			<el-button style="float: right" type="warning" @click="navigateTo({name: 'userRegister'})" >Register New User</el-button>
 	  </el-col>
 	</el-row>
-	
 	<el-row>
 		<el-table
 		v-loading="listLoading"
@@ -23,34 +22,40 @@
 		highlight-current-row>
 			<el-table-column label="Name" width="250">
 				<template slot-scope="scope">
-			<el-tag type="info" size="mini">{{ scope.row.name}}</el-tag>
+			<el-tag type="info" size="medium">{{ scope.row.profiles[0].first_name}}</el-tag>
 				</template>
 			</el-table-column>
 
-			<el-table-column align="center" label="Email" width="250">
+			<el-table-column align="center" label="Email" width="200">
 				<template slot-scope="scope">
-				<el-tag type="info" size="mini">{{ scope.row.email }}</el-tag>
+				<el-tag type="info" size="medium">{{ scope.row.email }}</el-tag>
 				</template>
 			</el-table-column>
 
-			<el-table-column align="center" label="Role" width="130">
-				<template align="center" slot-scope="scope">
-					<!-- <el-tag type="warning" size="mini">{{ scope.row.roles[0].name | capitalize }}</el-tag> -->
+			<el-table-column align="center" label="Role" width="150">
+				<template slot-scope="scope">
+				<el-tag type="info" size="medium">{{ scope.row.profiles[0].roles[0].name }}</el-tag>
 				</template>
 			</el-table-column>
-			
+
+			<el-table-column align="center" label="User Status" width="100">
+				<template slot-scope="scope">
+					<el-tag v-if="scope.row.user_status_id == 1" type="success" size="mini">Active</el-tag>
+					<el-tag v-else type="danger" size="medium">Inactive</el-tag>
+				</template>
+			</el-table-column>
+
+			<el-table-column align="center" label="Translator Status" width="100">
+				<template slot-scope="scope">
+					<el-tag v-if="scope.row.translator_status_id == 1" type="success" size="mini">Active</el-tag>
+					<el-tag v-else type="danger" size="medium">Inactive</el-tag>
+				</template>
+			</el-table-column>
+
 			<el-table-column align="center" label="Expertise" width="140">
-				<template align="center" slot-scope="scope">
-				{{ scope.row.branches[0].name }}
-				</template>
-			</el-table-column>
-
-			
-
-			<el-table-column align="center" label="Status" width="100">
 				<template slot-scope="scope">
-					<el-tag v-if="scope.row.status == 1" type="success" size="mini">Active</el-tag>
-					<el-tag v-else type="danger" size="mini">Inactive</el-tag>
+					<el-tag v-if="scope.row.expertise == null" type="success" size="mini"></el-tag>
+					<el-tag v-else type="danger" size="medium">{{ scope.row.expertise }}</el-tag>
 				</template>
 			</el-table-column>
 
@@ -71,7 +76,7 @@
 	</el-row>
 
 	<el-row>
-		<el-col :span="24" align="center">
+		<el-col :span="24" >
 			<pagination
 				background
 				layout="prev, pager, next"
@@ -97,7 +102,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getUserIndex, deleteUser } from '@/api/user'
+import { getUserIndex, deleteUser, getUsers } from '@/api/user'
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
 
@@ -153,7 +158,7 @@ export default {
 		async userList(val) {
 			this.listLoading = true
 
-			console.log(val)
+			console.log("heloo", val)
 			console.log(this.userQuery)
 
 
@@ -199,10 +204,5 @@ export default {
 </script>
 
 <style>
-  .el-row {
-		margin-bottom: 20px;
-		&:last-child {
-		margin-bottom: 0;
-		}
-	}
+
 </style>

@@ -1,233 +1,189 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-input v-model="branchQuery.name" :disabled="true" placeholder="Name" style="width: 400px;" class="filter-item" />
-      <el-button class="filter-item" type="primary" icon="el-icon-search">
-        Search
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add New Expertise
-      </el-button>
-    </div>
 
-    <br>
+	<el-row>
+	  <el-col :span="20" >
+		<el-input
+		  v-model="search"
+		  prefix-icon="el-icon-search"
+		  placeholder="Type to search"/>
+	  </el-col>
+	  <el-col :span="4" >
+			<el-button style="float: right" type="warning" @click="navigateTo({name: 'expertiseRegister'})" >Create New Expertise</el-button>
+	  </el-col>
+	</el-row>
+	
+	<el-row>
+		<el-table
+		v-loading="listLoading"
+		:data="expertise.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+		element-loading-text="Loading"
+		border
+		fit
+		highlight-current-row>
 
-    <el-table
-      :key="tableKey"
-      :data="branch"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
+			<el-table-column label="Expertise Name" width="400">
+				<template slot-scope="scope">
+				<el-tag type="info" size="mini">{{ scope.row.name}}</el-tag>
+				</template>
+			</el-table-column>
 
-      <el-table-column label="Expertise Name" min-width="150px">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Date Created" width="150px" align="center">
-        <template slot-scope="scope">
-          <span>{{ moment(scope.row.created_at).format('MMMM Do YYYY') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Status" class-name="status-col" width="100" align="center">
-        <template slot-scope="{row}">
-          <el-tag :type="row.is_active | statusFilter">
-            {{ row.is_active }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="Actions" align="center" width="150" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+      <el-table-column label="Fee Rate" width="400">
+				<!-- <template slot-scope="scope">s
+				<el-tag type="info" size="mini">{{ scope.row.name}}</el-tag>
+				</template> -->
+			</el-table-column>
 
-    <pagination v-show="total>0" :total="total" :page.sync="branchQuery.page" :limit.sync="branchQuery.limit" @pagination="getBranch" />
+            <el-table-column align="center" label="Created Date" width="200">
+				<template slot-scope="scope">
+				<el-tag type="info" size="mini">{{ scope.row.created_at}}</el-tag>
+				</template>
+			</el-table-column>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="newBranch" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Name" prop="name">
-          <el-input v-model="newBranch.name" />
-        </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="newBranch.is_active" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          Cancel
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
-        </el-button>
-      </div>
+			<el-table-column align="center" label="Action" >
+				<template align="center" slot-scope="scope">
+					<el-tooltip :open-delay="tooltipDelay" content="Profile" placement="top">
+						<el-button size="mini" icon="el-icon-search" @click="navigateTo ({name: 'expertiseDetail', params:{expertiseId: scope.row.id}})" circle></el-button>
+					</el-tooltip>
+					<el-tooltip :open-delay="tooltipDelay" content="Update" placement="top">
+						<el-button size="mini" type="primary" icon="el-icon-edit" @click="navigateTo ({name: 'expertiseUpdate', params:{expertiseId: scope.row.id}})" circle></el-button>
+					</el-tooltip>
+				</template>
+			</el-table-column>
+
+		</el-table>
+	</el-row>
+
+	<el-row>
+		<el-col :span="24" align="center">
+			<pagination
+				background
+				layout="prev, pager, next"
+				:page-count="expertiseQuery.page_count"
+				@pagination="expertiseList" />
+		</el-col>
+	</el-row>
+
+	<!-- Dialog for Expertise Delete -->
+    <el-dialog
+      :visible.sync="dialogDelete"
+      title="Delete Confirmation"
+      width="30%">
+      <span>Delete this Expertise?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogDelete = false">Cancel</el-button>
+        <el-button type="primary" @click="deleteExpertiseId">Delete</el-button>
+      </span>
     </el-dialog>
 
   </div>
 </template>
 
+
 <script>
-import { createBranch, getBranch, updateBranch } from '@/api/branch'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { mapGetters } from 'vuex'
+import { getExpertiseIndex, deleteExpertise, searchExpertise } from '@/api/expertise'
 import moment from 'moment'
+import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'ComplexTable',
-  components: { Pagination },
+  	data() {
+		return {
+			expertise: [],
+			listLoading: false,
+			tooltipDelay: 500,
+			status: 1,
+			
+			idDelete: '',
+			dialogDelete: false,
+			
+			totalExpertisePage: 0,
+			expertiseQuery: {
+				page: 1,
+				limit: 50,
+				page_count: 1
+			},
 
-  filters: {
-    statusFilter(is_active) {
-      const statusMap = {
-        active: 'success',
-        inactive: 'info',
-        deleted: 'danger'
+			search: ''
+		}
+	},
+	
+	components: { Pagination },
+	computed: {
+		...mapGetters([
+		'roles'
+		])
+	},
+
+	filters: {
+		capitalize: function (value) {
+			if (!value) return ''
+			value = value.toString()
+			return value.charAt(0).toUpperCase() + value.slice(1)
+		}
+	},
+	
+  	created() {
+		this.expertiseList()
+	},
+	
+	methods: {
+
+		// navigate to specific route
+		navigateTo (route) {
+			this.$router.push(route)
+		},
+
+		// list all expertise
+		async expertiseList(val) {
+			this.listLoading = true
+
+			console.log(val)
+			console.log(this.expertiseQuery)
+
+
+			if (val) {
+				this.expertiseQuery.page = val.page
+				console.log(this.expertiseQuery)
+			}
+
+			const meta = (await getExpertiseIndex(this.expertiseQuery)).data.meta.pagination
+
+			this.expertise = (await getExpertiseIndex(this.expertiseQuery)).data.data
+
+			this.totalExpertisePage = meta.total
+			this.expertiseQuery.page_count = meta.total_pages
+
+			console.log(this.expertise)
+			
+			this.listLoading = false
+
+		},
+
+	// get desired expertise id to delete
+    async changeDeleteId(id) {
+      console.log(id)
+      this.idDelete = id
+      this.dialogDelete = true
+    },
+
+    // delete expertise
+    async deleteExpertiseId() {
+      console.log(this.idDelete)
+      try {
+        await deleteExpertise(this.idDelete)
+      } catch (err) {
+        console.log(err)
       }
-      return statusMap[is_active]
-    },
-
-    moment: function(date) {
-      return moment(date).format('MMMM Do YYYY')
+      this.dialogDelete = false
+      this.expertiseList()
     }
-  },
-  data() {
-    return {
-      tableKey: 0,
-      branch: null,
-      total: 0,
-      branchLoading: true,
-      branchQuery: {
-        page: 1,
-        limit: 20,
-        name: undefined,
-        code: undefined
-      },
-      statusOptions: ['Active', 'Inactive', 'Deleted'],
-      newBranch: {
-        id: undefined,
-        created_at: new Date(),
-        name: '',
-        code: '',
-        is_active: 'Active'
-      },
-      dialogFormVisible: false,
-      dialogStatus: '',
-      textMap: {
-        update: 'Edit',
-        create: 'Create'
-      },
-      rules: {
-        created_at: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        name: [{ required: true, message: 'name is required', trigger: 'blur' }]
-      }
-    }
-  },
-  created() {
-    this.getBranch()
-  },
 
-  methods: {
-
-    moment: function(date) {
-      return moment(date)
-    },
-
-    date: function(date) {
-      return moment(date).format('MMMM Do YYYY')
-    },
-
-    getBranch() {
-      getBranch()
-        .then(resp => {
-          this.branch = resp.data.data
-        })
-    },
-
-    resetTemp() {
-      this.newBranch = {
-        id: undefined,
-        created_at: new Date(),
-        name: '',
-        code: '',
-        is_active: 'active'
-      }
-    },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          createBranch(this.newBranch)
-            .then(resp => {
-              this.branch.unshift(this.newBranch)
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Created Successfully',
-                type: 'success'
-              })
-              this.getBranch()
-            })
-        }
-      })
-    },
-    handleUpdate(row) {
-      this.resetTemp()
-      this.newBranch = Object.assign({}, row) // copy obj
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.newBranch)
-          // tempData.updated_at = +new Date(tempData.updated_at)
-          updateBranch(tempData)
-            .then(resp => {
-              for (const v of this.branch) {
-                if (v.id === this.newBranch.id) {
-                  const index = this.branch.indexOf(v)
-                  this.branch.splice(index, 1, this.newBranch)
-                  break
-                }
-              }
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success'
-              })
-              this.getBranch()
-            })
-        }
-      })
-    },
-    handleDelete(row) {
-      this.$notify({
-        title: 'Success',
-        message: 'Delete Successfully',
-        type: 'success'
-      })
-      const index = this.branch.indexOf(row)
-      this.branch.splice(index, 1)
-    }
   }
-
 }
-
 </script>
+
+<style>
+
+</style>
+

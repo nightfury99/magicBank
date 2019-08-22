@@ -12,23 +12,23 @@
       </el-form-item>
 
       <el-row> 
-        <!-- <el-col :span="12">
-          <el-form-item label="Nickname">
-            <el-col :span="24">
-              <el-input :disabled="true" v-model="user.nickname"/>
-            </el-col>
-          </el-form-item>
-        </el-col> -->
-
-        <!-- <el-col :span="12">
-          <el-form-item label="Phone No.">
-            <el-col :span="24">
-              <el-input :disabled="true" v-model="user.phone_no"/>
-            </el-col>
-          </el-form-item>
-        </el-col> -->
-        
         <el-col :span="12">
+          <el-form-item label="Email">
+            <el-col :span="24">
+              <el-input :disabled="true" v-model="user.email"/>
+            </el-col>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="12">
+          <el-form-item label="Phone No.">
+                  <el-col :span="24">
+                    <el-input :disabled="true" v-model="user.phone_no"/>
+                  </el-col>
+          </el-form-item>
+        </el-col>
+        
+        <el-col :span="24">
           <el-form-item label="Role">
               <el-row>
               <el-col :span="24">
@@ -40,21 +40,18 @@
           </el-form-item>
         </el-col>
 
-        <!-- <el-col :span="12">
-            <el-form-item label="Branch">
-              <el-row>
-              <el-col :span="24">
-              <el-select v-model="user.branch_id" placeholder="Please select branch" style="width:100%">
-                <el-option v-for="(item, index) in branches" :key="index" :label="item.name" :value="item.id" />
-              </el-select>
-              </el-col>
-              </el-row>
-            </el-form-item>
-        </el-col> -->
+        <el-col :span="12">
+          <el-form-item label="User Status">
+            <el-radio-group v-model="user.userstatus">
+              <el-radio-button label="1">Active</el-radio-button>
+              <el-radio-button label="0">Deactivated</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
 
         <el-col :span="12">
-          <el-form-item label="Status">
-            <el-radio-group v-model="user.status">
+          <el-form-item label="Translator Status">
+            <el-radio-group v-model="user.userstatus">
               <el-radio-button label="1">Active</el-radio-button>
               <el-radio-button label="0">Deactivated</el-radio-button>
             </el-radio-group>
@@ -74,7 +71,7 @@
 </template>
 
 <script>
-import { getUserShow, putUser, getRoleIndex, getBranchIndex } from '@/api/user'
+import { getUserShow, putUser, getRoleIndex, } from '@/api/user'
 
 export default {
   data() {
@@ -86,7 +83,8 @@ export default {
         nickname: '',
         phone_no: '',
         email: '',
-        status: '',
+        userstatus: '',
+        translatorstatus: '',
         branch_id: '',
         role_id: ''
       },
@@ -105,22 +103,24 @@ export default {
 
   methods: {
 
-    // get user
+    // get user details
     async getUser() {
 
       const userId = this.$store.state.route.params.userId
 
       getUserShow(userId)
         .then(res => {
+          console.log(data)
           const data = res.data.data
-          this.user.name = data.name,
+          this.user.name = data.profiles[0].first_name,
           this.user.id = data.id,
-          this.user.nickname = data.nickname,
+          this.user.nickname = data.social_google_id,
           this.user.phone_no = data.phone_no,
           this.user.email = data.email
-          this.user.status = data.status,
-          this.user.branch_id = data.branches[0].id,
+          this.user.userstatus = data.user_status_id,
+          this.user.translatorstatus = data.translator_status_id,
           this.user.role_id = data.roles[0].id
+          console.log(data)
         })
         .catch(error => {
             console.log(error.response)
