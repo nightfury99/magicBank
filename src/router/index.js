@@ -203,6 +203,34 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/language',
+    component: Layout,
+    redirect: '/language/index',
+    meta: {
+      title: 'Language List',
+      icon: 'list'
+      // roles: ['']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/language/index'),
+        name: 'Language'
+      },
+      {
+        path: 'update/:languageId',
+        component: () => import('@/views/language/languageUpdate'),
+        name: 'languageUpdate',
+        hidden: true,
+        meta: {
+          title: 'Update Language',
+          icon: 'example'
+          // roles: ['']
+        }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

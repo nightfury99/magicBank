@@ -139,20 +139,9 @@ export default {
 
       const bookingId = this.$store.state.route.params.bookingId
 
-      getBookingShow(bookingId)
+      await getBookingShow(bookingId)
         .then(res => {
-          const data = res.data.data
-          this.booking.id = data.id,
-          this.booking.originname = data.origin[0].first_name,
-          this.booking.username = data.phone_no,
-          this.booking.translatorname = data.email
-          this.booking.booking_date = data.booking_date,
-          this.booking.booking_time = data.booking_time,
-          this.booking.end_call = data.end_call,
-          this.booking.notes = data.notes,
-          this.booking.bookingexpertise = data.expertise[0].name,
-          this.booking.bookingtype = data.type[0].category,
-          this.booking.language = data.language
+          this.booking = res.data.data
         })
         .catch(error => {
             console.log(error.response)
